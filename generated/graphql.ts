@@ -29164,6 +29164,11 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: string, level: number, slug: string, products?: { edges: Array<{ node: { name: string } }> } | null } }> } | null };
 
+export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProductsQuery = { products?: { edges: Array<{ node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, category?: { name: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null } }> } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -29218,3 +29223,34 @@ export const GetCategoriesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetProductsDocument = new TypedDocumentString(`
+    query GetProducts {
+  products(first: 10, channel: "default-channel") {
+    edges {
+      node {
+        isAvailable
+        isAvailableForPurchase
+        name
+        rating
+        id
+        thumbnail {
+          alt
+          url
+        }
+        category {
+          name
+        }
+        pricing {
+          priceRange {
+            start {
+              gross {
+                amount
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetProductsQuery, GetProductsQueryVariables>;

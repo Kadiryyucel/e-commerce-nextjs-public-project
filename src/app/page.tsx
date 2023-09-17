@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { CurrentUserDocument, GetCategoriesDocument } from "../../generated/graphql";
+import { CurrentUserDocument, GetCategoriesDocument ,GetProductsDocument} from "../../generated/graphql";
 import { executeGraphQL } from "./lib";
 
 import PageHeader from "./components/PageHeader";
@@ -11,7 +11,7 @@ import { Mulish } from 'next/font/google'
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
 export default async function Page() {
 	const data = await executeGraphQL({
-		query: CurrentUserDocument,
+		query: GetProductsDocument,
 		variables: {
 			channel: "default-channel",
 			first: 12,
@@ -28,16 +28,16 @@ export default async function Page() {
 
 
 	return (
-		<div>
+		<div className="px-28">
 			<div>
 				<PageHeader />
-				<div className="wrapper w-screen flex justify-center bg-white">
+				<div className="wrapper flex justify-center bg-white">
 					<ul className="relative flex justify-center bg-white z-10">
 						{dataCategories.categories?.edges.map(({ node: x }) => {
 							return (
 								<li className="inline-block justify-center px-4 show-category">
 									{x.name}
-									<div className="menu flex flex-col flex-wrap absolute h-52 bg-white translate-x-0 py-8 px-8">
+									<div className="menu flex flex-col flex-wrap absolute h-52 bg-white translate-x-0 p-8">
 										{x.products?.edges.map(({ node: sub }) => {
 											return (<div className={`flex-initial ${mulish.className}`}>{sub.name}</div>)
 										})}
