@@ -1,0 +1,18 @@
+query GetCategories {
+    categories(first: 10) {
+    edges {
+      node {
+        name
+        level
+        slug
+        products(first: 10, channel: "default-channel") {
+          edges {
+            node {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
