@@ -1,39 +1,36 @@
 
-import Link from "next/link";
-import Image from "next/image";
-import { CurrentUserDocument, GetCategoriesDocument ,GetProductsDocument} from "../../generated/graphql";
-import { executeGraphQL } from "./lib";
 
 import PageHeader from "./components/PageHeader";
+import Products from "./components/Products";
+import Link from "next/link";
+import Image from "next/image";
+
 
 import { Mulish } from 'next/font/google'
 
+import { GetProductsQuery, GetCategoriesQuery } from "../../generated/graphql";
+import { GET_PRODUCTS, GET_CATEGORİES } from "../../graphql/queries";
+
+import { getClient } from "@/app/lib/ssr"
+
+
+
+
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
+
 export default async function Page() {
-	const data = await executeGraphQL({
-		query: GetProductsDocument,
-		variables: {
-			channel: "default-channel",
-			first: 12,
-		},
-	});
+    const dataCategories = await getClient().query<GetCategoriesQuery>({ query: GET_CATEGORİES })
+	const dataProducts = await getClient().query<GetProductsQuery>({ query: GET_PRODUCTS })
 
-	const dataCategories = await executeGraphQL({
-		query: GetCategoriesDocument,
-		variables: {
-			channel: "default-channel",
-			first: 12,
-		},
-	});
-
+	const cursor = dataProducts.data.products?.pageInfo?.startCursor || '';
 
 	return (
-		<div className="px-28">
-			<div>
+		<div className="relative px-28">
+			<div className="wrapper">
 				<PageHeader />
-				<div className="wrapper flex justify-center bg-white">
+				<div className="flex justify-center bg-white">
 					<ul className="relative flex justify-center bg-white z-10">
-						{dataCategories.categories?.edges.map(({ node: x }) => {
+						{dataCategories.data.categories?.edges.map(({ node: x }) => {
 							return (
 								<li className="inline-block justify-center px-4 show-category">
 									{x.name}
@@ -47,10 +44,10 @@ export default async function Page() {
 						})}
 					</ul>
 				</div>
-				<div className="bg-menus"></div>
 			</div>
+			<div className="bg-menus"></div>
 			<div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-				{data.products?.edges.map(({ node: product }) => {
+				{dataProducts.data.products?.edges.map(({ node: product }) => {
 					return (
 						<Link href={`/products/${product.id}`} key={product.id}>
 							<div>
@@ -77,8 +74,9 @@ export default async function Page() {
 							</div>
 						</Link>
 					);
-				})}
+				})}	
 			</div>
+			<Products cursor={cursor} />
 		</div>
 	);
 }

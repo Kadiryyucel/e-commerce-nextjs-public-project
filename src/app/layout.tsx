@@ -1,8 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter,Montserrat_Alternates} from 'next/font/google'
+import { Inter, Montserrat_Alternates } from 'next/font/google'
 
-const inter = Montserrat_Alternates({ subsets: ['latin'],weight: '400' })
+import { ApolloWrapper } from "@/app/lib/apollo-provider";
+
+import { AppStateProvider } from "@/app/store"
+
+const inter = Montserrat_Alternates({ subsets: ['latin'], weight: '400' })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,9 +18,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ApolloWrapper>
+          <AppStateProvider>{children}</AppStateProvider>
+        </ApolloWrapper>
+      </body>
     </html>
   )
 }

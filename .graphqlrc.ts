@@ -6,10 +6,16 @@ loadEnvConfig(".");
 const config: CodegenConfig = {
 	overwrite: true,
 	schema: 'https://self-ecommerce.saleor.cloud/graphql/',
-	documents: "graphql/**/*.graphql",
+	documents: "graphql/**/*.ts",
+	watch:true,
 	generates: {
 		"generated/": {
 			preset: "client",
+			plugins: [
+				"typescript",
+				"typescript-operations",
+				"typescript-react-apollo"
+			  ],
 			config: {
 				useTypeImports: true,
 				skipTypename: true,
@@ -18,6 +24,7 @@ const config: CodegenConfig = {
 				documentMode: "string",
 			},
 			presetConfig: {
+				gqlTagName: "gql",
 				fragmentMasking: false,
 			},
 		},
