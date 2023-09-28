@@ -12,6 +12,7 @@ import { GetProductsQuery, GetCategoriesQuery } from "../../generated/graphql";
 import { GET_PRODUCTS, GET_CATEGORİES } from "../../graphql/queries";
 
 import { getClient } from "@/app/lib/ssr"
+import { useEffect } from "react";
 
 
 
@@ -24,19 +25,20 @@ export default async function Page() {
 
 	const cursor = dataProducts.data.products?.pageInfo?.startCursor || '';
 
+
 	return (
 		<div className="relative px-28">
 			<div className="wrapper">
 				<PageHeader />
-				<div className="flex justify-center bg-white">
-					<ul className="relative flex justify-center bg-white z-10">
+				<div className="flex justify-center bg-white relative w-full">
+					<ul className="list-menu flex justify-center bg-white z-10">
 						{dataCategories.data.categories?.edges.map(({ node: x }) => {
 							return (
-								<li className="inline-block justify-center px-4 show-category">
-									{x.name}
-									<div className="menu flex flex-col flex-wrap absolute h-52 bg-white translate-x-0 p-8">
+								<li className="inline-block justify-center px-4 pb-4 show-category">
+									<span>{x.name}</span>
+									<div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white translate-x-0 p-8">
 										{x.products?.edges.map(({ node: sub }) => {
-											return (<div className={`flex-initial ${mulish.className}`}>{sub.name}</div>)
+											return (<div className={`flex-initial menu-text ${mulish.className}`}><span>{sub.name}</span></div>)
 										})}
 									</div>
 								</li>

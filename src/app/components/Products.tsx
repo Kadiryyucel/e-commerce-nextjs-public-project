@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 
-import { useState, useEffect, useRef, useMemo, memo } from "react";
+import { useState, useEffect, useRef, useMemo, memo, useSyncExternalStore } from "react";
 import { GetProductsQuery } from "@/generated/graphql";
 import { GET_PRODUCTS } from "../../../graphql/queries";
 
@@ -30,48 +30,57 @@ const Products = (props: { cursor: string }) => {
     const [hasSpinner, setSpinner] = useState(false)
 
 
+    async function getDataProducts() {
 
-    useEffect(() => {
-        async function getDataProducts() {
+        const { data: newData } = await fetchMore({ variables: { after: currentCursor.current } })
+        setSpinner(false)
 
-            const { data: newData } = await fetchMore({ variables: { after: currentCursor.current } })
-            setSpinner(false)
+        currentCursor.current = newData.products?.pageInfo.startCursor || '';
+        let hasNextPage = newData.products?.pageInfo?.hasNextPage;
 
-            currentCursor.current = newData.products?.pageInfo.startCursor || '';
-            let hasNextPage = newData.products?.pageInfo?.hasNextPage;
-
-            if(hasNextPage === false){
-                setNextPage(hasNextPage)
-            }
-            
-            
-            let collect: any = [];
-            newData.products?.edges.forEach((cur) => {
-                collect = [...collect, cur.node]
-            })
-
-            setProducts(prev => [...prev, ...collect])
+        if (hasNextPage === false) {
+            setNextPage(hasNextPage)
         }
 
-        let buffered:any;
-        async function whenScroll() {
-            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight) {
 
-                clearTimeout(buffered)
+        let collect: any = [];
+        newData.products?.edges.forEach((cur) => {
+            collect = [...collect, cur.node]
+        })
 
-                setSpinner(true);
-                buffered = setTimeout(async () => {
-                    getDataProducts();
-                }, 2000);
-            }
+        setProducts(prev => [...prev, ...collect])
+    }
+
+    function whenScroll() {
+        let buffered: any;
+        
+        if ((window.innerHeight + window.scrollY) === document.body.scrollHeight) {
+
+            clearTimeout(buffered)
+
+            setSpinner(true);
+            buffered = setTimeout(async () => {
+                await getDataProducts();
+            }, 2000);
         }
 
         if (typeof window !== 'undefined') {
             window.addEventListener('scroll', whenScroll)
         }
-        return () => window.removeEventListener('scroll', whenScroll)
-    }, [])
 
+        return () => window.removeEventListener('scroll', whenScroll)
+    }
+
+    
+    function useWhenScroll() {
+        return useSyncExternalStore(
+          whenScroll,
+          () => true, 
+          () => true
+        );
+      }
+
+    useWhenScroll()
 
 
     return (
