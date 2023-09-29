@@ -33,6 +33,11 @@ const Products = (props: { cursor: string }) => {
 
     useEffect(() => {
 
+        window.scrollTo({
+            top:0,
+        })
+
+
         async function getDataProducts() {
 
             const { data: newData } = await fetchMore({ variables: { after: currentCursor.current } })
@@ -63,7 +68,7 @@ const Products = (props: { cursor: string }) => {
                 setSpinner('visible');
                 buffered = setTimeout(async () => {
                     getDataProducts();
-                }, 2000);
+                }, 1000);
             }
         }
 
