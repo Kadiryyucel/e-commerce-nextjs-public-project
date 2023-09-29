@@ -27,15 +27,16 @@ const Products = (props: { cursor: string }) => {
     currentCursor.current = data.products?.pageInfo?.startCursor || '';
 
     const [hasNextPage, setNextPage] = useState(true)
-    const [hasSpinner, setSpinner] = useState(false)
+    const [hasSpinner, setSpinner] = useState('invisible')
 
 
 
     useEffect(() => {
+
         async function getDataProducts() {
 
             const { data: newData } = await fetchMore({ variables: { after: currentCursor.current } })
-            setSpinner(false)
+            setSpinner('invisible')
 
             currentCursor.current = newData.products?.pageInfo.startCursor || '';
             let hasNextPage = newData.products?.pageInfo?.hasNextPage;
@@ -55,11 +56,11 @@ const Products = (props: { cursor: string }) => {
 
         let buffered: any;
         async function whenScroll() {
-            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight) {
+            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight ) {
 
                 clearTimeout(buffered)
 
-                setSpinner(true);
+                setSpinner('visible');
                 buffered = setTimeout(async () => {
                     getDataProducts();
                 }, 2000);
@@ -75,7 +76,6 @@ const Products = (props: { cursor: string }) => {
 
 
     }, [])
-
 
 
     return (

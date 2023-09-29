@@ -112,3 +112,8 @@ h6 {
 .menu-text>span{
   color: rgb(130, 130, 130);
 }
+
+.mainspinner{
+  opacity: 0;
+  visibility: hidden;
+}

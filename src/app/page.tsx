@@ -12,7 +12,7 @@ import { GetProductsQuery, GetCategoriesQuery } from "../../generated/graphql";
 import { GET_PRODUCTS, GET_CATEGORİES } from "../../graphql/queries";
 
 import { getClient } from "@/app/lib/ssr"
-import { useEffect } from "react";
+
 
 
 
