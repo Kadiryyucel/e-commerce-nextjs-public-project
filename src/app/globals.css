@@ -117,3 +117,7 @@ h6 {
   opacity: 0;
   visibility: hidden;
 }
+
+.info-adress .MuiInputBase-root{
+ border-radius: 24px !important;
+}
