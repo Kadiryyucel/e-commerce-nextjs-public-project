@@ -51,7 +51,7 @@ export default async function Page() {
 			<div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
 				{dataProducts.data.products?.edges.map(({ node: product }) => {
 					return (
-						<Link href={`/products/${product.id}`} key={product.id}>
+						<Link href={`/checkout`} key={product.id}>
 							<div>
 								<div className="min-h-80 h-80 overflow-hidden rounded-md border bg-slate-50 hover:bg-slate-100">
 									{product.thumbnail && (
