@@ -76,7 +76,7 @@ h6 {
   left: calc((100% - 1000px)/2);
   border-radius: 0 0 10px 10px;
   border: 4px solid black;
-  border-top:4px;
+  border-top: 4px;
   top: 100%;
 }
 
@@ -105,19 +105,33 @@ h6 {
   left: -100%;
 }
 
-.show-category>span{
+.show-category>span {
   font-weight: bold;
 }
 
-.menu-text>span{
+.menu-text>span {
   color: rgb(130, 130, 130);
 }
 
-.mainspinner{
+.mainspinner {
   opacity: 0;
   visibility: hidden;
 }
 
-.info-adress .MuiInputBase-root{
- border-radius: 24px !important;
+.shipping-adress .MuiInputBase-root {
+  border-radius: 24px !important;
+}
+
+
+.font-700 {
+  font-weight: 700 !important;
+}
+
+.info-discount{
+  border-top:2px solid rgb(200, 200, 200);
+  border-bottom: 2px solid rgb(200, 200, 200);
+}
+
+*:placeholder-shown{
+  margin-left: 1rem;
 }
