@@ -122,16 +122,26 @@ h6 {
   border-radius: 24px !important;
 }
 
+.shipping-adress input {
+  padding-left: 0.5rem;
+}
+
 
 .font-700 {
   font-weight: 700 !important;
 }
 
 .info-discount{
-  border-top:2px solid rgb(200, 200, 200);
-  border-bottom: 2px solid rgb(200, 200, 200);
+  border-top:1px solid rgb(200, 200, 200);
+  border-bottom: 1px solid rgb(200, 200, 200);
 }
 
-*:placeholder-shown{
-  margin-left: 1rem;
+.desktop-order-summary:after{
+  content: '';
+  position: absolute;
+  width: 50vw;
+  height: 100%;
+  background-color: rgb(250 250 250);
+  left: 0;
+  top:0;
 }

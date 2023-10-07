@@ -23,7 +23,7 @@ export default function ValidPayMethods(props: { payMethods:any }) {
                     < Image
                         src={x}
                         alt="Picture of the author"
-                        className='md:w-1/3 '
+                        className='w-1/3 '
                     />)}
             </div>
         </div>
