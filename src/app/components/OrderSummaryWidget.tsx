@@ -34,9 +34,9 @@ export default function OrderSummaryWidget(props: { mobile: boolean }) {
                 </div>}
                 {(!mobile || open) && <div className="relative z-10 py-6 lg:pb-6 lg:pt-0 px-4 md:mb-8 bg-zinc-50 rounded-2xl">
                     <div className="py-4">{
-                        basketProducts.map(({ product }) => {
+                        basketProducts.map(({ product },i) => {
                             return (
-                                <div>
+                                <div key={i}>
                                     <div className="flex justify-between my-4">
                                         <div className="flex w-10/12">
                                             <div className="w-2/12">

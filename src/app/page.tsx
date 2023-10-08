@@ -1,6 +1,6 @@
 
 
-import PageHeader from "./components/PageHeader";
+import PageHeader from "./layout/PageHeader";
 import Products from "./components/Products";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,13 +32,13 @@ export default async function Page() {
 				<PageHeader />
 				<div className="flex justify-center bg-white relative w-full">
 					<ul className="list-menu flex justify-center bg-white z-10">
-						{dataCategories.data.categories?.edges.map(({ node: x }) => {
+						{dataCategories.data.categories?.edges.map(({ node: x },index:number) => {
 							return (
-								<li className="inline-block justify-center px-4 pb-4 show-category">
+								<li className="inline-block justify-center px-4 pb-4 show-category" key={index}>
 									<span>{x.name}</span>
 									<div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white translate-x-0 p-8">
-										{x.products?.edges.map(({ node: sub }) => {
-											return (<div className={`flex-initial menu-text ${mulish.className}`}><span>{sub.name}</span></div>)
+										{x.products?.edges.map(({ node: sub },i:number) => {
+											return (<div className={`flex-initial menu-text ${mulish.className}`} key={i}><span>{sub.name}</span></div>)
 										})}
 									</div>
 								</li>

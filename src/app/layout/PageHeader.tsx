@@ -8,7 +8,6 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { SlBasket } from 'react-icons/sl'
 
 import { Lato } from 'next/font/google'
-import { useEffect } from 'react';
 import { Box } from '@mui/material';
 
 const lato = Lato({ subsets: ['latin'], weight: '400' })

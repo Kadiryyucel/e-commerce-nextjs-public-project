@@ -1,8 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter, Montserrat_Alternates } from 'next/font/google'
+import { Montserrat_Alternates } from 'next/font/google'
 
-import { ApolloWrapper } from "@/app/lib/apollo-provider";
+import { ApolloWrapper } from "@/app/lib/client";
 
 import { AppStateProvider } from "@/app/store"
 

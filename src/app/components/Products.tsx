@@ -21,20 +21,13 @@ const Products = (props: { cursor: string }) => {
     const currentCursor = useRef<string>('')
     const { data, error, fetchMore } = useSuspenseQuery<GetProductsQuery>(GET_PRODUCTS, { variables: { after: cursor } })
 
-    if (error) return <div></div>
-
-
-    currentCursor.current = data.products?.pageInfo?.startCursor || '';
-
     const [hasNextPage, setNextPage] = useState(true)
     const [hasSpinner, setSpinner] = useState('invisible')
-
-
 
     useEffect(() => {
 
         window.scrollTo({
-            top:0,
+            top: 0,
         })
 
 
@@ -61,7 +54,7 @@ const Products = (props: { cursor: string }) => {
 
         let buffered: any;
         async function whenScroll() {
-            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight ) {
+            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight) {
 
                 clearTimeout(buffered)
 
@@ -80,7 +73,13 @@ const Products = (props: { cursor: string }) => {
         return () => window.removeEventListener('scroll', whenScroll)
 
 
-    }, [])
+    }, [fetchMore])
+
+    if (error) return <div></div>
+
+
+    currentCursor.current = data.products?.pageInfo?.startCursor || '';
+
 
 
     return (

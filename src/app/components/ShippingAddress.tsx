@@ -1,6 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 import ShippingMethod from "./ShippingMethod";
-import Payment from "./Payment";
+import CreditCardInfo from "./CreditCardInfo";
 
 export default function ShippingAddress() {
 
@@ -164,7 +164,7 @@ export default function ShippingAddress() {
                 </div>
 
                 <ShippingMethod />
-                <Payment />
+                <CreditCardInfo />
             </div>
         </>
     )

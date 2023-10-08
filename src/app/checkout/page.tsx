@@ -3,7 +3,7 @@
 
 import { Breadcrumbs, Button, Link } from "@mui/material";
 import OrderSummaryWidget from "../components/OrderSummaryWidget";
-import PageAlign from "../components/PageAlign";
+import PageAlign from "../layout/PageAlign";
 import ShippingAddress from "../components/ShippingAddress";
 import ValidPayMethods from "../components/ValidPayMethods";
 
@@ -26,9 +26,10 @@ export default function Checkout() {
         >
             Core
         </Link>,
-        <div>
+        <Link underline="hover" key="1" color="inherit" href="/" >
             Shipping & Billing
-        </div>
+        </Link>
+
     ];
 
     const [currentWidth, setCurrentWidth] = useState(0)
