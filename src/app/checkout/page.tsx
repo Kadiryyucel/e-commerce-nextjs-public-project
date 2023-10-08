@@ -1,4 +1,3 @@
-
 'use client'
 
 import { Breadcrumbs, Button, Link } from "@mui/material";
@@ -8,7 +7,8 @@ import ShippingAddress from "../components/ShippingAddress";
 import ValidPayMethods from "../components/ValidPayMethods";
 
 import { Roboto } from 'next/font/google'
-import { useEffect, useState } from "react";
+
+import useWhenResize from '@/app/helpers/whenResize'
 
 const roboto = Roboto({ subsets: ['latin'], weight: '400' })
 
@@ -22,33 +22,18 @@ export default function Checkout() {
             underline="hover"
             key="2"
             color="inherit"
-            href="/material-ui/getting-started/installation/"
+            href="/"
         >
             Core
         </Link>,
-        <Link underline="hover" key="1" color="inherit" href="/" >
+        <Link underline="hover" key="3" color="inherit" href="/" >
             Shipping & Billing
         </Link>
 
     ];
 
-    const [currentWidth, setCurrentWidth] = useState(0)
-    useEffect(() => {
-        let debaounce = 500
-        let currentBuffer: NodeJS.Timeout;
-        function whenResize() {
-            clearTimeout(currentBuffer)
-            currentBuffer = setTimeout(() => {
-                let currentWidth = window.innerWidth;
 
-                setCurrentWidth(currentWidth)
-                console.log('Tarayıcı genişliği değişti. Yeni genişlik: ' + currentWidth);
-            }, debaounce)
-        }
-
-        window.addEventListener('resize', whenResize);
-        return () => window.removeEventListener('resize', whenResize)
-    }, [])
+    let currentWidth = useWhenResize()
 
     function MobileOrderSummary() {
         if (currentWidth <= 1024) {
