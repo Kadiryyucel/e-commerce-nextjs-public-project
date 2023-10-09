@@ -1,66 +1,36 @@
 'use client'
-import React, { FormEvent } from "react";
-import { useSaleorAuthContext } from "@saleor/auth-sdk/react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 
-const CurrentUserDocument = gql`
-  query CurrentUser {
-    me {
-      id
-      email
-      firstName
-      lastName
-      avatar {
-        url
-        alt
-      }
-    }
-  }
-`;
+import SignIn from './signin';
+import SignUp from './signup'
 
-export default function LoginPage() {
-  const { signIn, signOut } = useSaleorAuthContext();
+export default function Login(props:{children:React.ReactNode}) {
 
-  const { data: currentUser, loading } = useQuery(CurrentUserDocument);
+    const [value, setValue] = useState('1');
 
-  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+    };
 
-    const result = await signIn({
-      email: "admin@example.com",
-      password: "admin",
-    });
-
-    if (result.data.tokenCreate.errors) {
-      // handle errors
-    }
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <main>
-      {currentUser?.me ? (
-        <>
-          <div>Display user {JSON.stringify(currentUser)}</div>
-          <button className="button" onClick={() => signOut()}>
-            Log Out
-          </button>
-        </>
-      ) : (
-        <div>
-          <form onSubmit={submitHandler}>
-            {/* You must connect your inputs to state or use a form library such as react-hook-form */}
-            <input type="email" name="email" placeholder="Email" />
-            <input type="password" name="password" placeholder="Password" />
-            <button className="button" type="submit">
-              Log In
-            </button>
-          </form>
-        </div>
-      )}
-    </main>
-  );
+    return (
+        <div className="flex justify-center">
+            <div className="w-2/4 max-w-md min-w-[320px] border">
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="Login" className="w-1/2" value="1" />
+                            <Tab label="Signup" className="w-1/2" value="2" />
+                        </TabList>
+                    </Box>
+                    <TabPanel className="flex flex-col gap-y-6" value="1"><SignIn/></TabPanel>
+                    <TabPanel className="flex flex-col gap-y-6" value="2"><SignUp/></TabPanel>
+                </TabContext>
+            </div>
+        </div >
+    )
 }

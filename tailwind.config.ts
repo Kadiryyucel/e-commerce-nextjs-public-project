@@ -18,6 +18,9 @@ const config: Config = {
       },
       translate: {
         'x-return': '-100%'
+      },
+      minWidth: {
+        'xs': '320px',
       }
     },
   },

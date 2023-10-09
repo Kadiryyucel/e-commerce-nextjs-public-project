@@ -2,6 +2,7 @@
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
+import Link from 'next/link';
 
 import { FiSearch } from 'react-icons/fi';
 import { CiUser } from 'react-icons/ci';
@@ -31,7 +32,7 @@ export default async function PageHeader() {
     return (
         <div className='w-full'>
             <div className="flex flex-wrap justify-center items-center w-full">
-                <div className='grow'><RiMenu2Line size={28} /></div>
+                <div className='grow xl:hidden'><RiMenu2Line size={28} /></div>
                 <h1 className={`${lato.className} grow shrink basis-auto`}>trendyol</h1>
                 <Box sx={{ backgroundColor: '#f3f3f3' }} className='grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
                     <TextField
@@ -45,9 +46,9 @@ export default async function PageHeader() {
 
 
                 <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
-                    <div className='flex items-center gap-x-2 '><div><CiUser size={20} /></div><span className='w-0 xl:w-auto overflow-hidden'>Login</span></div>
-                    <div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='w-0 xl:w-auto overflow-hidden'>Favorilerim</span></div>
-                    <div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='w-0 xl:w-auto overflow-hidden'>Sepetim</span></div>
+                    <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
+                    <div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div>
+                    <div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div>
                 </div>
             </div>
             <div className="flex flex-col justify-start bg-white w-3/4 absolute left-0 top-0 xl:relative xl:w-full">

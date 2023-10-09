@@ -42,7 +42,7 @@
   align-items: center;
 }
 
-.wrapper:has(.show-category:hover)+.bg-menus {
+.wrapper:has(.show-category:hover)::after {
   background-color: rgb(222, 221, 221);
   opacity: 0.6;
   position: absolute;
