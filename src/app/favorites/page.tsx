@@ -1,30 +1,19 @@
-import PageHeader from "./layout/PageHeader";
-import Products from "./components/Products";
-import Link from "next/link";
+'use client'
+
+import { getFavorites } from '@/app/helpers/favorites'
 import Image from "next/image";
+
+import { Link } from '@mui/material';
 
 import { CiHeart } from 'react-icons/ci'
 
-import { GetProductsQuery } from "../../generated/graphql";
-import { GET_PRODUCTS } from "../../graphql/queries";
+export default function Favorites() {
 
-import { getClient } from "@/app/lib/ssr"
+    let favorites = getFavorites();
 
-
-export default async function Page() {
-	const dataProducts = await getClient().query<GetProductsQuery>({ query: GET_PRODUCTS })
-
-	const cursor = dataProducts.data.products?.pageInfo?.startCursor || '';
-
-
-	return (
-		<div className="relative">
-			<div className="px-2 xl:px-28">
-				<div className="wrapper">
-					<PageHeader />
-				</div>
-				<div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-					{dataProducts.data.products?.edges.map(({ node: product }) => {
+    return(
+        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+					{favorites.map(({ node: product }) => {
 						return (
 							<Link href={`/checkout`} key={product.id} className="relative">
 								<div>
@@ -54,9 +43,5 @@ export default async function Page() {
 						);
 					})}
 				</div>
-				<Products cursor={cursor} />
-			</div>
-		</div>
-
-	);
+    )
 }
