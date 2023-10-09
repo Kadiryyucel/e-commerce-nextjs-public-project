@@ -13,6 +13,12 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      flexGrow: {
+        8: '8'
+      },
+      translate: {
+        'x-return': '-100%'
+      }
     },
   },
   plugins: [],
