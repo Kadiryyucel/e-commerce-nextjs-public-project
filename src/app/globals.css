@@ -144,3 +144,34 @@ h6 {
   left: 0;
   top:0;
 }
+
+.count-product input{
+  text-align: center;
+  padding: 8px 5.5px;
+}
+
+.count-product input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.count-product > div{
+  height: 100%;
+}
+
+.mobile-approval{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top:0;
+  height: 6rem;
+  background-color: #ccc; /* arka plan rengini değiştirin */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; 
+
+}
+

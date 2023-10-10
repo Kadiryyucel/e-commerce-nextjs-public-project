@@ -21,6 +21,10 @@ const config: Config = {
       },
       minWidth: {
         'xs': '320px',
+        counterBtn: '24px',
+      },
+      maxWidth: {
+        ['basket-product-describe']:'60%'
       }
     },
   },
