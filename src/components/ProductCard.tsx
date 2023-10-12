@@ -26,7 +26,7 @@ export default function ProductsCart({ product }: ProductsProps) {
         } else {
             del(product.id);
         }
-    }, [isFavorite]);
+    }, [isFavorite,product]);
 
 
     return (
