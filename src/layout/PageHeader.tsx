@@ -30,7 +30,7 @@ export default async function PageHeader() {
 
 
     return (
-        <div className='w-full'>
+        <div className='wrapper-content px-2 px-28 w-full'>
             <div className="flex flex-wrap justify-center items-center w-full">
                 <div className='grow xl:hidden'><RiMenu2Line size={28} /></div>
                 <h1 className={`${lato.className} grow shrink basis-auto`}>trendyol</h1>
@@ -48,7 +48,7 @@ export default async function PageHeader() {
                 <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
                     <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
                     <div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div>
-                    <div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div>
+                    <Link href={`/basket`}><div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
                 </div>
             </div>
             <div className="flex flex-col justify-start bg-white w-3/4 absolute left-0 top-0 xl:relative xl:w-full">

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useState } from "react";
 
 
-import one from '@/app/assets/nike.png'
-import two from '@/app/assets/rightimgsecond.png'
-import three from '@/app/assets/rightimgfirst.png'
+import one from '@/assets/nike.png'
+import two from '@/assets/rightimgsecond.png'
+import three from '@/assets/rightimgfirst.png'
 import { Badge } from "@mui/material";
 
 export default function OrderSummaryWidget(props: { mobile: boolean }) {

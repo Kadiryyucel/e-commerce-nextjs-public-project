@@ -2,7 +2,7 @@
 
 import { Breadcrumbs, Button, Link } from "@mui/material";
 import OrderSummaryWidget from "../../components/OrderSummaryWidget";
-import PageAlign from "../../layout/PageAlign";
+import PageAlign from "@/layout/PageAlign";
 import ShippingAddress from "../../components/ShippingAddress";
 import ValidPayMethods from "../../components/ValidPayMethods";
 

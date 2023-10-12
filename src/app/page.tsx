@@ -19,11 +19,11 @@ export default async function Page() {
 
 	return (
 		<div className="relative">
-			<div className="px-2 xl:px-28">
+			<div>
 				<div className="wrapper">
 					<PageHeader />
 				</div>
-				<div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+				<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
 					{dataProducts.data.products?.edges.map(({ node: product }) => {
 						return (
 							<Link href={`/checkout`} key={product.id} className="relative">
