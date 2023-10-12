@@ -6,9 +6,6 @@ import googlePay from "../assets/GooglePay.png";
 import payPal from "../assets/Paypal.png";
 import shopPay from "../assets/ShopPay.png";
 
-import shopPaySecondTemp from "../assets/SecondTemp/shopPay.png";
-import paypalSecondTemp from "../assets/SecondTemp/paypal.png";
-import googlePaySecondTemp from "../assets/SecondTemp/googlePay.png";
 
 export default function ValidPayMethods(props: { payMethods:any }) {
 

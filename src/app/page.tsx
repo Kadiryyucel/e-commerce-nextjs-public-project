@@ -1,5 +1,5 @@
-import PageHeader from "./layout/PageHeader";
-import Products from "./components/Products";
+import PageHeader from "../layout/PageHeader";
+import Products from "../components/Products";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ import { CiHeart } from 'react-icons/ci'
 import { GetProductsQuery } from "../../generated/graphql";
 import { GET_PRODUCTS } from "../../graphql/queries";
 
-import { getClient } from "@/app/lib/ssr"
+import { getClient } from "@/lib/ssr"
 
 
 export default async function Page() {

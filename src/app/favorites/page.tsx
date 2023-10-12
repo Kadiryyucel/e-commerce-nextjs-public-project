@@ -1,6 +1,6 @@
 'use client'
 
-import { getFavorites } from '@/app/helpers/favorites'
+import { getFavorites } from '@/helpers/favorites'
 import Image from "next/image";
 
 import { Link } from '@mui/material';

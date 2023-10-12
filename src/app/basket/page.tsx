@@ -1,20 +1,19 @@
 'use client'
-import { createPortal } from 'react-dom';
-import one from '@/app/assets/nike.png'
+import one from '@/assets/nike.png'
 
 import Image from 'next/image'
 import { Button, Checkbox } from '@mui/material'
-import SpinButton from '../components/SpinButton'
+import SpinButton from '../../components/SpinButton'
 export default function Basket() {
 
     let data = new Array(5)
     data.fill(6)
     function BasketCol() {
         return (
-            <div className='flex flex-col gap-y-4 pl-4'>
+            <div className='flex flex-col md:w-full gap-y-4 xl:pl-4 p-0'>
                 {data.map((_, i) => {
                     return (
-                        <div className='w-full flex justify-center' key={i}>
+                        <div className='w-full flex justify-center xl:justify-end' key={i}>
                             <div className='flex items-center md:justify-between max-w-screen-lg border p-6'>
                                 <div className='flex items-center md:w-full'>
                                     <div className="flex shrink-0 items-start w-1/12">
@@ -61,7 +60,7 @@ export default function Basket() {
         <>
             <div className='flex gap-x-4'>
                 <BasketCol></BasketCol>
-                <div className='w-full'>
+                <div className='w-full xl:block hidden'>
                     <div className='flex flex-col items-center border w-6/12 px-4'>
                         <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
                         <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
@@ -71,7 +70,7 @@ export default function Basket() {
                     <Button variant='contained' className='w-6/12 mt-4'>Onayla</Button>
                 </div>
 
-                <div className='flex justify-center items-center xl:hidden fixed w-screen h-20 gap-x-6 bg-slate-200 mobile-approval'>
+                <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 bg-slate-200 mobile-approval'>
                     <div className='flex flex-col'>
                         <div className='text-xs'><span>Toplam</span></div>
                         <div><span>4.449,87 TL</span></div>

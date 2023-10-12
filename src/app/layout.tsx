@@ -2,9 +2,9 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Montserrat_Alternates } from 'next/font/google'
 
-import { ApolloWrapper } from "@/app/lib/client";
+import { ApolloWrapper } from "@/lib/client";
 
-import { AppStateProvider } from "@/app/store"
+import { AppStateProvider } from "@/store"
 
 const inter = Montserrat_Alternates({ subsets: ['latin'], weight: '400' })
 

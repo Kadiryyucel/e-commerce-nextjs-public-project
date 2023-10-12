@@ -16,10 +16,10 @@ import { Lato } from 'next/font/google'
 import { Mulish } from 'next/font/google'
 
 
-import { GetCategoriesQuery } from "../../../generated/graphql";
-import { GET_CATEGORİES } from "../../../graphql/queries";
+import { GetCategoriesQuery } from "../../generated/graphql";
+import { GET_CATEGORİES } from "../../graphql/queries";
 
-import { getClient } from "@/app/lib/ssr"
+import { getClient } from "@/lib/ssr"
 
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
 const lato = Lato({ subsets: ['latin'], weight: '400' })

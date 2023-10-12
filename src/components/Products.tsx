@@ -4,12 +4,12 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 
 import { useState, useEffect, useRef, useMemo, memo } from "react";
 import { GetProductsQuery } from "@/generated/graphql";
-import { GET_PRODUCTS } from "../../../graphql/queries";
+import { GET_PRODUCTS } from "../../graphql/queries";
 
 
 import Link from "next/link";
 import Image from "next/image";
-import ShowSpinner from "@/app/components/MainSpinner"
+import ShowSpinner from "@/components/MainSpinner"
 
 
 
