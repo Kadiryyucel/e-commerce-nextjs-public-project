@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { PRODUCT_CARD } from './fragments'
 export const CURRENT_USER = gql`query CurrentUser {
 	me {
 		id
@@ -36,33 +37,15 @@ export const GET_CATEGORİES = gql`query GetCategories {
   }
 }`
 
-export const GET_PRODUCTS = gql`query GetProducts($after:String) {
+export const GET_PRODUCTS = gql`
+${PRODUCT_CARD}
+query GetProducts($after:String) {
     products(channel:"default-channel", first: 12,after:$after) {
-      edges {
-      node {
-        isAvailable
-        isAvailableForPurchase
-        name
-        rating
-        id
-        thumbnail {
-          alt
-          url
-        }
-        pricing {
-          priceRange {
-            start {
-              gross {
-                amount
-              }
-            }
-          }
-        }
-        category {
-          name
-        }
-      }
-      cursor
+      edges{
+       node {
+         ...ProductCard
+       }
+       cursor
     }
     pageInfo {
       hasNextPage
@@ -70,5 +53,5 @@ export const GET_PRODUCTS = gql`query GetProducts($after:String) {
       endCursor
     }
     totalCount
-  }
+   }
   }`

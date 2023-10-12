@@ -29762,6 +29762,8 @@ export type _Service = {
   sdl?: Maybe<Scalars['String']['output']>;
 };
 
+export type ProductCardFragment = { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -29801,7 +29803,31 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
-
+export const ProductCardFragmentDoc = new TypedDocumentString(`
+    fragment ProductCard on Product {
+  isAvailable
+  isAvailableForPurchase
+  name
+  rating
+  id
+  thumbnail {
+    alt
+    url
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+        }
+      }
+    }
+  }
+  category {
+    name
+  }
+}
+    `, {"fragmentName":"ProductCard"}) as unknown as TypedDocumentString<ProductCardFragment, unknown>;
 export const AuthDocument = new TypedDocumentString(`
     mutation Auth($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
@@ -29858,27 +29884,7 @@ export const GetProductsDocument = new TypedDocumentString(`
   products(channel: "default-channel", first: 12, after: $after) {
     edges {
       node {
-        isAvailable
-        isAvailableForPurchase
-        name
-        rating
-        id
-        thumbnail {
-          alt
-          url
-        }
-        pricing {
-          priceRange {
-            start {
-              gross {
-                amount
-              }
-            }
-          }
-        }
-        category {
-          name
-        }
+        ...ProductCard
       }
       cursor
     }
@@ -29890,7 +29896,29 @@ export const GetProductsDocument = new TypedDocumentString(`
     totalCount
   }
 }
-    `) as unknown as TypedDocumentString<GetProductsQuery, GetProductsQueryVariables>;
+    fragment ProductCard on Product {
+  isAvailable
+  isAvailableForPurchase
+  name
+  rating
+  id
+  thumbnail {
+    alt
+    url
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+        }
+      }
+    }
+  }
+  category {
+    name
+  }
+}`) as unknown as TypedDocumentString<GetProductsQuery, GetProductsQueryVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -59644,6 +59672,8 @@ export type _Service = {
   sdl?: Maybe<Scalars['String']['output']>;
 };
 
+export type ProductCardFragment = { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -59669,7 +59699,31 @@ export type GetProductsQueryVariables = Exact<{
 
 export type GetProductsQuery = { products?: { totalCount?: number | null, edges: Array<{ cursor: string, node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }>, pageInfo: { hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
-
+export const ProductCardFragmentDoc = `
+    fragment ProductCard on Product {
+  isAvailable
+  isAvailableForPurchase
+  name
+  rating
+  id
+  thumbnail {
+    alt
+    url
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+        }
+      }
+    }
+  }
+  category {
+    name
+  }
+}
+    `;
 export const AuthDocument = `
     mutation Auth($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
@@ -59807,27 +59861,7 @@ export const GetProductsDocument = `
   products(channel: "default-channel", first: 12, after: $after) {
     edges {
       node {
-        isAvailable
-        isAvailableForPurchase
-        name
-        rating
-        id
-        thumbnail {
-          alt
-          url
-        }
-        pricing {
-          priceRange {
-            start {
-              gross {
-                amount
-              }
-            }
-          }
-        }
-        category {
-          name
-        }
+        ...ProductCard
       }
       cursor
     }
@@ -59839,7 +59873,7 @@ export const GetProductsDocument = `
     totalCount
   }
 }
-    `;
+    ${ProductCardFragmentDoc}`;
 
 /**
  * __useGetProductsQuery__
