@@ -11,7 +11,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import SignIn from './signin';
 import SignUp from './signup'
 
-export default function Login(props: { children: React.ReactNode }) {
+export default function Login() {
 
     const [value, setValue] = useState('1');
 
