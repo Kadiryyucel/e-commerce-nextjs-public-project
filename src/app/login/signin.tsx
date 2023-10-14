@@ -1,33 +1,12 @@
 'use client'
-import React, { FormEvent } from "react";
 
-import { AUTH } from "../../../graphql/mutations";
-
-import { useMutation } from '@apollo/client';
 
 import { Button, InputAdornment, TextField } from "@mui/material";
 import Link from "@mui/material/Link"
 
 export default function LoginPage() {
 
-  const [signIn, { data, loading, error }] = useMutation(AUTH);
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
-
-  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const result = await signIn({
-      variables: {
-        email: "admin@example.com",
-        password: "admin",
-      }
-    });
-
-    if (result.data.tokenCreate.errors) {
-    }
-  };
 
 
   return (
