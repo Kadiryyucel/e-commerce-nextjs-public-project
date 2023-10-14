@@ -1,47 +1,36 @@
 'use client'
+import Site from '@/template/Site'
 
-import { getFavorites } from '@/helpers/favorites'
-import Image from "next/image";
+import { getFavorites, del } from '@/helpers/favorites'
 
-import { Link } from '@mui/material';
+import ProductCard from '@/components/ProductCard'
 
-import { CiHeart } from 'react-icons/ci'
+import { IoCloseOutline } from 'react-icons/io5'
+
+import { useState } from 'react'
 
 export default function Favorites() {
 
-    let favorites = getFavorites();
+	const [favorites, setFavorite] = useState(getFavorites())
 
-    return(
-        <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-					{favorites.map(({ node: product }) => {
-						return (
-							<Link href={`/checkout`} key={product.id} className="relative">
-								<div>
-									<div className="absolute top-4 right-4 p-1 bg-slate-50 rounded-full z-10 border hover:text-amber-500"><CiHeart color='inherit' size={28}/></div>
-									<div className="min-h-80 h-80 overflow-hidden rounded-md border bg-slate-50 hover:bg-slate-100">
-										{product.thumbnail && (
-											<Image
-												width={250}
-												height={250}
-												alt={product.thumbnail.alt || ""}
-												src={product.thumbnail.url}
-												className="h-full w-full object-cover object-center p-4 hover:scale-105"
-											/>
-										)}
-									</div>
-									<div className="mt-2 flex justify-between">
-										<div>
-											<h3 className="text-sm font-semibold text-gray-700">{product.name}</h3>
-											<p className="text-sm text-gray-500">{product.category?.name}</p>
-										</div>
-										<p className="text-sm font-medium text-gray-900">
-											${product.pricing?.priceRange?.start?.gross.amount}
-										</p>
-									</div>
-								</div>
-							</Link>
-						);
-					})}
-				</div>
-    )
+	function whenDel(id: string) {
+		del(id)
+		let newFavorites = favorites.filter(fav => fav.id !== id)
+		setFavorite(() => [...newFavorites])
+	}
+
+	return (
+		<Site>
+			<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+				{favorites.map((product) => {
+					return (
+						<ProductCard product={product} key={product.id} >
+							<div className="absolute top-4 right-4 p-1 bg-slate-50 rounded-full z-10 border text-slate-300 hover:text-amber-500 hover:border-amber-500" key={product.id} onClick={() => whenDel(product.id)}>
+								<IoCloseOutline color='inherit' size={28} />
+							</div>
+						</ProductCard>);
+				})}
+			</div>
+		</Site>
+	)
 }
