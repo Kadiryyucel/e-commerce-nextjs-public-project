@@ -1,3 +1,4 @@
+import { type ProductCardFragment } from '../../generated/graphql'
 
 const key='favorites';
 
@@ -9,7 +10,9 @@ export function getFavorites():any[]{
     return JSON.parse(localStorage.getItem(key) || '');
 }
 
-export function add(item:any){
+export function add(item:ProductCardFragment){
+    let check = getFavorites().some((fav:ProductCardFragment)=>fav.id === item.id)
+    if(check) return
     localStorage.setItem(key,JSON.stringify([item,...getFavorites()]))
 }
 

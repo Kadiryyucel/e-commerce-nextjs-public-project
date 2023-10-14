@@ -7,33 +7,44 @@ import { CiHeart } from 'react-icons/ci'
 import { AiTwotoneHeart } from 'react-icons/ai'
 
 import { type ProductCardFragment } from '../../generated/graphql'
-import { useEffect, useState } from 'react';
+import { useState, memo } from 'react';
 
-import { add, del } from '@/helpers/favorites'
-
-type ProductsProps = {
-    product: ProductCardFragment;
-};
-
-export default function ProductsCart({ product }: ProductsProps) {
-
-    const [isFavorite, setFavorite] = useState(false);
+import { add, del, getFavorites } from '@/helpers/favorites'
 
 
-    useEffect(() => {
-        if (isFavorite) {
-            add(product);
-        } else {
-            del(product.id);
+
+const ProductsCard = function ({ product, children }: { product: ProductCardFragment, children: React.ReactNode }) {
+
+    let isInFavorites = getFavorites().some(fav=>fav.id === product.id);
+
+    const [isFavorite, setFavorite] = useState<boolean>(isInFavorites);
+
+    function toggleFavorite(){
+        if(isFavorite){
+            del(product.id)
+            setFavorite(false)
+        } 
+        else {
+            add(product)
+            setFavorite(true)
+        } 
+    }
+
+    function DefaultSlot() {
+        if (children) {
+            return children
         }
-    }, [isFavorite,product]);
+        else {
+            return <div className="absolute top-4 right-4 p-1 bg-slate-50 rounded-full z-10 border hover:text-amber-500" onClick={() => toggleFavorite()}>
+                {isFavorite ? <AiTwotoneHeart color='rgb(245 158 11)' size={28} /> : <CiHeart color='inherit' size={28} />}
+            </div>
+        }
+    }
 
 
     return (
         <div className='relative'>
-            <div className="absolute top-4 right-4 p-1 bg-slate-50 rounded-full z-10 border hover:text-amber-500" onClick={()=> setFavorite(prev=>!prev)}>
-                {isFavorite ? <AiTwotoneHeart color='rgb(245 158 11)' size={28} /> : <CiHeart color='inherit' size={28} />}
-            </div>
+            <DefaultSlot />
             <Link href={`/checkout`} key={product.id} className="relative">
                 <div>
                     <div className="min-h-80 h-80 overflow-hidden rounded-md border bg-slate-50 hover:bg-slate-100">
@@ -62,3 +73,5 @@ export default function ProductsCart({ product }: ProductsProps) {
 
     )
 }
+
+export default memo(ProductsCard)
