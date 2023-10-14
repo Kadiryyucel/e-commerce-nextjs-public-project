@@ -18,7 +18,7 @@ export const CURRENT_USER = gql`query CurrentUser {
 	}
 }`
 
-export const GET_CATEGORİES = gql`query GetCategories {
+export const GET_CATEGORIES = gql`query GetCategories {
     categories(first: 10) {
     edges {
       node {
