@@ -1,5 +1,7 @@
 'use client'
 
+import Site from '@/template/Site'
+
 import { Breadcrumbs, Button, Link } from "@mui/material";
 import OrderSummaryWidget from "../../components/OrderSummaryWidget";
 import PageAlign from "@/layout/PageAlign";
@@ -49,7 +51,8 @@ export default function Checkout() {
 
     return (
         <>
-            <div className={`checkout-page ${roboto.className}`}>
+        <Site>
+        <div className={`checkout-page ${roboto.className}`}>
                 <PageAlign
                     left={
                         <>
@@ -81,6 +84,7 @@ export default function Checkout() {
 
 
             </div>
+        </Site>
         </>
     )
 } 

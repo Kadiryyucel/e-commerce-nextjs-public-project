@@ -1,9 +1,13 @@
 'use client'
-import one from '@/assets/nike.png'
+
+import Site from '@/template/Site'
 
 import Image from 'next/image'
 import { Button, Checkbox } from '@mui/material'
 import SpinButton from '../../components/SpinButton'
+
+import one from '@/assets/nike.png'
+
 export default function Basket() {
 
     let data = new Array(5)
@@ -56,30 +60,33 @@ export default function Basket() {
                 })}
             </div>)
     }
+
     return (
         <>
-            <div className='flex gap-x-4'>
-                <BasketCol></BasketCol>
-                <div className='w-full xl:block hidden'>
-                    <div className='flex flex-col items-center border w-6/12 px-4'>
-                        <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
-                        <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
-                        <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
-                        <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
+            <Site>
+                <div className='flex gap-x-4'>
+                    <BasketCol></BasketCol>
+                    <div className='w-full xl:block hidden'>
+                        <div className='flex flex-col items-center border w-6/12 px-4'>
+                            <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
+                            <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
+                            <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
+                            <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
+                        </div>
+                        <Button variant='contained' className='w-6/12 mt-4'>Onayla</Button>
                     </div>
-                    <Button variant='contained' className='w-6/12 mt-4'>Onayla</Button>
-                </div>
 
-                <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 bg-slate-200 mobile-approval'>
-                    <div className='flex flex-col'>
-                        <div className='text-xs'><span>Toplam</span></div>
-                        <div><span>4.449,87 TL</span></div>
-                        <div className='text-xs'><span>Kargo Bedava</span></div>
+                    <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 bg-slate-200 mobile-approval'>
+                        <div className='flex flex-col'>
+                            <div className='text-xs'><span>Toplam</span></div>
+                            <div><span>4.449,87 TL</span></div>
+                            <div className='text-xs'><span>Kargo Bedava</span></div>
+                        </div>
+                        <Button variant='contained' className='w-3/6 h-12'>Onayla</Button>
                     </div>
-                    <Button variant='contained' className='w-3/6 h-12'>Onayla</Button>
-                </div>
 
-            </div>
+                </div>
+            </Site>
         </>
     )
 }
