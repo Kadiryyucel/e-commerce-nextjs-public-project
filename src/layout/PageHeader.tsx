@@ -1,4 +1,4 @@
-
+'use client'
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
@@ -17,23 +17,22 @@ import { Mulish } from 'next/font/google'
 
 
 import { GetCategoriesQuery } from "../../generated/graphql";
-import { GET_CATEGORİES } from "../../graphql/queries";
+import { GET_CATEGORIES } from "../../graphql/queries";
 
-import { getClient } from "@/lib/ssr"
+import { useSuspenseQuery } from '@apollo/client';
 
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
 const lato = Lato({ subsets: ['latin'], weight: '400' })
 
-export default async function PageHeader() {
+export default function PageHeader() {
 
-    const dataCategories = await getClient().query<GetCategoriesQuery>({ query: GET_CATEGORİES });
-
+    const dataCategories = useSuspenseQuery<GetCategoriesQuery>(GET_CATEGORIES);
 
     return (
-        <div className='wrapper-content px-2 px-28 w-full'>
+        <div className='wrapper-content px-2 px-28 w-full mb-10'>
             <div className="flex flex-wrap justify-center items-center w-full">
                 <div className='grow xl:hidden'><RiMenu2Line size={28} /></div>
-                <h1 className={`${lato.className} grow shrink basis-auto`}>trendyol</h1>
+                <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
                 <Box sx={{ backgroundColor: '#f3f3f3' }} className='grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
                     <TextField
                         className='search-bar w-full'
@@ -47,7 +46,7 @@ export default async function PageHeader() {
 
                 <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
                     <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
-                    <div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div>
+                    <Link href={`/favorites`}><div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div></Link>
                     <Link href={`/basket`}><div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
                 </div>
             </div>
@@ -58,9 +57,8 @@ export default async function PageHeader() {
                 </div>
 
                 <ul className="list-menu flex flex-col xl:flex-row justify-center bg-white z-10 divide-y divide-slate-200 xl:divide-none">
-                    {dataCategories.data.categories?.edges.map(({ node: x }, index: number) => {
+                    {dataCategories.data?.categories?.edges.map(({ node: x }, index: number) => {
                         return (
-                            <>
                                 <li className="flex justify-between xl:inline-block justify-center pl-4 py-4 show-category" key={index}>
                                     <span>{x.name}</span> <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>
                                     <div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white translate-x-0 p-8">
@@ -69,7 +67,6 @@ export default async function PageHeader() {
                                         })}
                                     </div>
                                 </li>
-                            </>
                         );
                     })}
                 </ul>
