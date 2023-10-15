@@ -29764,6 +29764,10 @@ export type _Service = {
 
 export type ProductCardFragment = { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null };
 
+export type ProductFragment = { name: string, id: string, slug: string };
+
+export type CategoryFragment = { name: string, id: string, slug: string };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -29780,7 +29784,7 @@ export type CurrentUserQuery = { me?: { id: string, lastLogin?: unknown | null, 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: string, level: number, slug: string, products?: { edges: Array<{ node: { name: string } }> } | null } }> } | null };
+export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: string, id: string, slug: string, products?: { edges: Array<{ node: { name: string, id: string, slug: string } }> } | null } }> } | null };
 
 export type GetProductsQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -29828,6 +29832,20 @@ export const ProductCardFragmentDoc = new TypedDocumentString(`
   }
 }
     `, {"fragmentName":"ProductCard"}) as unknown as TypedDocumentString<ProductCardFragment, unknown>;
+export const ProductFragmentDoc = new TypedDocumentString(`
+    fragment PRODUCT on Product {
+  name
+  id
+  slug
+}
+    `, {"fragmentName":"PRODUCT"}) as unknown as TypedDocumentString<ProductFragment, unknown>;
+export const CategoryFragmentDoc = new TypedDocumentString(`
+    fragment CATEGORY on Category {
+  name
+  id
+  slug
+}
+    `, {"fragmentName":"CATEGORY"}) as unknown as TypedDocumentString<CategoryFragment, unknown>;
 export const AuthDocument = new TypedDocumentString(`
     mutation Auth($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
@@ -29864,13 +29882,11 @@ export const GetCategoriesDocument = new TypedDocumentString(`
   categories(first: 10) {
     edges {
       node {
-        name
-        level
-        slug
+        ...CATEGORY
         products(first: 10, channel: "default-channel") {
           edges {
             node {
-              name
+              ...PRODUCT
             }
           }
         }
@@ -29878,7 +29894,16 @@ export const GetCategoriesDocument = new TypedDocumentString(`
     }
   }
 }
-    `) as unknown as TypedDocumentString<GetCategoriesQuery, GetCategoriesQueryVariables>;
+    fragment PRODUCT on Product {
+  name
+  id
+  slug
+}
+fragment CATEGORY on Category {
+  name
+  id
+  slug
+}`) as unknown as TypedDocumentString<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetProductsDocument = new TypedDocumentString(`
     query GetProducts($after: String) {
   products(channel: "default-channel", first: 12, after: $after) {
@@ -59674,6 +59699,10 @@ export type _Service = {
 
 export type ProductCardFragment = { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null };
 
+export type ProductFragment = { name: string, id: string, slug: string };
+
+export type CategoryFragment = { name: string, id: string, slug: string };
+
 export type AuthMutationVariables = Exact<{
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -59690,7 +59719,7 @@ export type CurrentUserQuery = { me?: { id: string, lastLogin?: unknown | null, 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: string, level: number, slug: string, products?: { edges: Array<{ node: { name: string } }> } | null } }> } | null };
+export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: string, id: string, slug: string, products?: { edges: Array<{ node: { name: string, id: string, slug: string } }> } | null } }> } | null };
 
 export type GetProductsQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
@@ -59722,6 +59751,20 @@ export const ProductCardFragmentDoc = `
   category {
     name
   }
+}
+    `;
+export const ProductFragmentDoc = `
+    fragment PRODUCT on Product {
+  name
+  id
+  slug
+}
+    `;
+export const CategoryFragmentDoc = `
+    fragment CATEGORY on Category {
+  name
+  id
+  slug
 }
     `;
 export const AuthDocument = `
@@ -59814,13 +59857,11 @@ export const GetCategoriesDocument = `
   categories(first: 10) {
     edges {
       node {
-        name
-        level
-        slug
+        ...CATEGORY
         products(first: 10, channel: "default-channel") {
           edges {
             node {
-              name
+              ...PRODUCT
             }
           }
         }
@@ -59828,7 +59869,8 @@ export const GetCategoriesDocument = `
     }
   }
 }
-    `;
+    ${CategoryFragmentDoc}
+${ProductFragmentDoc}`;
 
 /**
  * __useGetCategoriesQuery__

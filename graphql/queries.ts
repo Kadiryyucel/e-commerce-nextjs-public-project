@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { PRODUCT_CARD } from './fragments'
+import { PRODUCT_CARD, PRODUCT, CATEGORY } from './fragments'
 export const CURRENT_USER = gql`query CurrentUser {
 	me {
 		id
@@ -18,17 +18,18 @@ export const CURRENT_USER = gql`query CurrentUser {
 	}
 }`
 
-export const GET_CATEGORIES = gql`query GetCategories {
+export const GET_CATEGORIES = gql`
+    ${CATEGORY}
+    ${PRODUCT}
+    query GetCategories {
     categories(first: 10) {
     edges {
       node {
-        name
-        level
-        slug
+        ...CATEGORY
         products(first: 10, channel: "default-channel") {
           edges {
             node {
-              name
+              ...PRODUCT
             }
           }
         }
