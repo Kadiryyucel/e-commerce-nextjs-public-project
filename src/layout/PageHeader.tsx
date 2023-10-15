@@ -22,7 +22,9 @@ import { GetCategoriesQuery } from "../../generated/graphql";
 import { GET_CATEGORIES } from "../../graphql/queries";
 
 import { useSuspenseQuery } from '@apollo/client';
+import clsx from 'clsx';
 
+import useWhenResize from '@/helpers/whenResize';
 
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
 const lato = Lato({ subsets: ['latin'], weight: '400' })
@@ -46,7 +48,7 @@ export default function PageHeader() {
     function MenuRes() {
         if (currentWidth <= 1024) {
             return (
-                <div className={`flex flex-col justify-start bg-white w-3/4 border-r-2 fixed h-screen left-0 top-0 xl:relative xl:w-full`}>
+                <div className={`flex flex-col justify-start bg-white w-3/4 border-r-2 fixed h-screen left-0 top-0 xl:relative xl:w-full transition-all ${clsx({ 'translate-x-[-100%]': !isOpenMenu, 'translate-x-0': isOpenMenu })}`}>
                     <div className='flex justify-between items-center px-4 xl:hidden' >
                         <h2 className={lato.className}>trendyol</h2>
                         {isOpenSubMenu ?

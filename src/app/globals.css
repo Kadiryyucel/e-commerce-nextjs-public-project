@@ -30,7 +30,7 @@
   opacity: 1;
 }
 
-.show-category:not(:hover)>div {
+.show-category:not(:hover)>div:nth-of-type(2) {
   visibility: hidden;
   opacity: 0;
 }
