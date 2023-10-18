@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 
-import PageHeader from '@/layout/PageHeader'
+import PageHeader from '@/layout/pageHeader/page'
 
 export default function Site({ children }: { children: React.ReactNode }) {
 
