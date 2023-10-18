@@ -10,7 +10,7 @@ import ValidPayMethods from "../../components/ValidPayMethods";
 
 import { Roboto } from 'next/font/google'
 
-import useWhenResize from '@/helpers/whenResize'
+import useWhenResize from '@/customHooks/useWhenResize'
 
 const roboto = Roboto({ subsets: ['latin'], weight: '400' })
 
@@ -68,7 +68,7 @@ export default function Checkout() {
                                 </div>
 
                                 <MobileOrderSummary />
-                                <ValidPayMethods payMethods={undefined} />
+                                <ValidPayMethods />
                                 <ShippingAddress />
                                 <Button variant="contained" className="rounded-2xl px-8 mt-8 mb-16 w-full">
                                     Complete Order
