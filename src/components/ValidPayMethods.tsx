@@ -7,7 +7,7 @@ import payPal from "../assets/Paypal.png";
 import shopPay from "../assets/ShopPay.png";
 
 
-export default function ValidPayMethods(props: { payMethods:any }) {
+export default function ValidPayMethods(props: { payMethods?:any }) {
 
     let cards = [shopPay, payPal, googlePay]
 
