@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material';
@@ -32,12 +33,12 @@ const lato = Lato({ subsets: ['latin'], weight: '400' })
 
 export default function PageHeader() {
 
-   
+
     const dataCategories = useSuspenseQuery<GetCategoriesQuery>(GET_CATEGORIES);
     const [isOpenMenu, setMenu] = useState(false);
     let currentWidth = useWhenResize();
 
-    function handleSetMenu(value: boolean){
+    function handleSetMenu(value: boolean) {
         setMenu(value)
     }
 
@@ -48,15 +49,18 @@ export default function PageHeader() {
         }
     }, [currentWidth])
 
+
+    const [searchVal, setSearchVal] = useState('');
+
     function MenuRes() {
         if (currentWidth <= 1024) {
             return (
-                <MobileMenu categories={dataCategories} setMenu={handleSetMenu} isOpenMenu={isOpenMenu}/>
-                )
+                <MobileMenu categories={dataCategories} setMenu={handleSetMenu} isOpenMenu={isOpenMenu} />
+            )
         }
         else {
             return (
-                <DesktopMenu categories={dataCategories} setMenu={handleSetMenu}/>
+                <DesktopMenu categories={dataCategories} setMenu={handleSetMenu} />
             )
         }
     }
@@ -71,8 +75,14 @@ export default function PageHeader() {
                     <TextField
                         className='search-bar w-full'
                         placeholder='Search'
+                        value={searchVal}
+                        onChange={(e) => { setSearchVal(e.target.value) }}
                         InputProps={{
-                            endAdornment: <InputAdornment position="end"><FiSearch size={24} color='orange' /></InputAdornment>,
+                            endAdornment: <InputAdornment position="end">
+                                <Link href={`/search/${searchVal}`}>
+                                    <FiSearch size={24} color='orange' />
+                                </Link>
+                            </InputAdornment>,
                         }}
                     />
                 </Box>
