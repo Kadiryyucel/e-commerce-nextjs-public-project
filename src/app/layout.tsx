@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { Montserrat_Alternates } from 'next/font/google'
 
 import { ApolloWrapper } from "@/lib/client";
+import { AppStateProvider } from "@/store";
 
-import { AppStateProvider } from "@/store"
 
 const inter = Montserrat_Alternates({ subsets: ['latin'], weight: '400' })
 

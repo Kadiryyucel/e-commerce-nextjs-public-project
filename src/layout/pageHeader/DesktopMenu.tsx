@@ -1,8 +1,7 @@
-
 import { BsChevronRight } from 'react-icons/bs'
 import { AiOutlineClose } from 'react-icons/ai'
-import { Mulish } from 'next/font/google'
 
+import { Mulish } from 'next/font/google'
 import { Lato } from 'next/font/google'
 
 const lato = Lato({ subsets: ['latin'], weight: '400' })
