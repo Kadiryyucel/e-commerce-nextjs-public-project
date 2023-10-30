@@ -7,11 +7,10 @@ export default function (type: 'client' | 'server') {
         if (data == null) {
             return []
         }
-        return JSON.parse(localStorage.getItem(key) || '');
+        return JSON.parse(localStorage.getItem(key) || '') || [];
     }
     return {
         client: {
-            getFavorites:getFavorites,
             add: function (item: ProductCardFragment) {
                 let data = getFavorites();
                 let existItem = data.some((fav:ProductCardFragment)=>fav.id === item.id)
@@ -23,7 +22,9 @@ export default function (type: 'client' | 'server') {
             }
         },
         server: {
-            getFavorites:function(){},
+            getFavorites:function(){
+                return []
+            },
             add:function(){},
             del:function(){}
         }
