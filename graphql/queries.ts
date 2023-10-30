@@ -40,8 +40,8 @@ export const GET_CATEGORIES = gql`
 
 export const GET_PRODUCTS = gql`
 ${PRODUCT_CARD}
-query GetProducts($after:String) {
-    products(channel:"default-channel", first: 12,after:$after) {
+query GetProducts($after:String,$search:String) {
+    products(channel:"default-channel", first: 12, after:$after, search:$search) {
       edges{
        node {
          ...ProductCard

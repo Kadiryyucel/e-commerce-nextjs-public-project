@@ -2164,6 +2164,7 @@ export type AttributeSortingInput = {
   field: AttributeSortField;
 };
 
+/** Represents attribute's original translatable fields and related translations. */
 export type AttributeTranslatableContent = Node & {
   /**
    * Custom attribute of a product.
@@ -2179,6 +2180,7 @@ export type AttributeTranslatableContent = Node & {
 };
 
 
+/** Represents attribute's original translatable fields and related translations. */
 export type AttributeTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -2202,6 +2204,7 @@ export type AttributeTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents attribute translations. */
 export type AttributeTranslation = Node & {
   /** The ID of the attribute translation. */
   id: Scalars['ID']['output'];
@@ -2612,6 +2615,7 @@ export type AttributeValueSelectableTypeInput = {
   value?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Represents attribute value's original translatable fields and related translations. */
 export type AttributeValueTranslatableContent = Node & {
   /**
    * Associated attribute that can be translated.
@@ -2641,6 +2645,7 @@ export type AttributeValueTranslatableContent = Node & {
 };
 
 
+/** Represents attribute value's original translatable fields and related translations. */
 export type AttributeValueTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -2664,6 +2669,7 @@ export type AttributeValueTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents attribute value translations. */
 export type AttributeValueTranslation = Node & {
   /** The ID of the attribute value translation. */
   id: Scalars['ID']['output'];
@@ -2944,6 +2950,21 @@ export type CatalogueInput = {
   variants?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+export type CataloguePredicateInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<CataloguePredicateInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<CataloguePredicateInput>>;
+  /** Defines the category conditions to be met. */
+  categoryPredicate?: InputMaybe<CategoryWhereInput>;
+  /** Defines the collection conditions to be met. */
+  collectionPredicate?: InputMaybe<CollectionWhereInput>;
+  /** Defines the product conditions to be met. */
+  productPredicate?: InputMaybe<ProductWhereInput>;
+  /** Defines the product variant conditions to be met. */
+  variantPredicate?: InputMaybe<ProductVariantWhereInput>;
+};
+
 /** Represents a single category of products. Categories allow to organize products in a tree-hierarchies which can be used for navigation in the storefront. */
 export type Category = Node & ObjectWithMetadata & {
   /** List of ancestors of the category. */
@@ -3015,6 +3036,12 @@ export type Category = Node & ObjectWithMetadata & {
   slug: Scalars['String']['output'];
   /** Returns translated category fields for the given language code. */
   translation?: Maybe<CategoryTranslation>;
+  /**
+   * The date and time when the category was last updated.
+   *
+   * Added in Saleor 3.17.
+   */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 
@@ -3178,6 +3205,12 @@ export type CategoryFilterInput = {
   metadata?: InputMaybe<Array<MetadataFilter>>;
   search?: InputMaybe<Scalars['String']['input']>;
   slugs?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * Filter by when was the most recent update.
+   *
+   * Added in Saleor 3.17.
+   */
+  updatedAt?: InputMaybe<DateTimeRangeInput>;
 };
 
 export type CategoryInput = {
@@ -3232,6 +3265,7 @@ export type CategorySortingInput = {
   field: CategorySortField;
 };
 
+/** Represents category original translatable fields and related translations. */
 export type CategoryTranslatableContent = Node & {
   /**
    * Represents a single category of products.
@@ -3264,6 +3298,7 @@ export type CategoryTranslatableContent = Node & {
 };
 
 
+/** Represents category original translatable fields and related translations. */
 export type CategoryTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -3280,6 +3315,7 @@ export type CategoryTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents category translations. */
 export type CategoryTranslation = Node & {
   /**
    * Translated description of the category.
@@ -5452,6 +5488,7 @@ export type CollectionSortingInput = {
   field: CollectionSortField;
 };
 
+/** Represents collection's original translatable fields and related translations. */
 export type CollectionTranslatableContent = Node & {
   /**
    * Represents a collection of products.
@@ -5484,6 +5521,7 @@ export type CollectionTranslatableContent = Node & {
 };
 
 
+/** Represents collection's original translatable fields and related translations. */
 export type CollectionTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -5500,6 +5538,7 @@ export type CollectionTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents collection translations. */
 export type CollectionTranslation = Node & {
   /**
    * Translated description of the collection.
@@ -6229,6 +6268,22 @@ export type DateRangeInput = {
   gte?: InputMaybe<Scalars['Date']['input']>;
   /** End date. */
   lte?: InputMaybe<Scalars['Date']['input']>;
+};
+
+/**
+ * Define the filtering options for date time fields.
+ *
+ * Added in Saleor 3.11.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type DateTimeFilterInput = {
+  /** The value equal to. */
+  eq?: InputMaybe<Scalars['DateTime']['input']>;
+  /** The value included in. */
+  oneOf?: InputMaybe<Array<Scalars['DateTime']['input']>>;
+  /** The value in range. */
+  range?: InputMaybe<DateTimeRangeInput>;
 };
 
 export type DateTimeRangeInput = {
@@ -8395,7 +8450,10 @@ export type IntRangeInput = {
 export type Invoice = Job & Node & ObjectWithMetadata & {
   /** Date and time at which invoice was created. */
   createdAt: Scalars['DateTime']['output'];
-  /** URL to view an invoice. */
+  /**
+   * URL to view an invoice.
+   * @deprecated This field will be removed in Saleor 4.0. Use `url` field.This field will be removed in 4.0
+   */
   externalUrl?: Maybe<Scalars['String']['output']>;
   /** The ID of the object. */
   id: Scalars['ID']['output'];
@@ -8445,7 +8503,7 @@ export type Invoice = Job & Node & ObjectWithMetadata & {
   status: JobStatusEnum;
   /** Date and time at which invoice was updated. */
   updatedAt: Scalars['DateTime']['output'];
-  /** URL to download an invoice. */
+  /** URL to view/download an invoice. This can be an internal URL if the Invoicing Plugin was used or an external URL if it has been provided. */
   url?: Maybe<Scalars['String']['output']>;
 };
 
@@ -10180,6 +10238,7 @@ export type MenuItemSortingInput = {
   field: MenuItemsSortField;
 };
 
+/** Represents menu item's original translatable fields and related translations. */
 export type MenuItemTranslatableContent = Node & {
   /** The ID of the menu item translatable content. */
   id: Scalars['ID']['output'];
@@ -10195,6 +10254,7 @@ export type MenuItemTranslatableContent = Node & {
 };
 
 
+/** Represents menu item's original translatable fields and related translations. */
 export type MenuItemTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -10211,6 +10271,7 @@ export type MenuItemTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents menu item translations. */
 export type MenuItemTranslation = Node & {
   /** The ID of the menu item translation. */
   id: Scalars['ID']['output'];
@@ -12156,6 +12217,116 @@ export type Mutation = {
    */
   productVariantUpdate?: Maybe<ProductVariantUpdate>;
   /**
+   * Deletes promotions.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_DELETED (async): A promotion was deleted.
+   */
+  promotionBulkDelete?: Maybe<PromotionBulkDelete>;
+  /**
+   * Creates a new promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_CREATED (async): A promotion was created.
+   * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+   */
+  promotionCreate?: Maybe<PromotionCreate>;
+  /**
+   * Deletes a promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_DELETED (async): A promotion was deleted.
+   */
+  promotionDelete?: Maybe<PromotionDelete>;
+  /**
+   * Creates a new promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_CREATED (async): A promotion rule was created.
+   */
+  promotionRuleCreate?: Maybe<PromotionRuleCreate>;
+  /**
+   * Deletes a promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_DELETED (async): A promotion rule was deleted.
+   */
+  promotionRuleDelete?: Maybe<PromotionRuleDelete>;
+  /**
+   * Creates/updates translations for a promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+   */
+  promotionRuleTranslate?: Maybe<PromotionRuleTranslate>;
+  /**
+   * Updates an existing promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_UPDATED (async): A promotion rule was updated.
+   */
+  promotionRuleUpdate?: Maybe<PromotionRuleUpdate>;
+  /**
+   * Creates/updates translations for a promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+   */
+  promotionTranslate?: Maybe<PromotionTranslate>;
+  /**
+   * Updates an existing promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_UPDATED (async): A promotion was updated.
+   * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+   * - PROMOTION_ENDED (async): Optionally called if promotion was ended.
+   */
+  promotionUpdate?: Maybe<PromotionUpdate>;
+  /**
    * Request email change of the logged in user.
    *
    * Requires one of the following permissions: AUTHENTICATED_USER.
@@ -12184,7 +12355,9 @@ export type Mutation = {
    */
   saleBulkDelete?: Maybe<SaleBulkDelete>;
   /**
-   * Adds products, categories, collections to a voucher.
+   * Adds products, categories, collections to a sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -12195,6 +12368,8 @@ export type Mutation = {
   /**
    * Removes products, categories, collections from a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleUpdate` or `promotionRuleDelete` mutations instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
    * Triggers the following webhook events:
@@ -12204,11 +12379,15 @@ export type Mutation = {
   /**
    * Manage sale's availability in channels.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` or `promotionRuleUpdate` mutations instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   saleChannelListingUpdate?: Maybe<SaleChannelListingUpdate>;
   /**
    * Creates a new sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionCreate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -12219,6 +12398,8 @@ export type Mutation = {
   /**
    * Deletes a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionDelete` mutation instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
    * Triggers the following webhook events:
@@ -12228,11 +12409,15 @@ export type Mutation = {
   /**
    * Creates/updates translations for a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PromotionTranslate` mutation instead.
+   *
    * Requires one of the following permissions: MANAGE_TRANSLATIONS.
    */
   saleTranslate?: Maybe<SaleTranslate>;
   /**
    * Updates a sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionUpdate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -12338,7 +12523,12 @@ export type Mutation = {
   /**
    * Updates site domain of the shop.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
+   *
    * Requires one of the following permissions: MANAGE_SETTINGS.
+   * @deprecated
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
    */
   shopDomainUpdate?: Maybe<ShopDomainUpdate>;
   /**
@@ -14126,6 +14316,57 @@ export type MutationProductVariantUpdateArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   input: ProductVariantInput;
   sku?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationPromotionBulkDeleteArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
+export type MutationPromotionCreateArgs = {
+  input: PromotionCreateInput;
+};
+
+
+export type MutationPromotionDeleteArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationPromotionRuleCreateArgs = {
+  input: PromotionRuleCreateInput;
+};
+
+
+export type MutationPromotionRuleDeleteArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationPromotionRuleTranslateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionRuleTranslationInput;
+  languageCode: LanguageCodeEnum;
+};
+
+
+export type MutationPromotionRuleUpdateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionRuleUpdateInput;
+};
+
+
+export type MutationPromotionTranslateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionTranslationInput;
+  languageCode: LanguageCodeEnum;
+};
+
+
+export type MutationPromotionUpdateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionUpdateInput;
 };
 
 
@@ -16283,6 +16524,12 @@ export type OrderLine = Node & ObjectWithMetadata & {
    */
   quantityToFulfill: Scalars['Int']['output'];
   /**
+   * Denormalized sale ID, set when order line is created for a product variant that is on sale.
+   *
+   * Added in Saleor 3.14.
+   */
+  saleId?: Maybe<Scalars['ID']['output']>;
+  /**
    * Denormalized tax class of the product in this order line.
    *
    * Added in Saleor 3.9.
@@ -16332,6 +16579,12 @@ export type OrderLine = Node & ObjectWithMetadata & {
   /** A purchased product variant. Note: this field may be null if the variant has been removed from stock at all. Requires one of the following permissions to include the unpublished items: MANAGE_ORDERS, MANAGE_DISCOUNTS, MANAGE_PRODUCTS. */
   variant?: Maybe<ProductVariant>;
   variantName: Scalars['String']['output'];
+  /**
+   * Voucher code that was used for this order line.
+   *
+   * Added in Saleor 3.14.
+   */
+  voucherCode?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -17339,6 +17592,7 @@ export type PageSortingInput = {
   field: PageSortField;
 };
 
+/** Represents page's original translatable fields and related translations. */
 export type PageTranslatableContent = Node & {
   /** List of page content attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -17373,6 +17627,7 @@ export type PageTranslatableContent = Node & {
 };
 
 
+/** Represents page's original translatable fields and related translations. */
 export type PageTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -17389,6 +17644,7 @@ export type PageTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents page translations. */
 export type PageTranslation = Node & {
   /**
    * Translated content of the page.
@@ -17792,6 +18048,12 @@ export type Payment = Node & ObjectWithMetadata & {
   modified: Scalars['DateTime']['output'];
   /** Order associated with a payment. */
   order?: Maybe<Order>;
+  /**
+   * Informs whether this is a partial payment.
+   *
+   * Added in Saleor 3.14.
+   */
+  partial: Scalars['Boolean']['output'];
   /** Type of method used for payment. */
   paymentMethodType: Scalars['String']['output'];
   /** List of private metadata items. Requires staff permissions to access. */
@@ -17810,6 +18072,12 @@ export type Payment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /**
+   * PSP reference of the payment.
+   *
+   * Added in Saleor 3.14.
+   */
+  pspReference?: Maybe<Scalars['String']['output']>;
   /** Unique token associated with a payment. */
   token: Scalars['String']['output'];
   /** Total amount of the payment. */
@@ -20256,6 +20524,7 @@ export type ProductStockFilterInput = {
   warehouseIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** Represents product's original translatable fields and related translations. */
 export type ProductTranslatableContent = Node & {
   /** List of product attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -20290,6 +20559,7 @@ export type ProductTranslatableContent = Node & {
 };
 
 
+/** Represents product's original translatable fields and related translations. */
 export type ProductTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -20313,6 +20583,7 @@ export type ProductTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents product translations. */
 export type ProductTranslation = Node & {
   /**
    * Translated description of the product.
@@ -21600,6 +21871,7 @@ export type ProductVariantStocksUpdateInput = {
   update?: InputMaybe<Array<StockUpdateInput>>;
 };
 
+/** Represents product variant's original translatable fields and related translations. */
 export type ProductVariantTranslatableContent = Node & {
   /** List of product variant attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -21617,6 +21889,7 @@ export type ProductVariantTranslatableContent = Node & {
 };
 
 
+/** Represents product variant's original translatable fields and related translations. */
 export type ProductVariantTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -21640,6 +21913,7 @@ export type ProductVariantTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents product variant translations. */
 export type ProductVariantTranslation = Node & {
   /** The ID of the product variant translation. */
   id: Scalars['ID']['output'];
@@ -21742,7 +22016,1013 @@ export type ProductWhereInput = {
   /** Filter by stock of the product variant. */
   stocks?: InputMaybe<ProductStockFilterInput>;
   /** Filter by when was the most recent update. */
-  updatedAt?: InputMaybe<DateTimeRangeInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type Promotion = Node & ObjectWithMetadata & {
+  /** Date time of promotion creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** Description of the promotion. */
+  description?: Maybe<Scalars['JSON']['output']>;
+  /** End date of the promotion. */
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The list of events associated with the promotion. */
+  events?: Maybe<Array<PromotionEvent>>;
+  id: Scalars['ID']['output'];
+  /** List of public metadata items. Can be accessed without permissions. */
+  metadata: Array<MetadataItem>;
+  /**
+   * A single key from public metadata.
+   *
+   * Tip: Use GraphQL aliases to fetch multiple keys.
+   *
+   * Added in Saleor 3.3.
+   */
+  metafield?: Maybe<Scalars['String']['output']>;
+  /**
+   * Public metadata. Use `keys` to control which fields you want to include. The default is to include everything.
+   *
+   * Added in Saleor 3.3.
+   */
+  metafields?: Maybe<Scalars['Metadata']['output']>;
+  /** Name of the promotion. */
+  name: Scalars['String']['output'];
+  /** List of private metadata items. Requires staff permissions to access. */
+  privateMetadata: Array<MetadataItem>;
+  /**
+   * A single key from private metadata. Requires staff permissions to access.
+   *
+   * Tip: Use GraphQL aliases to fetch multiple keys.
+   *
+   * Added in Saleor 3.3.
+   */
+  privateMetafield?: Maybe<Scalars['String']['output']>;
+  /**
+   * Private metadata. Requires staff permissions to access. Use `keys` to control which fields you want to include. The default is to include everything.
+   *
+   * Added in Saleor 3.3.
+   */
+  privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /** The list of promotion rules. */
+  rules?: Maybe<Array<PromotionRule>>;
+  /** Start date of the promotion. */
+  startDate: Scalars['DateTime']['output'];
+  /** Returns translated promotion fields for the given language code. */
+  translation?: Maybe<PromotionTranslation>;
+  /** Date time of last update of promotion. */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionMetafieldArgs = {
+  key: Scalars['String']['input'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionMetafieldsArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionPrivateMetafieldArgs = {
+  key: Scalars['String']['input'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionPrivateMetafieldsArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Deletes promotions.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_DELETED (async): A promotion was deleted.
+ */
+export type PromotionBulkDelete = {
+  /** Returns how many objects were affected. */
+  count: Scalars['Int']['output'];
+  errors: Array<DiscountError>;
+};
+
+export type PromotionCountableConnection = {
+  edges: Array<PromotionCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PromotionCountableEdge = {
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Promotion;
+};
+
+/**
+ * Creates a new promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_CREATED (async): A promotion was created.
+ * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+ */
+export type PromotionCreate = {
+  errors: Array<PromotionCreateError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionCreateError = {
+  /** The error code. */
+  code: PromotionCreateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** Index of an input list item that caused the error. */
+  index?: Maybe<Scalars['Int']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionCreateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionCreateInput = {
+  /** Promotion description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** The end date of the promotion in ISO 8601 format. */
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Promotion name. */
+  name: Scalars['String']['input'];
+  /** List of promotion rules. */
+  rules?: InputMaybe<Array<PromotionRuleInput>>;
+  /** The start date of the promotion in ISO 8601 format. */
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+/**
+ * Event sent when new promotion is created.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionCreated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionCreatedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Deletes a promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_DELETED (async): A promotion was deleted.
+ */
+export type PromotionDelete = {
+  errors: Array<PromotionDeleteError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionDeleteError = {
+  /** The error code. */
+  code: PromotionDeleteErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'NOT_FOUND';
+
+/**
+ * Event sent when promotion is deleted.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionDeleted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * The event informs about the end of the promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionEnded = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion ended event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionEndedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionEvent = PromotionCreatedEvent | PromotionEndedEvent | PromotionRuleCreatedEvent | PromotionRuleDeletedEvent | PromotionRuleUpdatedEvent | PromotionStartedEvent | PromotionUpdatedEvent;
+
+export type PromotionEventInterface = {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/** An enumeration. */
+export type PromotionEventsEnum =
+  | 'PROMOTION_CREATED'
+  | 'PROMOTION_ENDED'
+  | 'PROMOTION_STARTED'
+  | 'PROMOTION_UPDATED'
+  | 'RULE_CREATED'
+  | 'RULE_DELETED'
+  | 'RULE_UPDATED';
+
+/**
+ * Represents the promotion rule that specifies the conditions that must be met to apply the promotion discount.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRule = Node & {
+  /** The catalogue predicate that must be met to apply the rule reward. */
+  cataloguePredicate?: Maybe<Scalars['JSON']['output']>;
+  /**
+   * List of channels where the rule applies.
+   *
+   * Requires one of the following permissions: AUTHENTICATED_APP, AUTHENTICATED_STAFF_USER.
+   */
+  channels?: Maybe<Array<Channel>>;
+  /** Description of the promotion rule. */
+  description?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  /** Name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Promotion to which the rule belongs. */
+  promotion?: Maybe<Promotion>;
+  /** The reward value of the promotion rule. Defines the discount value applied when the rule conditions are met. */
+  rewardValue?: Maybe<Scalars['PositiveDecimal']['output']>;
+  /** The type of reward value of the promotion rule. */
+  rewardValueType?: Maybe<RewardValueTypeEnum>;
+  /** Returns translated promotion rule fields for the given language code. */
+  translation?: Maybe<PromotionRuleTranslation>;
+};
+
+
+/**
+ * Represents the promotion rule that specifies the conditions that must be met to apply the promotion discount.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates a new promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_CREATED (async): A promotion rule was created.
+ */
+export type PromotionRuleCreate = {
+  errors: Array<PromotionRuleCreateError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleCreateError = {
+  /** The error code. */
+  code: PromotionRuleCreateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleCreateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionRuleCreateInput = {
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** List of channel ids to which the rule should apply to. */
+  channels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the promotion that rule belongs to. */
+  promotion: Scalars['ID']['input'];
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Event sent when new promotion rule is created.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleCreated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleCreatedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Deletes a promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_DELETED (async): A promotion rule was deleted.
+ */
+export type PromotionRuleDelete = {
+  errors: Array<PromotionRuleDeleteError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleDeleteError = {
+  /** The error code. */
+  code: PromotionRuleDeleteErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'NOT_FOUND';
+
+/**
+ * Event sent when new promotion rule is deleted.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleDeleted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleDeletedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * History log of the promotion event related to rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleEventInterface = {
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionRuleInput = {
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** List of channel ids to which the rule should apply to. */
+  channels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Represents promotion rule's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslatableContent = Node & {
+  /**
+   * Description of the promotion rule.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion rule translatable content. */
+  id: Scalars['ID']['output'];
+  /** Name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Returns translated promotion rule fields for the given language code. */
+  translation?: Maybe<PromotionRuleTranslation>;
+};
+
+
+/**
+ * Represents promotion rule's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslatableContentTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates/updates translations for a promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+ */
+export type PromotionRuleTranslate = {
+  errors: Array<TranslationError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+/**
+ * Represents promotion rule translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslation = Node & {
+  /**
+   * Translated description of the promotion rule.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion rule translation. */
+  id: Scalars['ID']['output'];
+  /** Translation language. */
+  language: LanguageDisplay;
+  /** Translated name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionRuleTranslationInput = {
+  /**
+   * Translated promotion description.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/**
+ * Updates an existing promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_UPDATED (async): A promotion rule was updated.
+ */
+export type PromotionRuleUpdate = {
+  errors: Array<PromotionRuleUpdateError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleUpdateError = {
+  /** List of channel IDs which causes the error. */
+  channels?: Maybe<Array<Scalars['ID']['output']>>;
+  /** The error code. */
+  code: PromotionRuleUpdateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleUpdateErrorCode =
+  | 'DUPLICATED_INPUT_ITEM'
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MISSING_CHANNELS'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND';
+
+export type PromotionRuleUpdateInput = {
+  /** List of channel ids to remove. */
+  addChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** List of channel ids to remove. */
+  removeChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Event sent when new promotion rule is updated.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleUpdated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleUpdatedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionSortField =
+  /** Sort promotions by created at. */
+  | 'CREATED_AT'
+  /** Sort promotions by end date. */
+  | 'END_DATE'
+  /** Sort promotions by name. */
+  | 'NAME'
+  /** Sort promotions by start date. */
+  | 'START_DATE';
+
+export type PromotionSortingInput = {
+  /** Specifies the direction in which to sort promotions. */
+  direction: OrderDirection;
+  /** Sort promotions by the selected field. */
+  field: PromotionSortField;
+};
+
+/**
+ * The event informs about the start of the promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionStarted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion started event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionStartedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Represents promotion's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslatableContent = Node & {
+  /**
+   * Description of the promotion.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion translatable content. */
+  id: Scalars['ID']['output'];
+  /** Name of the promotion. */
+  name: Scalars['String']['output'];
+  /** Returns translated promotion fields for the given language code. */
+  translation?: Maybe<PromotionTranslation>;
+};
+
+
+/**
+ * Represents promotion's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslatableContentTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates/updates translations for a promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+ */
+export type PromotionTranslate = {
+  errors: Array<TranslationError>;
+  promotion?: Maybe<Promotion>;
+};
+
+/**
+ * Represents promotion translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslation = Node & {
+  /**
+   * Translated description of the promotion.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion translation. */
+  id: Scalars['ID']['output'];
+  /** Translation language. */
+  language: LanguageDisplay;
+  /** Translated name of the promotion. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionTranslationInput = {
+  /**
+   * Translated promotion description.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/**
+ * Updates an existing promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_UPDATED (async): A promotion was updated.
+ * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+ * - PROMOTION_ENDED (async): Optionally called if promotion was ended.
+ */
+export type PromotionUpdate = {
+  errors: Array<PromotionUpdateError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionUpdateError = {
+  /** The error code. */
+  code: PromotionUpdateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionUpdateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionUpdateInput = {
+  /** Promotion description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** The end date of the promotion in ISO 8601 format. */
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Promotion name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The start date of the promotion in ISO 8601 format. */
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+/**
+ * Event sent when promotion is updated.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionUpdated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion updated event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionUpdatedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionWhereInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<PromotionWhereInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<PromotionWhereInput>>;
+  /** Filter promotions by end date. */
+  endDate?: InputMaybe<DateTimeFilterInput>;
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  isOldSale?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata?: InputMaybe<Array<MetadataFilter>>;
+  /** Filter by promotion name. */
+  name?: InputMaybe<StringFilterInput>;
+  /** Filter promotions by start date. */
+  startDate?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type PublishableChannelListingInput = {
@@ -22016,6 +23296,26 @@ export type Query = {
   /** List of the shop's products. Requires one of the following permissions to include the unpublished items: MANAGE_ORDERS, MANAGE_DISCOUNTS, MANAGE_PRODUCTS. */
   products?: Maybe<ProductCountableConnection>;
   /**
+   * Look up a promotion by ID.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  promotion?: Maybe<Promotion>;
+  /**
+   * List of the promotions.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  promotions?: Maybe<PromotionCountableConnection>;
+  /**
    * List of top selling products.
    *
    * Requires one of the following permissions: MANAGE_PRODUCTS.
@@ -22025,12 +23325,14 @@ export type Query = {
    * Look up a sale by ID.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   * @deprecated This field will be removed in Saleor 4.0. Use the `promotion` query instead.
    */
   sale?: Maybe<Sale>;
   /**
    * List of the shop's sales.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   * @deprecated This field will be removed in Saleor 4.0. Use the `promotions` query instead.
    */
   sales?: Maybe<SaleCountableConnection>;
   /**
@@ -22589,6 +23891,21 @@ export type QueryProductsArgs = {
 };
 
 
+export type QueryPromotionArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryPromotionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<PromotionSortingInput>;
+  where?: InputMaybe<PromotionWhereInput>;
+};
+
+
 export type QueryReportProductSalesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -22822,7 +24139,16 @@ export type RequestPasswordReset = {
   errors: Array<AccountError>;
 };
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/** An enumeration. */
+export type RewardValueTypeEnum =
+  | 'FIXED'
+  | 'PERCENTAGE';
+
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type Sale = Node & ObjectWithMetadata & {
   /** List of categories this sale applies to. */
   categories?: Maybe<CategoryCountableConnection>;
@@ -22907,7 +24233,11 @@ export type Sale = Node & ObjectWithMetadata & {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleCategoriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -22916,7 +24246,11 @@ export type SaleCategoriesArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleCollectionsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -22925,31 +24259,51 @@ export type SaleCollectionsArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleMetafieldArgs = {
   key: Scalars['String']['input'];
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleMetafieldsArgs = {
   keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SalePrivateMetafieldArgs = {
   key: Scalars['String']['input'];
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SalePrivateMetafieldsArgs = {
   keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleProductsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -22958,13 +24312,21 @@ export type SaleProductsArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleVariantsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -22973,7 +24335,9 @@ export type SaleVariantsArgs = {
 };
 
 /**
- * Adds products, categories, collections to a voucher.
+ * Adds products, categories, collections to a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -23004,7 +24368,11 @@ export type SaleBulkDelete = {
   errors: Array<DiscountError>;
 };
 
-/** Represents sale channel listing. */
+/**
+ * Represents sale channel listing.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionRule` type instead.
+ */
 export type SaleChannelListing = Node & {
   /** The channel in which the sale is available. */
   channel: Channel;
@@ -23032,6 +24400,8 @@ export type SaleChannelListingInput = {
 
 /**
  * Manage sale's availability in channels.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` or `promotionRuleUpdate` mutations instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  */
@@ -23061,6 +24431,8 @@ export type SaleCountableEdge = {
 /**
  * Creates a new sale.
  *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionCreate` mutation instead.
+ *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
  * Triggers the following webhook events:
@@ -23077,6 +24449,8 @@ export type SaleCreate = {
  * Event sent when new sale is created.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionCreated` event instead.
  */
 export type SaleCreated = Event & {
   /** Time of the event. */
@@ -23096,6 +24470,8 @@ export type SaleCreated = Event & {
  * Event sent when new sale is created.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionCreated` event instead.
  */
 export type SaleCreatedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -23103,6 +24479,8 @@ export type SaleCreatedSaleArgs = {
 
 /**
  * Deletes a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionDelete` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -23120,6 +24498,8 @@ export type SaleDelete = {
  * Event sent when sale is deleted.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionDeleted` event instead.
  */
 export type SaleDeleted = Event & {
   /** Time of the event. */
@@ -23139,6 +24519,8 @@ export type SaleDeleted = Event & {
  * Event sent when sale is deleted.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionDeleted` event instead.
  */
 export type SaleDeletedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -23175,6 +24557,8 @@ export type SaleInput = {
 
 /**
  * Removes products, categories, collections from a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleUpdate` or `promotionRuleDelete` mutations instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -23226,6 +24610,8 @@ export type SaleSortingInput = {
  * The event informs about the start or end of the sale.
  *
  * Added in Saleor 3.5.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionStarted` and `PromotionEnded` events instead.
  */
 export type SaleToggle = Event & {
   /** Time of the event. */
@@ -23249,11 +24635,18 @@ export type SaleToggle = Event & {
  * The event informs about the start or end of the sale.
  *
  * Added in Saleor 3.5.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionStarted` and `PromotionEnded` events instead.
  */
 export type SaleToggleSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
 };
 
+/**
+ * Represents sale's original translatable fields and related translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslatableContent` instead.
+ */
 export type SaleTranslatableContent = Node & {
   /** The ID of the sale translatable content. */
   id: Scalars['ID']['output'];
@@ -23271,12 +24664,19 @@ export type SaleTranslatableContent = Node & {
 };
 
 
+/**
+ * Represents sale's original translatable fields and related translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslatableContent` instead.
+ */
 export type SaleTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
 /**
  * Creates/updates translations for a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PromotionTranslate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_TRANSLATIONS.
  */
@@ -23287,6 +24687,11 @@ export type SaleTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/**
+ * Represents sale translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslation` instead.
+ */
 export type SaleTranslation = Node & {
   /** The ID of the sale translation. */
   id: Scalars['ID']['output'];
@@ -23302,6 +24707,8 @@ export type SaleType =
 
 /**
  * Updates a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionUpdate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -23320,6 +24727,8 @@ export type SaleUpdate = {
  * Event sent when sale is updated.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionUpdated` event instead.
  */
 export type SaleUpdated = Event & {
   /** Time of the event. */
@@ -23339,6 +24748,8 @@ export type SaleUpdated = Event & {
  * Event sent when sale is updated.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionUpdated` event instead.
  */
 export type SaleUpdatedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -23607,6 +25018,7 @@ export type ShippingMethodPostalCodeRule = Node & {
   start?: Maybe<Scalars['String']['output']>;
 };
 
+/** Represents shipping method's original translatable fields and related translations. */
 export type ShippingMethodTranslatableContent = Node & {
   /**
    * Shipping method description to translate.
@@ -23630,10 +25042,12 @@ export type ShippingMethodTranslatableContent = Node & {
 };
 
 
+/** Represents shipping method's original translatable fields and related translations. */
 export type ShippingMethodTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
+/** Represents shipping method translations. */
 export type ShippingMethodTranslation = Node & {
   /**
    * Translated description of the shipping method.
@@ -24599,6 +26013,8 @@ export type ShopAddressUpdate = {
 /**
  * Updates site domain of the shop.
  *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
+ *
  * Requires one of the following permissions: MANAGE_SETTINGS.
  */
 export type ShopDomainUpdate = {
@@ -24788,6 +26204,7 @@ export type ShopSettingsUpdate = {
   shopErrors: Array<ShopError>;
 };
 
+/** Represents shop translations. */
 export type ShopTranslation = Node & {
   /** Translated description of sale. */
   description: Scalars['String']['output'];
@@ -26914,7 +28331,7 @@ export type TransactionUpdateInput = {
   pspReference?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type TranslatableItem = AttributeTranslatableContent | AttributeValueTranslatableContent | CategoryTranslatableContent | CollectionTranslatableContent | MenuItemTranslatableContent | PageTranslatableContent | ProductTranslatableContent | ProductVariantTranslatableContent | SaleTranslatableContent | ShippingMethodTranslatableContent | VoucherTranslatableContent;
+export type TranslatableItem = AttributeTranslatableContent | AttributeValueTranslatableContent | CategoryTranslatableContent | CollectionTranslatableContent | MenuItemTranslatableContent | PageTranslatableContent | ProductTranslatableContent | ProductVariantTranslatableContent | PromotionRuleTranslatableContent | PromotionTranslatableContent | SaleTranslatableContent | ShippingMethodTranslatableContent | VoucherTranslatableContent;
 
 export type TranslatableItemConnection = {
   edges: Array<TranslatableItemEdge>;
@@ -26939,6 +28356,8 @@ export type TranslatableKinds =
   | 'MENU_ITEM'
   | 'PAGE'
   | 'PRODUCT'
+  | 'PROMOTION'
+  | 'PROMOTION_RULE'
   | 'SALE'
   | 'SHIPPING_METHOD'
   | 'VARIANT'
@@ -26990,7 +28409,7 @@ export type TranslationInput = {
   seoTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type TranslationTypes = AttributeTranslation | AttributeValueTranslation | CategoryTranslation | CollectionTranslation | MenuItemTranslation | PageTranslation | ProductTranslation | ProductVariantTranslation | SaleTranslation | ShippingMethodTranslation | VoucherTranslation;
+export type TranslationTypes = AttributeTranslation | AttributeValueTranslation | CategoryTranslation | CollectionTranslation | MenuItemTranslation | PageTranslation | ProductTranslation | ProductVariantTranslation | PromotionRuleTranslation | PromotionTranslation | SaleTranslation | ShippingMethodTranslation | VoucherTranslation;
 
 /**
  * Event sent when translation is updated.
@@ -27995,6 +29414,7 @@ export type VoucherSortingInput = {
   field: VoucherSortField;
 };
 
+/** Represents voucher's original translatable fields and related translations. */
 export type VoucherTranslatableContent = Node & {
   /** The ID of the voucher translatable content. */
   id: Scalars['ID']['output'];
@@ -28012,6 +29432,7 @@ export type VoucherTranslatableContent = Node & {
 };
 
 
+/** Represents voucher's original translatable fields and related translations. */
 export type VoucherTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -28028,6 +29449,7 @@ export type VoucherTranslate = {
   voucher?: Maybe<Voucher>;
 };
 
+/** Represents voucher translations. */
 export type VoucherTranslation = Node & {
   /** The ID of the voucher translation. */
   id: Scalars['ID']['output'];
@@ -28927,6 +30349,22 @@ export type WebhookEventTypeAsyncEnum =
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   /** A product variant is updated. */
   | 'PRODUCT_VARIANT_UPDATED'
+  /** A promotion is created. */
+  | 'PROMOTION_CREATED'
+  /** A promotion is deleted. */
+  | 'PROMOTION_DELETED'
+  /** A promotion is deactivated. */
+  | 'PROMOTION_ENDED'
+  /** A promotion rule is created. */
+  | 'PROMOTION_RULE_CREATED'
+  /** A promotion rule is deleted. */
+  | 'PROMOTION_RULE_DELETED'
+  /** A promotion rule is updated. */
+  | 'PROMOTION_RULE_UPDATED'
+  /** A promotion is activated. */
+  | 'PROMOTION_STARTED'
+  /** A promotion is updated. */
+  | 'PROMOTION_UPDATED'
   /** A sale is created. */
   | 'SALE_CREATED'
   /** A sale is deleted. */
@@ -29339,6 +30777,22 @@ export type WebhookEventTypeEnum =
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   /** A product variant is updated. */
   | 'PRODUCT_VARIANT_UPDATED'
+  /** A promotion is created. */
+  | 'PROMOTION_CREATED'
+  /** A promotion is deleted. */
+  | 'PROMOTION_DELETED'
+  /** A promotion is deactivated. */
+  | 'PROMOTION_ENDED'
+  /** A promotion rule is created. */
+  | 'PROMOTION_RULE_CREATED'
+  /** A promotion rule is deleted. */
+  | 'PROMOTION_RULE_DELETED'
+  /** A promotion rule is updated. */
+  | 'PROMOTION_RULE_UPDATED'
+  /** A promotion is activated. */
+  | 'PROMOTION_STARTED'
+  /** A promotion is updated. */
+  | 'PROMOTION_UPDATED'
   /** A sale is created. */
   | 'SALE_CREATED'
   /** A sale is deleted. */
@@ -29620,6 +31074,14 @@ export type WebhookSampleEventTypeEnum =
   | 'PRODUCT_VARIANT_OUT_OF_STOCK'
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   | 'PRODUCT_VARIANT_UPDATED'
+  | 'PROMOTION_CREATED'
+  | 'PROMOTION_DELETED'
+  | 'PROMOTION_ENDED'
+  | 'PROMOTION_RULE_CREATED'
+  | 'PROMOTION_RULE_DELETED'
+  | 'PROMOTION_RULE_UPDATED'
+  | 'PROMOTION_STARTED'
+  | 'PROMOTION_UPDATED'
   | 'SALE_CREATED'
   | 'SALE_DELETED'
   | 'SALE_TOGGLE'
@@ -29788,6 +31250,7 @@ export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: s
 
 export type GetProductsQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -29905,8 +31368,8 @@ fragment CATEGORY on Category {
   slug
 }`) as unknown as TypedDocumentString<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetProductsDocument = new TypedDocumentString(`
-    query GetProducts($after: String) {
-  products(channel: "default-channel", first: 12, after: $after) {
+    query GetProducts($after: String, $search: String) {
+  products(channel: "default-channel", first: 12, after: $after, search: $search) {
     edges {
       node {
         ...ProductCard
@@ -32099,6 +33562,7 @@ export type AttributeSortingInput = {
   field: AttributeSortField;
 };
 
+/** Represents attribute's original translatable fields and related translations. */
 export type AttributeTranslatableContent = Node & {
   /**
    * Custom attribute of a product.
@@ -32114,6 +33578,7 @@ export type AttributeTranslatableContent = Node & {
 };
 
 
+/** Represents attribute's original translatable fields and related translations. */
 export type AttributeTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -32137,6 +33602,7 @@ export type AttributeTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents attribute translations. */
 export type AttributeTranslation = Node & {
   /** The ID of the attribute translation. */
   id: Scalars['ID']['output'];
@@ -32547,6 +34013,7 @@ export type AttributeValueSelectableTypeInput = {
   value?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Represents attribute value's original translatable fields and related translations. */
 export type AttributeValueTranslatableContent = Node & {
   /**
    * Associated attribute that can be translated.
@@ -32576,6 +34043,7 @@ export type AttributeValueTranslatableContent = Node & {
 };
 
 
+/** Represents attribute value's original translatable fields and related translations. */
 export type AttributeValueTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -32599,6 +34067,7 @@ export type AttributeValueTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents attribute value translations. */
 export type AttributeValueTranslation = Node & {
   /** The ID of the attribute value translation. */
   id: Scalars['ID']['output'];
@@ -32879,6 +34348,21 @@ export type CatalogueInput = {
   variants?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+export type CataloguePredicateInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<CataloguePredicateInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<CataloguePredicateInput>>;
+  /** Defines the category conditions to be met. */
+  categoryPredicate?: InputMaybe<CategoryWhereInput>;
+  /** Defines the collection conditions to be met. */
+  collectionPredicate?: InputMaybe<CollectionWhereInput>;
+  /** Defines the product conditions to be met. */
+  productPredicate?: InputMaybe<ProductWhereInput>;
+  /** Defines the product variant conditions to be met. */
+  variantPredicate?: InputMaybe<ProductVariantWhereInput>;
+};
+
 /** Represents a single category of products. Categories allow to organize products in a tree-hierarchies which can be used for navigation in the storefront. */
 export type Category = Node & ObjectWithMetadata & {
   /** List of ancestors of the category. */
@@ -32950,6 +34434,12 @@ export type Category = Node & ObjectWithMetadata & {
   slug: Scalars['String']['output'];
   /** Returns translated category fields for the given language code. */
   translation?: Maybe<CategoryTranslation>;
+  /**
+   * The date and time when the category was last updated.
+   *
+   * Added in Saleor 3.17.
+   */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 
@@ -33113,6 +34603,12 @@ export type CategoryFilterInput = {
   metadata?: InputMaybe<Array<MetadataFilter>>;
   search?: InputMaybe<Scalars['String']['input']>;
   slugs?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * Filter by when was the most recent update.
+   *
+   * Added in Saleor 3.17.
+   */
+  updatedAt?: InputMaybe<DateTimeRangeInput>;
 };
 
 export type CategoryInput = {
@@ -33167,6 +34663,7 @@ export type CategorySortingInput = {
   field: CategorySortField;
 };
 
+/** Represents category original translatable fields and related translations. */
 export type CategoryTranslatableContent = Node & {
   /**
    * Represents a single category of products.
@@ -33199,6 +34696,7 @@ export type CategoryTranslatableContent = Node & {
 };
 
 
+/** Represents category original translatable fields and related translations. */
 export type CategoryTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -33215,6 +34713,7 @@ export type CategoryTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents category translations. */
 export type CategoryTranslation = Node & {
   /**
    * Translated description of the category.
@@ -35387,6 +36886,7 @@ export type CollectionSortingInput = {
   field: CollectionSortField;
 };
 
+/** Represents collection's original translatable fields and related translations. */
 export type CollectionTranslatableContent = Node & {
   /**
    * Represents a collection of products.
@@ -35419,6 +36919,7 @@ export type CollectionTranslatableContent = Node & {
 };
 
 
+/** Represents collection's original translatable fields and related translations. */
 export type CollectionTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -35435,6 +36936,7 @@ export type CollectionTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents collection translations. */
 export type CollectionTranslation = Node & {
   /**
    * Translated description of the collection.
@@ -36164,6 +37666,22 @@ export type DateRangeInput = {
   gte?: InputMaybe<Scalars['Date']['input']>;
   /** End date. */
   lte?: InputMaybe<Scalars['Date']['input']>;
+};
+
+/**
+ * Define the filtering options for date time fields.
+ *
+ * Added in Saleor 3.11.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type DateTimeFilterInput = {
+  /** The value equal to. */
+  eq?: InputMaybe<Scalars['DateTime']['input']>;
+  /** The value included in. */
+  oneOf?: InputMaybe<Array<Scalars['DateTime']['input']>>;
+  /** The value in range. */
+  range?: InputMaybe<DateTimeRangeInput>;
 };
 
 export type DateTimeRangeInput = {
@@ -38330,7 +39848,10 @@ export type IntRangeInput = {
 export type Invoice = Job & Node & ObjectWithMetadata & {
   /** Date and time at which invoice was created. */
   createdAt: Scalars['DateTime']['output'];
-  /** URL to view an invoice. */
+  /**
+   * URL to view an invoice.
+   * @deprecated This field will be removed in Saleor 4.0. Use `url` field.This field will be removed in 4.0
+   */
   externalUrl?: Maybe<Scalars['String']['output']>;
   /** The ID of the object. */
   id: Scalars['ID']['output'];
@@ -38380,7 +39901,7 @@ export type Invoice = Job & Node & ObjectWithMetadata & {
   status: JobStatusEnum;
   /** Date and time at which invoice was updated. */
   updatedAt: Scalars['DateTime']['output'];
-  /** URL to download an invoice. */
+  /** URL to view/download an invoice. This can be an internal URL if the Invoicing Plugin was used or an external URL if it has been provided. */
   url?: Maybe<Scalars['String']['output']>;
 };
 
@@ -40115,6 +41636,7 @@ export type MenuItemSortingInput = {
   field: MenuItemsSortField;
 };
 
+/** Represents menu item's original translatable fields and related translations. */
 export type MenuItemTranslatableContent = Node & {
   /** The ID of the menu item translatable content. */
   id: Scalars['ID']['output'];
@@ -40130,6 +41652,7 @@ export type MenuItemTranslatableContent = Node & {
 };
 
 
+/** Represents menu item's original translatable fields and related translations. */
 export type MenuItemTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -40146,6 +41669,7 @@ export type MenuItemTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents menu item translations. */
 export type MenuItemTranslation = Node & {
   /** The ID of the menu item translation. */
   id: Scalars['ID']['output'];
@@ -42091,6 +43615,116 @@ export type Mutation = {
    */
   productVariantUpdate?: Maybe<ProductVariantUpdate>;
   /**
+   * Deletes promotions.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_DELETED (async): A promotion was deleted.
+   */
+  promotionBulkDelete?: Maybe<PromotionBulkDelete>;
+  /**
+   * Creates a new promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_CREATED (async): A promotion was created.
+   * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+   */
+  promotionCreate?: Maybe<PromotionCreate>;
+  /**
+   * Deletes a promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_DELETED (async): A promotion was deleted.
+   */
+  promotionDelete?: Maybe<PromotionDelete>;
+  /**
+   * Creates a new promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_CREATED (async): A promotion rule was created.
+   */
+  promotionRuleCreate?: Maybe<PromotionRuleCreate>;
+  /**
+   * Deletes a promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_DELETED (async): A promotion rule was deleted.
+   */
+  promotionRuleDelete?: Maybe<PromotionRuleDelete>;
+  /**
+   * Creates/updates translations for a promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+   */
+  promotionRuleTranslate?: Maybe<PromotionRuleTranslate>;
+  /**
+   * Updates an existing promotion rule.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_RULE_UPDATED (async): A promotion rule was updated.
+   */
+  promotionRuleUpdate?: Maybe<PromotionRuleUpdate>;
+  /**
+   * Creates/updates translations for a promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+   */
+  promotionTranslate?: Maybe<PromotionTranslate>;
+  /**
+   * Updates an existing promotion.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - PROMOTION_UPDATED (async): A promotion was updated.
+   * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+   * - PROMOTION_ENDED (async): Optionally called if promotion was ended.
+   */
+  promotionUpdate?: Maybe<PromotionUpdate>;
+  /**
    * Request email change of the logged in user.
    *
    * Requires one of the following permissions: AUTHENTICATED_USER.
@@ -42119,7 +43753,9 @@ export type Mutation = {
    */
   saleBulkDelete?: Maybe<SaleBulkDelete>;
   /**
-   * Adds products, categories, collections to a voucher.
+   * Adds products, categories, collections to a sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -42130,6 +43766,8 @@ export type Mutation = {
   /**
    * Removes products, categories, collections from a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleUpdate` or `promotionRuleDelete` mutations instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
    * Triggers the following webhook events:
@@ -42139,11 +43777,15 @@ export type Mutation = {
   /**
    * Manage sale's availability in channels.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` or `promotionRuleUpdate` mutations instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   saleChannelListingUpdate?: Maybe<SaleChannelListingUpdate>;
   /**
    * Creates a new sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionCreate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -42154,6 +43796,8 @@ export type Mutation = {
   /**
    * Deletes a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionDelete` mutation instead.
+   *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
    * Triggers the following webhook events:
@@ -42163,11 +43807,15 @@ export type Mutation = {
   /**
    * Creates/updates translations for a sale.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PromotionTranslate` mutation instead.
+   *
    * Requires one of the following permissions: MANAGE_TRANSLATIONS.
    */
   saleTranslate?: Maybe<SaleTranslate>;
   /**
    * Updates a sale.
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionUpdate` mutation instead.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
@@ -42273,7 +43921,12 @@ export type Mutation = {
   /**
    * Updates site domain of the shop.
    *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
+   *
    * Requires one of the following permissions: MANAGE_SETTINGS.
+   * @deprecated
+   *
+   * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
    */
   shopDomainUpdate?: Maybe<ShopDomainUpdate>;
   /**
@@ -44061,6 +45714,57 @@ export type MutationProductVariantUpdateArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   input: ProductVariantInput;
   sku?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationPromotionBulkDeleteArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
+export type MutationPromotionCreateArgs = {
+  input: PromotionCreateInput;
+};
+
+
+export type MutationPromotionDeleteArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationPromotionRuleCreateArgs = {
+  input: PromotionRuleCreateInput;
+};
+
+
+export type MutationPromotionRuleDeleteArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationPromotionRuleTranslateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionRuleTranslationInput;
+  languageCode: LanguageCodeEnum;
+};
+
+
+export type MutationPromotionRuleUpdateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionRuleUpdateInput;
+};
+
+
+export type MutationPromotionTranslateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionTranslationInput;
+  languageCode: LanguageCodeEnum;
+};
+
+
+export type MutationPromotionUpdateArgs = {
+  id: Scalars['ID']['input'];
+  input: PromotionUpdateInput;
 };
 
 
@@ -46218,6 +47922,12 @@ export type OrderLine = Node & ObjectWithMetadata & {
    */
   quantityToFulfill: Scalars['Int']['output'];
   /**
+   * Denormalized sale ID, set when order line is created for a product variant that is on sale.
+   *
+   * Added in Saleor 3.14.
+   */
+  saleId?: Maybe<Scalars['ID']['output']>;
+  /**
    * Denormalized tax class of the product in this order line.
    *
    * Added in Saleor 3.9.
@@ -46267,6 +47977,12 @@ export type OrderLine = Node & ObjectWithMetadata & {
   /** A purchased product variant. Note: this field may be null if the variant has been removed from stock at all. Requires one of the following permissions to include the unpublished items: MANAGE_ORDERS, MANAGE_DISCOUNTS, MANAGE_PRODUCTS. */
   variant?: Maybe<ProductVariant>;
   variantName: Scalars['String']['output'];
+  /**
+   * Voucher code that was used for this order line.
+   *
+   * Added in Saleor 3.14.
+   */
+  voucherCode?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -47274,6 +48990,7 @@ export type PageSortingInput = {
   field: PageSortField;
 };
 
+/** Represents page's original translatable fields and related translations. */
 export type PageTranslatableContent = Node & {
   /** List of page content attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -47308,6 +49025,7 @@ export type PageTranslatableContent = Node & {
 };
 
 
+/** Represents page's original translatable fields and related translations. */
 export type PageTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -47324,6 +49042,7 @@ export type PageTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/** Represents page translations. */
 export type PageTranslation = Node & {
   /**
    * Translated content of the page.
@@ -47727,6 +49446,12 @@ export type Payment = Node & ObjectWithMetadata & {
   modified: Scalars['DateTime']['output'];
   /** Order associated with a payment. */
   order?: Maybe<Order>;
+  /**
+   * Informs whether this is a partial payment.
+   *
+   * Added in Saleor 3.14.
+   */
+  partial: Scalars['Boolean']['output'];
   /** Type of method used for payment. */
   paymentMethodType: Scalars['String']['output'];
   /** List of private metadata items. Requires staff permissions to access. */
@@ -47745,6 +49470,12 @@ export type Payment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /**
+   * PSP reference of the payment.
+   *
+   * Added in Saleor 3.14.
+   */
+  pspReference?: Maybe<Scalars['String']['output']>;
   /** Unique token associated with a payment. */
   token: Scalars['String']['output'];
   /** Total amount of the payment. */
@@ -50191,6 +51922,7 @@ export type ProductStockFilterInput = {
   warehouseIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** Represents product's original translatable fields and related translations. */
 export type ProductTranslatableContent = Node & {
   /** List of product attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -50225,6 +51957,7 @@ export type ProductTranslatableContent = Node & {
 };
 
 
+/** Represents product's original translatable fields and related translations. */
 export type ProductTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -50248,6 +51981,7 @@ export type ProductTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents product translations. */
 export type ProductTranslation = Node & {
   /**
    * Translated description of the product.
@@ -51535,6 +53269,7 @@ export type ProductVariantStocksUpdateInput = {
   update?: InputMaybe<Array<StockUpdateInput>>;
 };
 
+/** Represents product variant's original translatable fields and related translations. */
 export type ProductVariantTranslatableContent = Node & {
   /** List of product variant attribute values that can be translated. */
   attributeValues: Array<AttributeValueTranslatableContent>;
@@ -51552,6 +53287,7 @@ export type ProductVariantTranslatableContent = Node & {
 };
 
 
+/** Represents product variant's original translatable fields and related translations. */
 export type ProductVariantTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -51575,6 +53311,7 @@ export type ProductVariantTranslateErrorCode =
   | 'NOT_FOUND'
   | 'REQUIRED';
 
+/** Represents product variant translations. */
 export type ProductVariantTranslation = Node & {
   /** The ID of the product variant translation. */
   id: Scalars['ID']['output'];
@@ -51677,7 +53414,1013 @@ export type ProductWhereInput = {
   /** Filter by stock of the product variant. */
   stocks?: InputMaybe<ProductStockFilterInput>;
   /** Filter by when was the most recent update. */
-  updatedAt?: InputMaybe<DateTimeRangeInput>;
+  updatedAt?: InputMaybe<DateTimeFilterInput>;
+};
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type Promotion = Node & ObjectWithMetadata & {
+  /** Date time of promotion creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** Description of the promotion. */
+  description?: Maybe<Scalars['JSON']['output']>;
+  /** End date of the promotion. */
+  endDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The list of events associated with the promotion. */
+  events?: Maybe<Array<PromotionEvent>>;
+  id: Scalars['ID']['output'];
+  /** List of public metadata items. Can be accessed without permissions. */
+  metadata: Array<MetadataItem>;
+  /**
+   * A single key from public metadata.
+   *
+   * Tip: Use GraphQL aliases to fetch multiple keys.
+   *
+   * Added in Saleor 3.3.
+   */
+  metafield?: Maybe<Scalars['String']['output']>;
+  /**
+   * Public metadata. Use `keys` to control which fields you want to include. The default is to include everything.
+   *
+   * Added in Saleor 3.3.
+   */
+  metafields?: Maybe<Scalars['Metadata']['output']>;
+  /** Name of the promotion. */
+  name: Scalars['String']['output'];
+  /** List of private metadata items. Requires staff permissions to access. */
+  privateMetadata: Array<MetadataItem>;
+  /**
+   * A single key from private metadata. Requires staff permissions to access.
+   *
+   * Tip: Use GraphQL aliases to fetch multiple keys.
+   *
+   * Added in Saleor 3.3.
+   */
+  privateMetafield?: Maybe<Scalars['String']['output']>;
+  /**
+   * Private metadata. Requires staff permissions to access. Use `keys` to control which fields you want to include. The default is to include everything.
+   *
+   * Added in Saleor 3.3.
+   */
+  privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /** The list of promotion rules. */
+  rules?: Maybe<Array<PromotionRule>>;
+  /** Start date of the promotion. */
+  startDate: Scalars['DateTime']['output'];
+  /** Returns translated promotion fields for the given language code. */
+  translation?: Maybe<PromotionTranslation>;
+  /** Date time of last update of promotion. */
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionMetafieldArgs = {
+  key: Scalars['String']['input'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionMetafieldsArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionPrivateMetafieldArgs = {
+  key: Scalars['String']['input'];
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionPrivateMetafieldsArgs = {
+  keys?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+/**
+ * Represents the promotion that allow creating discounts based on given conditions, and is visible to all the customers.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Deletes promotions.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_DELETED (async): A promotion was deleted.
+ */
+export type PromotionBulkDelete = {
+  /** Returns how many objects were affected. */
+  count: Scalars['Int']['output'];
+  errors: Array<DiscountError>;
+};
+
+export type PromotionCountableConnection = {
+  edges: Array<PromotionCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PromotionCountableEdge = {
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Promotion;
+};
+
+/**
+ * Creates a new promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_CREATED (async): A promotion was created.
+ * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+ */
+export type PromotionCreate = {
+  errors: Array<PromotionCreateError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionCreateError = {
+  /** The error code. */
+  code: PromotionCreateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** Index of an input list item that caused the error. */
+  index?: Maybe<Scalars['Int']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionCreateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionCreateInput = {
+  /** Promotion description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** The end date of the promotion in ISO 8601 format. */
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Promotion name. */
+  name: Scalars['String']['input'];
+  /** List of promotion rules. */
+  rules?: InputMaybe<Array<PromotionRuleInput>>;
+  /** The start date of the promotion in ISO 8601 format. */
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+/**
+ * Event sent when new promotion is created.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionCreated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionCreatedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Deletes a promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_DELETED (async): A promotion was deleted.
+ */
+export type PromotionDelete = {
+  errors: Array<PromotionDeleteError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionDeleteError = {
+  /** The error code. */
+  code: PromotionDeleteErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'NOT_FOUND';
+
+/**
+ * Event sent when promotion is deleted.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionDeleted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * The event informs about the end of the promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionEnded = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion ended event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionEndedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionEvent = PromotionCreatedEvent | PromotionEndedEvent | PromotionRuleCreatedEvent | PromotionRuleDeletedEvent | PromotionRuleUpdatedEvent | PromotionStartedEvent | PromotionUpdatedEvent;
+
+export type PromotionEventInterface = {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/** An enumeration. */
+export type PromotionEventsEnum =
+  | 'PROMOTION_CREATED'
+  | 'PROMOTION_ENDED'
+  | 'PROMOTION_STARTED'
+  | 'PROMOTION_UPDATED'
+  | 'RULE_CREATED'
+  | 'RULE_DELETED'
+  | 'RULE_UPDATED';
+
+/**
+ * Represents the promotion rule that specifies the conditions that must be met to apply the promotion discount.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRule = Node & {
+  /** The catalogue predicate that must be met to apply the rule reward. */
+  cataloguePredicate?: Maybe<Scalars['JSON']['output']>;
+  /**
+   * List of channels where the rule applies.
+   *
+   * Requires one of the following permissions: AUTHENTICATED_APP, AUTHENTICATED_STAFF_USER.
+   */
+  channels?: Maybe<Array<Channel>>;
+  /** Description of the promotion rule. */
+  description?: Maybe<Scalars['JSON']['output']>;
+  id: Scalars['ID']['output'];
+  /** Name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Promotion to which the rule belongs. */
+  promotion?: Maybe<Promotion>;
+  /** The reward value of the promotion rule. Defines the discount value applied when the rule conditions are met. */
+  rewardValue?: Maybe<Scalars['PositiveDecimal']['output']>;
+  /** The type of reward value of the promotion rule. */
+  rewardValueType?: Maybe<RewardValueTypeEnum>;
+  /** Returns translated promotion rule fields for the given language code. */
+  translation?: Maybe<PromotionRuleTranslation>;
+};
+
+
+/**
+ * Represents the promotion rule that specifies the conditions that must be met to apply the promotion discount.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates a new promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_CREATED (async): A promotion rule was created.
+ */
+export type PromotionRuleCreate = {
+  errors: Array<PromotionRuleCreateError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleCreateError = {
+  /** The error code. */
+  code: PromotionRuleCreateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleCreateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionRuleCreateInput = {
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** List of channel ids to which the rule should apply to. */
+  channels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the promotion that rule belongs to. */
+  promotion: Scalars['ID']['input'];
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Event sent when new promotion rule is created.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleCreated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleCreatedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Deletes a promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_DELETED (async): A promotion rule was deleted.
+ */
+export type PromotionRuleDelete = {
+  errors: Array<PromotionRuleDeleteError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleDeleteError = {
+  /** The error code. */
+  code: PromotionRuleDeleteErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'NOT_FOUND';
+
+/**
+ * Event sent when new promotion rule is deleted.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleDeleted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleDeletedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * History log of the promotion event related to rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleEventInterface = {
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionRuleInput = {
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** List of channel ids to which the rule should apply to. */
+  channels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Represents promotion rule's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslatableContent = Node & {
+  /**
+   * Description of the promotion rule.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion rule translatable content. */
+  id: Scalars['ID']['output'];
+  /** Name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Returns translated promotion rule fields for the given language code. */
+  translation?: Maybe<PromotionRuleTranslation>;
+};
+
+
+/**
+ * Represents promotion rule's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslatableContentTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates/updates translations for a promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+ */
+export type PromotionRuleTranslate = {
+  errors: Array<TranslationError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+/**
+ * Represents promotion rule translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionRuleTranslation = Node & {
+  /**
+   * Translated description of the promotion rule.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion rule translation. */
+  id: Scalars['ID']['output'];
+  /** Translation language. */
+  language: LanguageDisplay;
+  /** Translated name of the promotion rule. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionRuleTranslationInput = {
+  /**
+   * Translated promotion description.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/**
+ * Updates an existing promotion rule.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_RULE_UPDATED (async): A promotion rule was updated.
+ */
+export type PromotionRuleUpdate = {
+  errors: Array<PromotionRuleUpdateError>;
+  promotionRule?: Maybe<PromotionRule>;
+};
+
+export type PromotionRuleUpdateError = {
+  /** List of channel IDs which causes the error. */
+  channels?: Maybe<Array<Scalars['ID']['output']>>;
+  /** The error code. */
+  code: PromotionRuleUpdateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionRuleUpdateErrorCode =
+  | 'DUPLICATED_INPUT_ITEM'
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'INVALID_PRECISION'
+  | 'MISSING_CHANNELS'
+  | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
+  | 'NOT_FOUND';
+
+export type PromotionRuleUpdateInput = {
+  /** List of channel ids to remove. */
+  addChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
+  cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
+  /** Promotion rule description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** Promotion rule name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** List of channel ids to remove. */
+  removeChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Defines the discount value. Required when catalogue predicate is provided. */
+  rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
+  /** Defines the promotion rule reward value type. Must be provided together with reward value. */
+  rewardValueType?: InputMaybe<RewardValueTypeEnum>;
+};
+
+/**
+ * Event sent when new promotion rule is updated.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleUpdated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion rule the event relates to. */
+  promotionRule?: Maybe<PromotionRule>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion rule created event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionRuleUpdatedEvent = Node & PromotionEventInterface & PromotionRuleEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** The rule ID associated with the promotion event. */
+  ruleId?: Maybe<Scalars['String']['output']>;
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionSortField =
+  /** Sort promotions by created at. */
+  | 'CREATED_AT'
+  /** Sort promotions by end date. */
+  | 'END_DATE'
+  /** Sort promotions by name. */
+  | 'NAME'
+  /** Sort promotions by start date. */
+  | 'START_DATE';
+
+export type PromotionSortingInput = {
+  /** Specifies the direction in which to sort promotions. */
+  direction: OrderDirection;
+  /** Sort promotions by the selected field. */
+  field: PromotionSortField;
+};
+
+/**
+ * The event informs about the start of the promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionStarted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion started event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionStartedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+/**
+ * Represents promotion's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslatableContent = Node & {
+  /**
+   * Description of the promotion.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion translatable content. */
+  id: Scalars['ID']['output'];
+  /** Name of the promotion. */
+  name: Scalars['String']['output'];
+  /** Returns translated promotion fields for the given language code. */
+  translation?: Maybe<PromotionTranslation>;
+};
+
+
+/**
+ * Represents promotion's original translatable fields and related translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslatableContentTranslationArgs = {
+  languageCode: LanguageCodeEnum;
+};
+
+/**
+ * Creates/updates translations for a promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Requires one of the following permissions: MANAGE_TRANSLATIONS.
+ */
+export type PromotionTranslate = {
+  errors: Array<TranslationError>;
+  promotion?: Maybe<Promotion>;
+};
+
+/**
+ * Represents promotion translations.
+ *
+ * Added in Saleor 3.17.
+ */
+export type PromotionTranslation = Node & {
+  /**
+   * Translated description of the promotion.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: Maybe<Scalars['JSONString']['output']>;
+  /** ID of the promotion translation. */
+  id: Scalars['ID']['output'];
+  /** Translation language. */
+  language: LanguageDisplay;
+  /** Translated name of the promotion. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type PromotionTranslationInput = {
+  /**
+   * Translated promotion description.
+   *
+   * Rich text format. For reference see https://editorjs.io/
+   */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/**
+ * Updates an existing promotion.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - PROMOTION_UPDATED (async): A promotion was updated.
+ * - PROMOTION_STARTED (async): Optionally called if promotion was started.
+ * - PROMOTION_ENDED (async): Optionally called if promotion was ended.
+ */
+export type PromotionUpdate = {
+  errors: Array<PromotionUpdateError>;
+  promotion?: Maybe<Promotion>;
+};
+
+export type PromotionUpdateError = {
+  /** The error code. */
+  code: PromotionUpdateErrorCode;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** An enumeration. */
+export type PromotionUpdateErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'NOT_FOUND'
+  | 'REQUIRED';
+
+export type PromotionUpdateInput = {
+  /** Promotion description. */
+  description?: InputMaybe<Scalars['JSON']['input']>;
+  /** The end date of the promotion in ISO 8601 format. */
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Promotion name. */
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** The start date of the promotion in ISO 8601 format. */
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+/**
+ * Event sent when promotion is updated.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionUpdated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The promotion the event relates to. */
+  promotion?: Maybe<Promotion>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * History log of the promotion updated event.
+ *
+ * Added in Saleor 3.17.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type PromotionUpdatedEvent = Node & PromotionEventInterface & {
+  /**
+   * User or App that created the promotion event.
+   *
+   * Requires one of the following permissions: MANAGE_STAFF, MANAGE_APPS, OWNER.
+   */
+  createdBy?: Maybe<UserOrApp>;
+  /** Date when event happened. */
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  /** Promotion event type. */
+  type: PromotionEventsEnum;
+};
+
+export type PromotionWhereInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<PromotionWhereInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<PromotionWhereInput>>;
+  /** Filter promotions by end date. */
+  endDate?: InputMaybe<DateTimeFilterInput>;
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  isOldSale?: InputMaybe<Scalars['Boolean']['input']>;
+  metadata?: InputMaybe<Array<MetadataFilter>>;
+  /** Filter by promotion name. */
+  name?: InputMaybe<StringFilterInput>;
+  /** Filter promotions by start date. */
+  startDate?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type PublishableChannelListingInput = {
@@ -51951,6 +54694,26 @@ export type Query = {
   /** List of the shop's products. Requires one of the following permissions to include the unpublished items: MANAGE_ORDERS, MANAGE_DISCOUNTS, MANAGE_PRODUCTS. */
   products?: Maybe<ProductCountableConnection>;
   /**
+   * Look up a promotion by ID.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  promotion?: Maybe<Promotion>;
+  /**
+   * List of the promotions.
+   *
+   * Added in Saleor 3.17.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  promotions?: Maybe<PromotionCountableConnection>;
+  /**
    * List of top selling products.
    *
    * Requires one of the following permissions: MANAGE_PRODUCTS.
@@ -51960,12 +54723,14 @@ export type Query = {
    * Look up a sale by ID.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   * @deprecated This field will be removed in Saleor 4.0. Use the `promotion` query instead.
    */
   sale?: Maybe<Sale>;
   /**
    * List of the shop's sales.
    *
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   * @deprecated This field will be removed in Saleor 4.0. Use the `promotions` query instead.
    */
   sales?: Maybe<SaleCountableConnection>;
   /**
@@ -52524,6 +55289,21 @@ export type QueryProductsArgs = {
 };
 
 
+export type QueryPromotionArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryPromotionsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<PromotionSortingInput>;
+  where?: InputMaybe<PromotionWhereInput>;
+};
+
+
 export type QueryReportProductSalesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -52757,7 +55537,16 @@ export type RequestPasswordReset = {
   errors: Array<AccountError>;
 };
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/** An enumeration. */
+export type RewardValueTypeEnum =
+  | 'FIXED'
+  | 'PERCENTAGE';
+
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type Sale = Node & ObjectWithMetadata & {
   /** List of categories this sale applies to. */
   categories?: Maybe<CategoryCountableConnection>;
@@ -52842,7 +55631,11 @@ export type Sale = Node & ObjectWithMetadata & {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleCategoriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -52851,7 +55644,11 @@ export type SaleCategoriesArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleCollectionsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -52860,31 +55657,51 @@ export type SaleCollectionsArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleMetafieldArgs = {
   key: Scalars['String']['input'];
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleMetafieldsArgs = {
   keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SalePrivateMetafieldArgs = {
   key: Scalars['String']['input'];
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SalePrivateMetafieldsArgs = {
   keys?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleProductsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -52893,13 +55710,21 @@ export type SaleProductsArgs = {
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
 
-/** Sales allow creating discounts for categories, collections or products and are visible to all the customers. */
+/**
+ * Sales allow creating discounts for categories, collections or products and are visible to all the customers.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `Promotion` type instead.
+ */
 export type SaleVariantsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -52908,7 +55733,9 @@ export type SaleVariantsArgs = {
 };
 
 /**
- * Adds products, categories, collections to a voucher.
+ * Adds products, categories, collections to a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -52939,7 +55766,11 @@ export type SaleBulkDelete = {
   errors: Array<DiscountError>;
 };
 
-/** Represents sale channel listing. */
+/**
+ * Represents sale channel listing.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionRule` type instead.
+ */
 export type SaleChannelListing = Node & {
   /** The channel in which the sale is available. */
   channel: Channel;
@@ -52967,6 +55798,8 @@ export type SaleChannelListingInput = {
 
 /**
  * Manage sale's availability in channels.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleCreate` or `promotionRuleUpdate` mutations instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  */
@@ -52996,6 +55829,8 @@ export type SaleCountableEdge = {
 /**
  * Creates a new sale.
  *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionCreate` mutation instead.
+ *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
  * Triggers the following webhook events:
@@ -53012,6 +55847,8 @@ export type SaleCreate = {
  * Event sent when new sale is created.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionCreated` event instead.
  */
 export type SaleCreated = Event & {
   /** Time of the event. */
@@ -53031,6 +55868,8 @@ export type SaleCreated = Event & {
  * Event sent when new sale is created.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionCreated` event instead.
  */
 export type SaleCreatedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -53038,6 +55877,8 @@ export type SaleCreatedSaleArgs = {
 
 /**
  * Deletes a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionDelete` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -53055,6 +55896,8 @@ export type SaleDelete = {
  * Event sent when sale is deleted.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionDeleted` event instead.
  */
 export type SaleDeleted = Event & {
   /** Time of the event. */
@@ -53074,6 +55917,8 @@ export type SaleDeleted = Event & {
  * Event sent when sale is deleted.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionDeleted` event instead.
  */
 export type SaleDeletedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -53110,6 +55955,8 @@ export type SaleInput = {
 
 /**
  * Removes products, categories, collections from a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionRuleUpdate` or `promotionRuleDelete` mutations instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -53161,6 +56008,8 @@ export type SaleSortingInput = {
  * The event informs about the start or end of the sale.
  *
  * Added in Saleor 3.5.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionStarted` and `PromotionEnded` events instead.
  */
 export type SaleToggle = Event & {
   /** Time of the event. */
@@ -53184,11 +56033,18 @@ export type SaleToggle = Event & {
  * The event informs about the start or end of the sale.
  *
  * Added in Saleor 3.5.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionStarted` and `PromotionEnded` events instead.
  */
 export type SaleToggleSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
 };
 
+/**
+ * Represents sale's original translatable fields and related translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslatableContent` instead.
+ */
 export type SaleTranslatableContent = Node & {
   /** The ID of the sale translatable content. */
   id: Scalars['ID']['output'];
@@ -53206,12 +56062,19 @@ export type SaleTranslatableContent = Node & {
 };
 
 
+/**
+ * Represents sale's original translatable fields and related translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslatableContent` instead.
+ */
 export type SaleTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
 /**
  * Creates/updates translations for a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PromotionTranslate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_TRANSLATIONS.
  */
@@ -53222,6 +56085,11 @@ export type SaleTranslate = {
   translationErrors: Array<TranslationError>;
 };
 
+/**
+ * Represents sale translations.
+ *
+ * DEPRECATED: this type will be removed in Saleor 4.0. Use `PromotionTranslation` instead.
+ */
 export type SaleTranslation = Node & {
   /** The ID of the sale translation. */
   id: Scalars['ID']['output'];
@@ -53237,6 +56105,8 @@ export type SaleType =
 
 /**
  * Updates a sale.
+ *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `promotionUpdate` mutation instead.
  *
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
@@ -53255,6 +56125,8 @@ export type SaleUpdate = {
  * Event sent when sale is updated.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionUpdated` event instead.
  */
 export type SaleUpdated = Event & {
   /** Time of the event. */
@@ -53274,6 +56146,8 @@ export type SaleUpdated = Event & {
  * Event sent when sale is updated.
  *
  * Added in Saleor 3.2.
+ *
+ * DEPRECATED: this event will be removed in Saleor 4.0. Use `PromotionUpdated` event instead.
  */
 export type SaleUpdatedSaleArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -53542,6 +56416,7 @@ export type ShippingMethodPostalCodeRule = Node & {
   start?: Maybe<Scalars['String']['output']>;
 };
 
+/** Represents shipping method's original translatable fields and related translations. */
 export type ShippingMethodTranslatableContent = Node & {
   /**
    * Shipping method description to translate.
@@ -53565,10 +56440,12 @@ export type ShippingMethodTranslatableContent = Node & {
 };
 
 
+/** Represents shipping method's original translatable fields and related translations. */
 export type ShippingMethodTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
 
+/** Represents shipping method translations. */
 export type ShippingMethodTranslation = Node & {
   /**
    * Translated description of the shipping method.
@@ -54534,6 +57411,8 @@ export type ShopAddressUpdate = {
 /**
  * Updates site domain of the shop.
  *
+ * DEPRECATED: this mutation will be removed in Saleor 4.0. Use `PUBLIC_URL` environment variable instead.
+ *
  * Requires one of the following permissions: MANAGE_SETTINGS.
  */
 export type ShopDomainUpdate = {
@@ -54723,6 +57602,7 @@ export type ShopSettingsUpdate = {
   shopErrors: Array<ShopError>;
 };
 
+/** Represents shop translations. */
 export type ShopTranslation = Node & {
   /** Translated description of sale. */
   description: Scalars['String']['output'];
@@ -56849,7 +59729,7 @@ export type TransactionUpdateInput = {
   pspReference?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type TranslatableItem = AttributeTranslatableContent | AttributeValueTranslatableContent | CategoryTranslatableContent | CollectionTranslatableContent | MenuItemTranslatableContent | PageTranslatableContent | ProductTranslatableContent | ProductVariantTranslatableContent | SaleTranslatableContent | ShippingMethodTranslatableContent | VoucherTranslatableContent;
+export type TranslatableItem = AttributeTranslatableContent | AttributeValueTranslatableContent | CategoryTranslatableContent | CollectionTranslatableContent | MenuItemTranslatableContent | PageTranslatableContent | ProductTranslatableContent | ProductVariantTranslatableContent | PromotionRuleTranslatableContent | PromotionTranslatableContent | SaleTranslatableContent | ShippingMethodTranslatableContent | VoucherTranslatableContent;
 
 export type TranslatableItemConnection = {
   edges: Array<TranslatableItemEdge>;
@@ -56874,6 +59754,8 @@ export type TranslatableKinds =
   | 'MENU_ITEM'
   | 'PAGE'
   | 'PRODUCT'
+  | 'PROMOTION'
+  | 'PROMOTION_RULE'
   | 'SALE'
   | 'SHIPPING_METHOD'
   | 'VARIANT'
@@ -56925,7 +59807,7 @@ export type TranslationInput = {
   seoTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type TranslationTypes = AttributeTranslation | AttributeValueTranslation | CategoryTranslation | CollectionTranslation | MenuItemTranslation | PageTranslation | ProductTranslation | ProductVariantTranslation | SaleTranslation | ShippingMethodTranslation | VoucherTranslation;
+export type TranslationTypes = AttributeTranslation | AttributeValueTranslation | CategoryTranslation | CollectionTranslation | MenuItemTranslation | PageTranslation | ProductTranslation | ProductVariantTranslation | PromotionRuleTranslation | PromotionTranslation | SaleTranslation | ShippingMethodTranslation | VoucherTranslation;
 
 /**
  * Event sent when translation is updated.
@@ -57930,6 +60812,7 @@ export type VoucherSortingInput = {
   field: VoucherSortField;
 };
 
+/** Represents voucher's original translatable fields and related translations. */
 export type VoucherTranslatableContent = Node & {
   /** The ID of the voucher translatable content. */
   id: Scalars['ID']['output'];
@@ -57947,6 +60830,7 @@ export type VoucherTranslatableContent = Node & {
 };
 
 
+/** Represents voucher's original translatable fields and related translations. */
 export type VoucherTranslatableContentTranslationArgs = {
   languageCode: LanguageCodeEnum;
 };
@@ -57963,6 +60847,7 @@ export type VoucherTranslate = {
   voucher?: Maybe<Voucher>;
 };
 
+/** Represents voucher translations. */
 export type VoucherTranslation = Node & {
   /** The ID of the voucher translation. */
   id: Scalars['ID']['output'];
@@ -58862,6 +61747,22 @@ export type WebhookEventTypeAsyncEnum =
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   /** A product variant is updated. */
   | 'PRODUCT_VARIANT_UPDATED'
+  /** A promotion is created. */
+  | 'PROMOTION_CREATED'
+  /** A promotion is deleted. */
+  | 'PROMOTION_DELETED'
+  /** A promotion is deactivated. */
+  | 'PROMOTION_ENDED'
+  /** A promotion rule is created. */
+  | 'PROMOTION_RULE_CREATED'
+  /** A promotion rule is deleted. */
+  | 'PROMOTION_RULE_DELETED'
+  /** A promotion rule is updated. */
+  | 'PROMOTION_RULE_UPDATED'
+  /** A promotion is activated. */
+  | 'PROMOTION_STARTED'
+  /** A promotion is updated. */
+  | 'PROMOTION_UPDATED'
   /** A sale is created. */
   | 'SALE_CREATED'
   /** A sale is deleted. */
@@ -59274,6 +62175,22 @@ export type WebhookEventTypeEnum =
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   /** A product variant is updated. */
   | 'PRODUCT_VARIANT_UPDATED'
+  /** A promotion is created. */
+  | 'PROMOTION_CREATED'
+  /** A promotion is deleted. */
+  | 'PROMOTION_DELETED'
+  /** A promotion is deactivated. */
+  | 'PROMOTION_ENDED'
+  /** A promotion rule is created. */
+  | 'PROMOTION_RULE_CREATED'
+  /** A promotion rule is deleted. */
+  | 'PROMOTION_RULE_DELETED'
+  /** A promotion rule is updated. */
+  | 'PROMOTION_RULE_UPDATED'
+  /** A promotion is activated. */
+  | 'PROMOTION_STARTED'
+  /** A promotion is updated. */
+  | 'PROMOTION_UPDATED'
   /** A sale is created. */
   | 'SALE_CREATED'
   /** A sale is deleted. */
@@ -59555,6 +62472,14 @@ export type WebhookSampleEventTypeEnum =
   | 'PRODUCT_VARIANT_OUT_OF_STOCK'
   | 'PRODUCT_VARIANT_STOCK_UPDATED'
   | 'PRODUCT_VARIANT_UPDATED'
+  | 'PROMOTION_CREATED'
+  | 'PROMOTION_DELETED'
+  | 'PROMOTION_ENDED'
+  | 'PROMOTION_RULE_CREATED'
+  | 'PROMOTION_RULE_DELETED'
+  | 'PROMOTION_RULE_UPDATED'
+  | 'PROMOTION_STARTED'
+  | 'PROMOTION_UPDATED'
   | 'SALE_CREATED'
   | 'SALE_DELETED'
   | 'SALE_TOGGLE'
@@ -59723,6 +62648,7 @@ export type GetCategoriesQuery = { categories?: { edges: Array<{ node: { name: s
 
 export type GetProductsQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -59899,8 +62825,8 @@ export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQue
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetProductsDocument = `
-    query GetProducts($after: String) {
-  products(channel: "default-channel", first: 12, after: $after) {
+    query GetProducts($after: String, $search: String) {
+  products(channel: "default-channel", first: 12, after: $after, search: $search) {
     edges {
       node {
         ...ProductCard
@@ -59930,6 +62856,7 @@ export const GetProductsDocument = `
  * const { data, loading, error } = useGetProductsQuery({
  *   variables: {
  *      after: // value for 'after'
+ *      search: // value for 'search'
  *   },
  * });
  */
