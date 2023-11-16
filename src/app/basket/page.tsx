@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from 'next/navigation'
 
 import Site from '@/template/Site'
 
@@ -8,7 +9,10 @@ import SpinButton from '../../components/SpinButton'
 
 import one from '@/assets/nike.png'
 
+
 export default function Basket() {
+
+    const router = useRouter();
 
     let data = new Array(5)
     data.fill(6)
@@ -67,13 +71,13 @@ export default function Basket() {
                 <div className='flex gap-x-4'>
                     <BasketCol></BasketCol>
                     <div className='w-full xl:block hidden'>
-                        <div className='flex flex-col items-center border w-6/12 px-4'>
+                        <div className='flex flex-col items-center border xl:w-8/12 px-4'>
                             <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
                             <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
                             <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
                             <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
                         </div>
-                        <Button variant='contained' className='w-6/12 mt-4'>Onayla</Button>
+                        <Button variant='contained' className='w-8/12 mt-4' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
                     </div>
 
                     <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 bg-slate-200 mobile-approval'>
@@ -82,7 +86,7 @@ export default function Basket() {
                             <div><span>4.449,87 TL</span></div>
                             <div className='text-xs'><span>Kargo Bedava</span></div>
                         </div>
-                        <Button variant='contained' className='w-3/6 h-12'>Onayla</Button>
+                        <Button variant='contained' className='w-3/6 h-12' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
                     </div>
 
                 </div>
