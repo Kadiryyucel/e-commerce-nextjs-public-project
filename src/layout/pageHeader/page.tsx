@@ -1,5 +1,9 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+
+import Link from 'next/link';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -7,8 +11,6 @@ import { Box } from '@mui/material';
 
 import DesktopMenu from './DesktopMenu';
 import MobileMenu from './MobileMenu';
-
-import Link from 'next/link';
 
 
 import { FiSearch } from 'react-icons/fi';
@@ -28,11 +30,11 @@ import { useSuspenseQuery } from '@apollo/client';
 
 import useWhenResize from '@/customHooks/useWhenResize';
 
+
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
 const lato = Lato({ subsets: ['latin'], weight: '400' })
 
 export default function PageHeader() {
-
 
     const dataCategories = useSuspenseQuery<GetCategoriesQuery>(GET_CATEGORIES);
     const [isOpenMenu, setMenu] = useState(false);
@@ -52,49 +54,73 @@ export default function PageHeader() {
 
     const [searchVal, setSearchVal] = useState('');
 
-    function MenuRes() {
-        if (currentWidth <= 1024) {
-            return (
-                <MobileMenu categories={dataCategories} setMenu={handleSetMenu} isOpenMenu={isOpenMenu} />
-            )
-        }
-        else {
+    function DesktopMen(){
+        if (currentWidth > 1280) {
             return (
                 <DesktopMenu categories={dataCategories} setMenu={handleSetMenu} />
             )
         }
     }
 
+    function MobileMen(){
+        if (currentWidth <= 1280) {
+            return (
+                <MobileMenu categories={dataCategories} setMenu={handleSetMenu} isOpenMenu={isOpenMenu} />
+            )
+        }
+    }
 
+    const searchParams = useSearchParams()! as unknown as URLSearchParams
+    const router = useRouter()
+    const pathname = usePathname()
+
+
+    const createQueryString = useCallback(
+        (name: string, value: string) => {
+            const params = new URLSearchParams(searchParams)
+            params.set(name, value)
+
+            return params.toString()
+        },
+        [searchParams]
+    )
+
+    function searchProcess() {
+        if (searchVal == null || searchVal == '') return
+        router.push('search' + '?' + createQueryString('q', searchVal))
+    }
     return (
-        <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
-            <div className="flex flex-wrap justify-center items-center w-full">
-                <div className='grow xl:hidden' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
-                <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
-                <Box sx={{ backgroundColor: '#f3f3f3' }} className='grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
-                    <TextField
-                        className='search-bar w-full'
-                        placeholder='Search'
-                        value={searchVal}
-                        onChange={(e) => { setSearchVal(e.target.value) }}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end">
-                                <Link href={`/search/${searchVal}`}>
-                                    <FiSearch size={24} color='orange' />
-                                </Link>
-                            </InputAdornment>,
-                        }}
-                    />
-                </Box>
+        <>
+            <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
+                <div className="flex flex-wrap justify-center items-center w-full">
+                    <div className='grow xl:hidden' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
+                    <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
+                    <Box sx={{ backgroundColor: '#f3f3f3' }} className='grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
+                        <TextField
+                            className='search-bar w-full'
+                            placeholder='Search'
+                            value={searchVal}
+                            onChange={(e) => { setSearchVal(e.target.value) }}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    <div className='cursor-pointer' onClick={() => { searchProcess() }}>
+                                        <FiSearch size={24} color='orange' />
+                                    </div>
+                                </InputAdornment>,
+                            }}
+                        />
+                    </Box>
 
 
-                <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
-                    <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
-                    <Link href={`/favorites`}><div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div></Link>
-                    <Link href={`/basket`}><div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
+                    <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
+                        <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
+                        <Link href={`/favorites`}><div className='flex items-center gap-x-2'><div><AiOutlineHeart size={20} /></div><span className='xl:w-auto hidden xl:block'>Favorilerim</span></div></Link>
+                        <Link href={`/basket`}><div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
+                    </div>
                 </div>
+                <DesktopMen/>
             </div>
-            <MenuRes></MenuRes>
-        </div>
+            <MobileMen/>
+        </>
     )
 }
