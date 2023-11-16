@@ -1,8 +1,8 @@
 "use client";
 
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { useLazyQuery } from '@apollo/client';
 
-import { useState, useEffect, useRef, useMemo, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { GetProductsQuery } from "@/generated/graphql";
 import { GET_PRODUCTS } from "../../graphql/queries";
 
@@ -11,28 +11,29 @@ import Link from "next/link";
 import Image from "next/image";
 import ShowSpinner from "@/components/MainSpinner"
 
+interface ProductsValues {
+    cursor?: string
+}
 
+const Products = (props: ProductsValues) => {
 
-const Products = (props: { cursor: string }) => {
-
-    const { cursor } = props
+    const cursor = props.cursor != null ? props.cursor : "";
 
     const [dataProducts, setProducts] = useState<any[]>([])
     const currentCursor = useRef<string>('')
-    const { data, error, fetchMore } = useSuspenseQuery<GetProductsQuery>(GET_PRODUCTS, { variables: { after: cursor } })
+    const [runQuery, { error, data, fetchMore }] = useLazyQuery<GetProductsQuery>(GET_PRODUCTS)
 
     const [hasNextPage, setNextPage] = useState(true)
     const [hasSpinner, setSpinner] = useState('invisible')
 
     useEffect(() => {
+        currentCursor.current = data?.products?.pageInfo?.startCursor || cursor;
 
         window.scrollTo({
             top: 0,
         })
 
-
         async function getDataProducts() {
-
             const { data: newData } = await fetchMore({ variables: { after: currentCursor.current } })
             setSpinner('invisible')
 
@@ -76,9 +77,6 @@ const Products = (props: { cursor: string }) => {
     }, [fetchMore])
 
     if (error) return <div></div>
-
-
-    currentCursor.current = data.products?.pageInfo?.startCursor || '';
 
 
 
