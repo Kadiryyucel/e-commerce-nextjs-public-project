@@ -45,7 +45,7 @@ export default function Checkout() {
 
     function DesktopOrderSummary() {
         if (currentWidth > 1024) {
-            return <div className="xl:w-1/4 pl-8 relative desktop-order-summary"><OrderSummaryWidget mobile={false} /></div>
+            return <div className="sm:w-2/4 xl:w-1/4 pl-8 relative desktop-order-summary"><OrderSummaryWidget mobile={false} /></div>
         }
     }
 
@@ -56,7 +56,7 @@ export default function Checkout() {
                 <PageAlign
                     left={
                         <>
-                            <div className="sm:w-full lg:w-full xl:w-1/4 mx-4 md:mx-8 xl:mr-8 xl:ml-0">
+                            <div className="sm:w-2/4 lg:w-full xl:w-1/4 mx-4 md:mx-8 xl:mr-8 xl:ml-0">
                                 <div className="mb-12">
                                     <h1 className="mb-2">Checkout</h1>
                                     <Breadcrumbs
