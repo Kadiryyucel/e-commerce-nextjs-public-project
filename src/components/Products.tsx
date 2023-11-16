@@ -82,7 +82,7 @@ const Products = (props: ProductsValues) => {
 
     return (
         <>
-            <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-4 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 {dataProducts.map((product, index) => {
                     return (
                         <Link href={`/products/${product.id}`} key={index}>
