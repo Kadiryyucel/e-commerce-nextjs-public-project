@@ -26,9 +26,15 @@ const config: Config = {
       },
       maxWidth: {
         ['basket-product-describe']:'60%'
-      }
+      },
+      height: {
+        '150': '37.5rem'
+      },
+      width: {
+        '100': '25rem',
+        '120': '30rem'
+      },
     },
-  },
-  plugins: [],
-}
+    },
+  }
 export default config
