@@ -45,7 +45,7 @@ export default function MobileMenu({ categories, isOpenMenu, setMenu }
                                     <span className='grow'>{x.name}</span>
                                     {!isOpenSubMenu && <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>}
                                 </div>
-                                <div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white p-8">
+                                <div className="menu hidden md:block flex-col flex-wrap absolute max-h-52 bg-white p-8">
                                     {x.products?.edges.map(({ node: sub }) => {
                                         return (<div key={sub.id}>
                                             <div className={`flex-initial menu-text ${mulish.className}`} key={sub.id}><span>{sub.name}</span></div>
