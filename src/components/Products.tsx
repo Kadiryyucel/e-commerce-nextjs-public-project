@@ -10,9 +10,11 @@ import { GET_PRODUCTS } from "../../graphql/queries";
 import Link from "next/link";
 import Image from "next/image";
 import ShowSpinner from "@/components/MainSpinner"
+import ProductCard from './ProductCard';
 
 interface ProductsValues {
     cursor?: string
+    className?: string
 }
 
 const Products = (props: ProductsValues) => {
@@ -74,7 +76,7 @@ const Products = (props: ProductsValues) => {
         return () => window.removeEventListener('scroll', whenScroll)
 
 
-    }, [fetchMore])
+    }, [fetchMore,cursor,data?.products?.pageInfo?.startCursor])
 
     if (error) return <div></div>
 
@@ -82,33 +84,10 @@ const Products = (props: ProductsValues) => {
 
     return (
         <>
-            <div className="mt-4 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className={`mt-4 xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 ${props.className}`}>
                 {dataProducts.map((product, index) => {
                     return (
-                        <Link href={`/products/${product.id}`} key={index}>
-                            <div>
-                                <div className="min-h-80 h-80 overflow-hidden rounded-md border bg-slate-50 hover:bg-slate-100">
-                                    {product.thumbnail && (
-                                        <Image
-                                            width={256}
-                                            height={256}
-                                            alt={product.thumbnail.alt || ""}
-                                            src={product.thumbnail.url}
-                                            className="h-full w-full object-cover object-center p-4 hover:scale-105"
-                                        />
-                                    )}
-                                </div>
-                                <div className="mt-2 flex justify-between">
-                                    <div>
-                                        <h3 className="text-sm font-semibold text-gray-700">{product.name}</h3>
-                                        <p className="text-sm text-gray-500">{product.category?.name}</p>
-                                    </div>
-                                    <p className="text-sm font-medium text-gray-900">
-                                        ${product.pricing?.priceRange?.start?.gross.amount}
-                                    </p>
-                                </div>
-                            </div>
-                        </Link>
+                        <div key={index}><ProductCard product={product} key={index}><></></ProductCard></div>
                     );
                 })
                 }

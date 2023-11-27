@@ -39,7 +39,7 @@ export default function ProductCard({ product, children }: { product: ProductCar
         let isInFavorites = getFavorites.some((fav: any) => fav.id === product.id);
         setFavorite(isInFavorites)
         setIsClient(true);
-    }, []);
+    }, [product.id]);
 
 
     function DefaultSlot() {
