@@ -12,6 +12,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
+import 'swiper/css/pagination';
 
 import nike from '../../assets/nike.png'
 import { Button, Rating } from '@mui/material';
@@ -20,6 +21,9 @@ import { CiHeart } from 'react-icons/ci'
 import { AiTwotoneHeart } from 'react-icons/ai'
 import { PiCoatHanger } from "react-icons/pi";
 import { FaTruckFast } from "react-icons/fa6";
+import { LuHeart } from "react-icons/lu";
+import Image from 'next/image';
+
 
 register();
 
@@ -58,21 +62,21 @@ export default function PrdouctDetail() {
 
 
   const [thumbsSwiper, setThumbsSwiper] = useState<types.Swiper | null>(null);
-  const [activeIndex,setActiveIndex] = useState<number>(0)
+  const [activeIndex, setActiveIndex] = useState<number>(0)
 
   return (
     <>
-      <div className='flex flex-col xl:flex-row'>
+      <div className='flex flex-col xl:flex-row xl:justify-center'>
         <div className='w-full xl:w-[25rem] shirink-0'>
-          <div className='relative w-full h-[37.5rem]'>
+          <div className='relative w-full h-[126vw] h- md:h-[117vw] xl:h-[37.5rem]'>
             <Swiper
-              onActiveIndexChange={(s:types.Swiper)=>{
+              onActiveIndexChange={(s: types.Swiper) => {
                 setActiveIndex(s.activeIndex)
-                console.log(s.activeIndex)
               }}
               ref={swiperElRef}
               spaceBetween={10}
               navigation={true}
+              pagination={true}
               loop={true}
               thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
               modules={[FreeMode, Navigation, Pagination, Thumbs]}
@@ -82,18 +86,18 @@ export default function PrdouctDetail() {
               {data.map(({ id, image, title }) => (
                 <SwiperSlide key={id}>
                   {activeIndex === id && <Magnifying>
-                    <img className='w-5/6 xl:h-full' src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                    <Image alt={'sds'} className='w-5/6 md:w-11/12 xl:w-full xl:h-full' src="https://swiperjs.com/demos/images/nature-1.jpg" />
                   </Magnifying>}
                 </SwiperSlide>
               ))}
             </Swiper>
             <div className="wrapper-img h-full w-[30rem] absolute top-0 left-full ml-4 z-20 overflow-hidden">
-              <div className='absolute top-0 left-0 z-20 magnifying-img' style={{width:'1000px',height:'1500px'}}>
+              <div className='absolute top-0 left-0 z-20 magnifying-img' style={{ width: '1000px', height: '1500px' }}>
                 <div className='absolute magnifying-img-content'></div>
               </div>
             </div>
           </div>
-          <div className='w-full mt-4'>
+          <div className='w-full mt-4 hidden xl:block'>
             <div>
               <Swiper
                 onSwiper={setThumbsSwiper}
@@ -104,80 +108,90 @@ export default function PrdouctDetail() {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className='detail-thumbs'>
                 <SwiperSlide>
-                  <img className='h-full' src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                  <Image alt={'sds'} className='h-full' src="https://swiperjs.com/demos/images/nature-1.jpg" />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <img className='h-full' src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                  <Image alt={'sds'} className='h-full' src="https://swiperjs.com/demos/images/nature-2.jpg" />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <img className='h-full' src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                  <Image alt={'sds'}className='h-full' src="https://swiperjs.com/demos/images/nature-2.jpg" />
                 </SwiperSlide>
               </Swiper>
             </div>
           </div>
         </div>
-        <div className='w-7/12 mx-4'>
+        <div className='xl:w-[38rem] mx-4'>
           <div>
             <h3>Baytas Baytaş Ekek Likrarlı Boxer 1444</h3>
           </div>
           <div className='flex flex-col'>
-            <div className='flex items-center text-xs'>
-              <span className='text-base'>3.8</span>
-              <div>
-                <Rating name="half-rating-read" defaultValue={2.5} precision={0.5} readOnly />
+            <div className='flex justify-between items-center text-xs'>
+              <div className='flex items-center'>
+                <span className='text-xs md:text-base'>3.8</span>
+                <div>
+                  <Rating name="half-rating-read" className='!text-xs lg:!text-lg' defaultValue={2.5} precision={0.5} readOnly />
+                </div>
+                <div className='bg-gray-400 rounded-full h-1 w-1 mx-2'></div>
+                <div className='text-slate-400 text-[0.65rem] lg:text-lg'>
+                  <span className='text-[0.65rem] lg:text-lg pr-1 text-black'>7459</span>
+                  Değerlendirme
+                </div>
+                <div className='flex items-center'>
+                  <div className='bg-gray-400 rounded-full h-1 w-1 mx-2 hidden sm:block'></div>
+                  <div className='text-slate-400 hidden sm:block'><span className='text-black'>1038</span> Soru & Cevap</div>
+                  <div className='bg-gray-400 rounded-full h-1 w-1 mx-2 hidden sm:block'></div>
+                  <div className='text-slate-400 hidden sm:block'><span className='text-black'>44045</span> Favori</div>
+                </div>
               </div>
-              <div className='bg-gray-400 rounded-full h-1 w-1 mx-2'></div>
-              <div className='text-slate-400'><span className='text-black'>7459</span> Değerlendirme</div>
-              <div className='bg-gray-400 rounded-full h-1 w-1 mx-2'></div>
-              <div className='text-slate-400'><span className='text-black'>1038</span> Soru & Cevap</div>
-              <div className='bg-gray-400 rounded-full h-1 w-1 mx-2'></div>
-              <div className='text-slate-400'><span className='text-black'>44045</span> Favori</div>
+              <div className='flex items-center text-slate-400 block sm:hidden'><LuHeart /><span className='text-black pl-1'>4.5B</span></div>
             </div>
-            <div className='text-2xl font-base'>14,99 TL</div>
+            <div className='text-2xl font-base hidden sm:block my-4'>14,99 TL</div>
           </div>
-          <div className='w-full h-1 bg-gray-400'></div>
+          <div className='w-full h-1 bg-gray-400 hidden sm:block'></div>
           <div>
-            <h5>Renk</h5>
-            <div className='flex gap-x-2 '>
+            <h5 className='mt-4 mb-2'>Renk</h5>
+            <div className='flex gap-x-2'>
               <div className='bg-gray-400 rounded-full h-8 w-8'></div>
               <div className='bg-gray-400 rounded-full h-8 w-8'></div>
               <div className='bg-gray-400 rounded-full h-8 w-8'></div>
             </div>
           </div>
           <div>
-            <h5>Beden</h5>
+            <h5 className='mt-4 mb-2'>Beden</h5>
             <div className='flex gap-2'>
-              <div className='border-2 rounded-lg h-8 px-4 leading-loose'>S</div>
-              <div className='border-2 rounded-lg h-8 px-4 leading-loose'>M</div>
-              <div className='border-2 rounded-lg h-8 px-4 leading-loose'>L</div>
-              <div className='border-2 rounded-lg h-8 px-4 leading-loose'>XL</div>
-              <div className='border-2 rounded-lg h-8 px-4 leading-loose'>XXL</div>
+              <div className='flex items-center border-2 rounded-lg h-8 px-4 leading-loose text-xs md:text-xl'>S</div>
+              <div className='flex items-center border-2 rounded-lg h-8 px-4 leading-loose text-xs md:text-xl'>M</div>
+              <div className='flex items-center border-2 rounded-lg h-8 px-4 leading-loose text-xs md:text-xl'>L</div>
+              <div className='flex items-center border-2 rounded-lg h-8 px-4 leading-loose text-xs md:text-xl'>XL</div>
+              <div className='flex items-center border-2 rounded-lg h-8 px-4 leading-loose text-xs md:text-xl'>XXL</div>
             </div>
           </div>
           <div className='flex jutify-center items-center mt-4'>
-            <div className='text-amber-500'>
+            <div className='text-amber-500 pr-1'>
               <PiCoatHanger color='inherit' size={28} />
             </div>
-            <div>Kullancıların çoğu 1 beden büyük almanızı öneriyor.</div>
+            <div className='text-xs md:text-xl'>Kullancıların çoğu 1 beden büyük almanızı öneriyor.</div>
           </div>
           <div className='flex items-center mt-4'>
-            <Button variant='contained' className='w-full h-12'>Onayla</Button>
+            <Button variant='contained' className='w-full h-12'>Sepete Ekle</Button>
             <div className="flex top-4 right-4 w-12 h-12 ml-4 bg-slate-50 justify-center items-center rounded-full z-10 shrink-0 border hover:text-amber-500 cursor-pointer" onClick={() => toggleFavorite()}>
               {isClient && isFavorite ? <AiTwotoneHeart color='rgb(245 158 11)' size={28} /> : <CiHeart color='inherit' size={28} />}
             </div>
           </div>
           <div>
-            <div>Bu ürün en az 2 adte satın alınabilmektedir.Sepete eklendiğinde 2 adet olarak eklenecektir.</div>
+            <div className='text-xs md:text-xl my-4'>
+              Bu ürün en az 2 adet satın alınabilmektedir. Sepete eklendiğinde 2 adet olarak eklenecektir.
+            </div>
           </div>
           <div className='flex justify-start items-center bg-emerald-50 px-4 py-2'>
             <div className='text-emerald-500 mr-2'>
               <FaTruckFast color='inherit' size={28} />
             </div>
-            <div>19 saat 24 dakika içinde sipariş verirsen en geç yarın kargoda!</div>
+            <div className='text-xs md:text-xl'>19 saat 24 dakika içinde sipariş verirsen en geç yarın kargoda!</div>
           </div>
           <div>
             <h3>Öne Çıkan Özellikler</h3>
-            <ul className='info-about-product'>
+            <ul className='info-about-product text-xs md:text-xl'>
               <li>Bu ürün Yaman Tekstil trafından gönderilecektir.</li>
               <li>Kampanya fiyatından satılmak üzere 100 adetten fazla stok sunulmuştur.</li>
               <li>İncelemiş olduğunuz ürünün satış fiyatını satıcı belirlemektedir.</li>

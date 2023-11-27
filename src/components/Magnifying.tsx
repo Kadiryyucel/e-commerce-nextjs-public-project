@@ -48,7 +48,7 @@ export default function Magnifying(props: { children: React.ReactNode }) {
     return (
         <>
             <div className="h-full relative">
-                <div className="magnifying h-full relative z-20">
+                <div className="magnifying flex justify-center h-full relative z-20">
                     {props.children}
                 </div>
 
