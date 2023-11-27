@@ -28,12 +28,21 @@ const config: Config = {
         ['basket-product-describe']:'60%'
       },
       height: {
-        '150': '37.5rem'
+        '150': '37.5rem',
+        '117': '117vw',
+        '135': '135vw'
+
       },
       width: {
         '100': '25rem',
-        '120': '30rem'
+        '120': '30rem',
+        '152': '38rem'
       },
+      fontSize: {
+        'xxs': ['0.65rem',{
+          lineHeight:'1rem',
+        }]
+      }
     },
     },
   }

@@ -16,6 +16,44 @@
   }
 }
 
+@media only screen and (min-width: 300px) and (max-width: 640px) {
+  .info-about-product>li::before {
+    content: "";
+    background-color: orange;
+    position: relative;
+    display: inline-block;
+    height: 5px !important;
+    width: 5px !important;
+    border-radius: 50%;
+    margin-right: 4px;
+  }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 768px) {
+  .info-about-product>li::before {
+    content: "";
+    background-color: orange;
+    position: relative;
+    display: inline-block;
+    height: 8px !important;
+    width: 8px !important;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .info-about-product>li::before {
+    content: "";
+    background-color: orange;
+    position: relative;
+    display: inline-block;
+    height: 10px !important;
+    width: 10px !important;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
 
 
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
@@ -274,5 +312,12 @@ input::-webkit-inner-spin-button {
   display: none;
 }
  
+.MuiListItemButton-root{
+  padding: 0.5rem 1rem;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
 
