@@ -54,7 +54,7 @@ export default function PageHeader() {
 
     const [searchVal, setSearchVal] = useState('');
 
-    function DesktopMen(){
+    function DesktopMen() {
         if (currentWidth > 1280) {
             return (
                 <DesktopMenu categories={dataCategories} setMenu={handleSetMenu} />
@@ -62,7 +62,7 @@ export default function PageHeader() {
         }
     }
 
-    function MobileMen(){
+    function MobileMen() {
         if (currentWidth <= 1280) {
             return (
                 <MobileMenu categories={dataCategories} setMenu={handleSetMenu} isOpenMenu={isOpenMenu} />
@@ -89,13 +89,36 @@ export default function PageHeader() {
         if (searchVal == null || searchVal == '') return
         router.push('search' + '?' + createQueryString('q', searchVal))
     }
+
+    let categories = [
+        {
+            category: 'Kategori',
+            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+        },
+        {
+            category: 'Beden',
+            childCategories: [{ category: 'totoadfadfadsfsafads' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+        },
+        {
+            category: 'Fiyat',
+            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+        },
+        {
+            category: 'Kalıp',
+            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+        },
+        {
+            category: 'Avantajlı Ürünler',
+            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+        }
+    ]
     return (
         <>
             <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
                 <div className="flex flex-wrap justify-center items-center w-full">
                     <div className='grow xl:hidden' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
                     <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
-                    <Box sx={{ backgroundColor: '#f3f3f3' }} className='grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
+                    <Box sx={{ backgroundColor: '#f3f3f3' }} className='flex justify-center relative grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
                         <TextField
                             className='search-bar w-full'
                             placeholder='Search'
@@ -109,6 +132,40 @@ export default function PageHeader() {
                                 </InputAdornment>,
                             }}
                         />
+                        <div className='search-suggests top-14 min-h-80 absolute z-20 p-10 border-4 border-yellow-500' style={{ backgroundColor: '#f3f3f3'}}>
+                            <div>
+                                <div className='flex justify-between'>
+                                    <span className='text-lg text-orange-400'>Geçmiş Aramalar</span>
+                                    <span>Temizle</span>
+                                </div>
+                                <div className='flex flex-col gap-y-2 my-2'>
+                                    <div>aplle</div>
+                                    <div>Pantolon</div>
+                                    <div>selam</div>
+                                    <div>tshirt</div>
+                                </div>
+                                <div>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <span className='text-lg text-orange-400'>Popüler Aramalar</span>
+                                        <div className='flex flex-wrap gap-2'>{categories.map((data,index) => {
+                                            return (
+                                                <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                            )
+                                        })}
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2 mt-2'>
+                                        <span className='text-lg text-orange-400'>Sana Özel Kategoriler</span>
+                                        <div className='flex flex-wrap gap-2'>{categories.map((data,index) => {
+                                            return (
+                                                <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                            )
+                                        })}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </Box>
 
 
@@ -118,9 +175,9 @@ export default function PageHeader() {
                         <Link href={`/basket`}><div className='flex items-center gap-x-2'><div><SlBasket size={20} /></div><span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
                     </div>
                 </div>
-                <DesktopMen/>
+                <DesktopMen />
             </div>
-            <MobileMen/>
+            <MobileMen />
         </>
     )
 }
