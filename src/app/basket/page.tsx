@@ -23,15 +23,15 @@ export default function Basket() {
                 {data.map((_, i) => {
                     return (
                         <div className='w-full flex justify-center xl:justify-end' key={i}>
-                            <div className='flex items-center md:justify-between max-w-screen-lg border p-6'>
+                            <div className='flex items-center md:justify-between max-w-screen-lg border pr-3 py-6'>
                                 <div className='flex items-center md:w-full'>
-                                    <div className="flex shrink-0 items-start w-1/12">
+                                    <div className="flex shrink-0 items-start w-1/12 mr-1">
                                         <Checkbox
-                                            className="pt-0"
+                                            className="pt-0 pl-1 md:pl-4"
                                             inputProps={{ 'aria-label': 'controlled' }}
                                         />
                                     </div>
-                                    <div className="min-h-24 h-24 shrink-0 w-2/12 overflow-hidden shrink-0 rounded-md border">
+                                    <div className="min-h-24 h-20 w-3/12 md:h-24 md:w-2/12 shrink-0 overflow-hidden shrink-0 rounded-md border">
                                         <Image
                                             width={80}
                                             height={80}
@@ -41,15 +41,15 @@ export default function Basket() {
                                             className="h-full w-full object-cover object-center"
                                         />
                                     </div>
-                                    <div className='w-9/12 flex flex-col xl:flex-row xl:justify-around justify-start xl:items-center items-start'>
-                                        <div className='flex flex-col max-w-full xl:max-w-[60%] text-xs'>
+                                    <div className='w-9/12 pl-1 flex flex-col xl:flex-row xl:justify-around justify-start xl:items-center items-start'>
+                                        <div className='flex flex-col max-w-full xl:max-w-[60%] text-[0.60rem] mb-2'>
                                             <div><h3 className='m-0'><b>Shoes</b></h3></div>
-                                            <div className='flex items-center justify-center'>
-
+                                            <div className='flex items-center justify-center hidden md:block'>
                                                 <p className='truncate'> Szymanski Tasarımlı Parfüm Esanslı Baskılı Ayna Oto Araç Kokusu Araba Kokusu</p>
                                             </div>
                                             <div><span>Beden:</span><span>Tek Ebat</span></div>
-                                            <div><span>5 saat 18 dakika içinde sipariş verirsen en geç yarın kargoda</span></div>
+                                            <div className='hidden md:block'><span>5 saat 18 dakika içinde sipariş verirsen en geç yarın kargoda</span></div>
+                                            <div className='block md:hidden'><span>Tahmini Kargoya Teslim: 3 gün içinde</span></div>
                                         </div>
                                         <div className='flex shrink-0 justify-between xl:justify-end w-full xl:w-auto items-end'>
                                             <SpinButton />
@@ -69,10 +69,10 @@ export default function Basket() {
     return (
         <>
             <Site>
-                <div className='flex gap-x-4'>
+                <div className='flex justify-center gap-x-4'>
                     <BasketCol></BasketCol>
-                    <div className='w-full xl:block hidden'>
-                        <div className='flex flex-col items-center border xl:w-8/12 px-4'>
+                    <div className='xl:w-8/12 xl:block hidden'>
+                        <div className='flex flex-col items-center border w-10/12 px-4'>
                             <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
                             <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
                             <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
