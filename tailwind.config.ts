@@ -31,7 +31,6 @@ const config: Config = {
         '150': '37.5rem',
         '117': '117vw',
         '135': '135vw'
-
       },
       width: {
         '100': '25rem',
@@ -40,6 +39,9 @@ const config: Config = {
       },
       fontSize: {
         'xxs': ['0.65rem',{
+          lineHeight:'1rem',
+        }],
+        'xxxs': ['0.60rem',{
           lineHeight:'1rem',
         }]
       }

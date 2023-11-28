@@ -121,11 +121,32 @@ h6 {
 }
 
 .search-bar {
-  border-radius: 10px !important;
+  outline: transparent solid 4px;
+  transition: outline .2s;
 }
 
 .search-bar fieldset {
   border: none !important;
+}
+
+.search-bar:has(input:focus){
+  border-radius: 0 !important;
+  outline: rgb(234 179 8 / 1) solid 4px;
+  border-bottom:  none;
+}
+
+.wrapper-content:has(input:focus) .search-suggests{
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.wrapper-content:has(:not(input:focus)) .search-suggests{
+  visibility: hidden;
+  opacity: 0;
+}
+
+.search-suggests{
+  transition: all .6s;
 }
 
 .menu {
@@ -320,4 +341,7 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
+.search-suggests{
+  width: calc(100% + 8px);
+}
 
