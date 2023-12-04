@@ -20,15 +20,17 @@ export default function Page() {
     return (
         <Site>
             <div className='flex justify-center flex-col md:flex-row'>
-                <ListMobileCategories className='flex'></ListMobileCategories>
+                <ListMobileCategories className='flex flex-col md:hidden'></ListMobileCategories>
                 <div className='pr-2 hidden md:block'>
-                    <ListCategories className='border inline-grid ml-2'/>
+                    <ListCategories className='hidden md:inline-grid border ml-2'/>
                 </div>
                 <div className='inline-grid w-full md:w-5/6'>
                     <div className="w-full  px-2 xl:px-4 2xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         {dataProducts.data.products?.edges.map(({ node: product }) => {
                             return (
-                                <div key={product.id}><ProductCard product={product} ><></></ProductCard></div>
+                                <div key={product.id}>
+                                        <ProductCard product={product} ><></></ProductCard>
+                                </div>
                             );
                         })}
                     </div>
@@ -36,5 +38,5 @@ export default function Page() {
                 </div>
             </div>
         </Site>
-    );   
+    );
 }
