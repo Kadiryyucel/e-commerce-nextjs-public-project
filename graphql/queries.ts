@@ -56,3 +56,15 @@ query GetProducts($after:String,$search:String) {
     totalCount
    }
   }`
+
+export const GET_PRODUCT = gql`
+${PRODUCT_CARD}
+query GetProduct($ids:[ID!]) {
+    products(channel:"default-channel", first: 1, where:{ids:$ids}) {
+      edges{
+       node {
+         ...ProductCard
+       }
+    }
+   }
+  }`

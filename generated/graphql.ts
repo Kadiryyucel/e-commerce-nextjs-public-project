@@ -3975,7 +3975,7 @@ export type Checkout = Node & ObjectWithMetadata & {
   /** The name of voucher assigned to the checkout. */
   discountName?: Maybe<Scalars['String']['output']>;
   /**
-   * Determines whether checkout prices should include taxes when displayed in a storefront.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -4129,6 +4129,14 @@ export type Checkout = Node & ObjectWithMetadata & {
   updatedAt: Scalars['DateTime']['output'];
   /** The user assigned to the checkout. Requires one of the following permissions: MANAGE_USERS, HANDLE_PAYMENTS, OWNER. */
   user?: Maybe<User>;
+  /**
+   * The voucher assigned to the checkout.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  voucher?: Maybe<Voucher>;
   /** The code of voucher assigned to the checkout. */
   voucherCode?: Maybe<Scalars['String']['output']>;
 };
@@ -6572,6 +6580,12 @@ export type DiscountError = {
   message?: Maybe<Scalars['String']['output']>;
   /** List of products IDs which causes the error. */
   products?: Maybe<Array<Scalars['ID']['output']>>;
+  /**
+   * List of voucher codes which causes the error.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCodes?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 /** An enumeration. */
@@ -6583,7 +6597,8 @@ export type DiscountErrorCode =
   | 'INVALID'
   | 'NOT_FOUND'
   | 'REQUIRED'
-  | 'UNIQUE';
+  | 'UNIQUE'
+  | 'VOUCHER_ALREADY_USED';
 
 export type DiscountStatusEnum =
   | 'ACTIVE'
@@ -6605,13 +6620,13 @@ export type DistanceUnitsEnum =
   | 'MM'
   | 'YD';
 
-/** Represents shop's domain. */
+/** Represents API domain. */
 export type Domain = {
   /** The host name of the domain. */
   host: Scalars['String']['output'];
   /** Inform if SSL is enabled. */
   sslEnabled: Scalars['Boolean']['output'];
-  /** Shop's absolute URL. */
+  /** The absolute URL of the API. */
   url: Scalars['String']['output'];
 };
 
@@ -6682,6 +6697,12 @@ export type DraftOrderCreateInput = {
   userEmail?: InputMaybe<Scalars['String']['input']>;
   /** ID of the voucher associated with the order. */
   voucher?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * A code of the voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -6759,6 +6780,12 @@ export type DraftOrderInput = {
   userEmail?: InputMaybe<Scalars['String']['input']>;
   /** ID of the voucher associated with the order. */
   voucher?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * A code of the voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -7120,6 +7147,33 @@ export type ExportScope =
   /** Export products with given ids. */
   | 'IDS';
 
+/**
+ * Export voucher codes to csv/xlsx file.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - VOUCHER_CODE_EXPORT_COMPLETED (async): A notification for the exported file.
+ */
+export type ExportVoucherCodes = {
+  errors: Array<ExportError>;
+  /** The newly created export file job which is responsible for export data. */
+  exportFile?: Maybe<ExportFile>;
+};
+
+export type ExportVoucherCodesInput = {
+  /** Type of exported file. */
+  fileType: FileTypesEnum;
+  /** List of voucher code IDs to export. */
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** The ID of the voucher. If provided, exports all codes belonging to the voucher. */
+  voucherId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 /** External authentication plugin. */
 export type ExternalAuthentication = {
   /** ID of external authentication plugin. */
@@ -7286,9 +7340,21 @@ export type Fulfillment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /**
+   * Amount of refunded shipping price.
+   *
+   * Added in Saleor 3.14.
+   */
+  shippingRefundedAmount?: Maybe<Money>;
   status: FulfillmentStatus;
   /** User-friendly fulfillment status. */
   statusDisplay?: Maybe<Scalars['String']['output']>;
+  /**
+   * Total refunded amount assigned to this fulfillment.
+   *
+   * Added in Saleor 3.14.
+   */
+  totalRefundedAmount?: Maybe<Money>;
   trackingNumber: Scalars['String']['output'];
   /** Warehouse from fulfillment was fulfilled. */
   warehouse?: Maybe<Warehouse>;
@@ -11251,6 +11317,19 @@ export type Mutation = {
    * - PRODUCT_EXPORT_COMPLETED (async): A notification for the exported file.
    */
   exportProducts?: Maybe<ExportProducts>;
+  /**
+   * Export voucher codes to csv/xlsx file.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - VOUCHER_CODE_EXPORT_COMPLETED (async): A notification for the exported file.
+   */
+  exportVoucherCodes?: Maybe<ExportVoucherCodes>;
   /** Prepare external authentication URL for user by custom plugin. */
   externalAuthenticationUrl?: Maybe<ExternalAuthenticationUrl>;
   /** Logout user by custom plugin. */
@@ -12619,6 +12698,9 @@ export type Mutation = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    *
    * Requires one of the following permissions: MANAGE_PRODUCTS.
+   *
+   * Triggers the following webhook events:
+   * - PRODUCT_VARIANT_STOCK_UPDATED (async): A product variant stock details were updated.
    */
   stockBulkUpdate?: Maybe<StockBulkUpdate>;
   /**
@@ -12850,6 +12932,17 @@ export type Mutation = {
    * - VOUCHER_UPDATED (async): A voucher was updated.
    */
   voucherChannelListingUpdate?: Maybe<VoucherChannelListingUpdate>;
+  /**
+   * Deletes voucher codes.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - VOUCHER_UPDATED (async): A voucher was updated.
+   */
+  voucherCodeBulkDelete?: Maybe<VoucherCodeBulkDelete>;
   /**
    * Creates a new voucher.
    *
@@ -13542,6 +13635,11 @@ export type MutationExportGiftCardsArgs = {
 
 export type MutationExportProductsArgs = {
   input: ExportProductsInput;
+};
+
+
+export type MutationExportVoucherCodesArgs = {
+  input: ExportVoucherCodesInput;
 };
 
 
@@ -14764,6 +14862,11 @@ export type MutationVoucherChannelListingUpdateArgs = {
 };
 
 
+export type MutationVoucherCodeBulkDeleteArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationVoucherCreateArgs = {
   input: VoucherInput;
 };
@@ -14933,7 +15036,7 @@ export type Order = Node & ObjectWithMetadata & {
   /** List of all discounts assigned to the order. */
   discounts: Array<OrderDiscount>;
   /**
-   * Determines whether checkout prices should include taxes when displayed in a storefront.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -15189,6 +15292,12 @@ export type Order = Node & ObjectWithMetadata & {
   /** Email address of the customer. The full data can be access for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_ORDERS, OWNER. */
   userEmail?: Maybe<Scalars['String']['output']>;
   voucher?: Maybe<Voucher>;
+  /**
+   * Voucher code that was used for Order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: Maybe<Scalars['String']['output']>;
   weight: Weight;
 };
 
@@ -15394,7 +15503,7 @@ export type OrderBulkCreateInput = {
   deliveryMethod?: InputMaybe<OrderBulkCreateDeliveryMethodInput>;
   /** List of discounts. */
   discounts?: InputMaybe<Array<OrderDiscountCommonInput>>;
-  /** Determines whether checkout prices should include taxes, when displayed in a storefront. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices?: InputMaybe<Scalars['Boolean']['input']>;
   /** External ID of the order. */
   externalReference?: InputMaybe<Scalars['String']['input']>;
@@ -15424,8 +15533,18 @@ export type OrderBulkCreateInput = {
   transactions?: InputMaybe<Array<TransactionCreateInput>>;
   /** Customer associated with the order. */
   user: OrderBulkCreateUserInput;
-  /** Code of a voucher associated with the order. */
+  /**
+   * Code of a voucher associated with the order.
+   *
+   * DEPRECATED: this field will be removed in Saleor 3.19. Use `voucherCode` instead.
+   */
   voucher?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Code of a voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
   /** Weight of the order in kg. */
   weight?: InputMaybe<Scalars['WeightScalar']['input']>;
 };
@@ -15854,6 +15973,8 @@ export type OrderErrorCode =
   | 'INSUFFICIENT_STOCK'
   | 'INVALID'
   | 'INVALID_QUANTITY'
+  | 'INVALID_VOUCHER'
+  | 'INVALID_VOUCHER_CODE'
   | 'NOT_AVAILABLE_IN_CHANNEL'
   | 'NOT_EDITABLE'
   | 'NOT_FOUND'
@@ -16950,14 +17071,6 @@ export type OrderSettings = {
   /** When enabled, all non-shippable gift card orders will be fulfilled automatically. */
   automaticallyFulfillNonShippableGiftCard: Scalars['Boolean']['output'];
   /**
-   * Determine the transaction flow strategy to be used. Include the selected option in the payload sent to the payment app, as a requested action for the transaction.
-   *
-   * Added in Saleor 3.13.
-   *
-   * Note: this API is currently in Feature Preview and can be subject to changes at later point.This preview feature field will be removed in Saleor 3.17. Use `PaymentSettings.defaultTransactionFlowStrategy` instead.
-   */
-  defaultTransactionFlowStrategy: TransactionFlowStrategyEnum;
-  /**
    * The time in days after expired orders will be deleted.
    *
    * Added in Saleor 3.14.
@@ -16973,6 +17086,14 @@ export type OrderSettings = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    */
   expireOrdersAfter?: Maybe<Scalars['Minute']['output']>;
+  /**
+   * Determine if voucher applied on draft order should be count toward voucher usage.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  includeDraftOrderInVoucherUsage: Scalars['Boolean']['output'];
   /**
    * Determine what strategy will be used to mark the order as paid. Based on the chosen option, the proper object will be created and attached to the order when it's manually marked as paid.
    * `PAYMENT_FLOW` - [default option] creates the `Payment` object.
@@ -17012,16 +17133,6 @@ export type OrderSettingsInput = {
   /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By defualt set to True. */
   automaticallyFulfillNonShippableGiftCard?: InputMaybe<Scalars['Boolean']['input']>;
   /**
-   * Determine the transaction flow strategy to be used. Include the selected option in the payload sent to the payment app, as a requested action for the transaction.
-   *
-   * Added in Saleor 3.13.
-   *
-   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
-   *
-   * DEPRECATED: this preview feature field will be removed in Saleor 3.17. Use `PaymentSettingsInput.defaultTransactionFlowStrategy` instead.
-   */
-  defaultTransactionFlowStrategy?: InputMaybe<TransactionFlowStrategyEnum>;
-  /**
    * The time in days after expired orders will be deleted.Allowed range is from 1 to 120.
    *
    * Added in Saleor 3.14.
@@ -17037,6 +17148,16 @@ export type OrderSettingsInput = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    */
   expireOrdersAfter?: InputMaybe<Scalars['Minute']['input']>;
+  /**
+   * Specify whether a coupon applied to draft orders will count toward voucher usage.
+   *
+   * Warning:  when switching this setting from `false` to `true`, the vouchers will be disconnected from all draft orders.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  includeDraftOrderInVoucherUsage?: InputMaybe<Scalars['Boolean']['input']>;
   /**
    * Determine what strategy will be used to mark the order as paid. Based on the chosen option, the proper object will be created and attached to the order when it's manually marked as paid.
    * `PAYMENT_FLOW` - [default option] creates the `Payment` object.
@@ -17065,7 +17186,7 @@ export type OrderSettingsUpdate = {
 export type OrderSettingsUpdateInput = {
   /** When disabled, all new orders from checkout will be marked as unconfirmed. When enabled orders from checkout will become unfulfilled immediately. By default set to True */
   automaticallyConfirmAllNewOrders?: InputMaybe<Scalars['Boolean']['input']>;
-  /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By defualt set to True. */
+  /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By default set to True. */
   automaticallyFulfillNonShippableGiftCard?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -20488,7 +20609,7 @@ export type ProductPricingInfo = {
    */
   discountLocalCurrency?: Maybe<TaxedMoney>;
   /**
-   * Determines whether this product's price displayed in a storefront should include taxes.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -21276,6 +21397,7 @@ export type ProductVariantBulkErrorCode =
   | 'NOT_PRODUCTS_VARIANT'
   | 'PRODUCT_NOT_ASSIGNED_TO_CHANNEL'
   | 'REQUIRED'
+  | 'STOCK_ALREADY_EXISTS'
   | 'UNIQUE';
 
 export type ProductVariantBulkResult = {
@@ -26560,6 +26682,9 @@ export type StockBulkResult = {
  * Note: this API is currently in Feature Preview and can be subject to changes at later point.
  *
  * Requires one of the following permissions: MANAGE_PRODUCTS.
+ *
+ * Triggers the following webhook events:
+ * - PRODUCT_VARIANT_STOCK_UPDATED (async): A product variant stock details were updated.
  */
 export type StockBulkUpdate = {
   /** Returns how many objects were updated. */
@@ -27057,7 +27182,7 @@ export type TaxConfiguration = Node & ObjectWithMetadata & {
   chargeTaxes: Scalars['Boolean']['output'];
   /** List of country-specific exceptions in tax configuration. */
   countries: Array<TaxConfigurationPerCountry>;
-  /** Determines whether prices displayed in a storefront should include taxes. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices: Scalars['Boolean']['output'];
   /** The ID of the object. */
   id: Scalars['ID']['output'];
@@ -27169,7 +27294,7 @@ export type TaxConfigurationPerCountry = {
   chargeTaxes: Scalars['Boolean']['output'];
   /** Country in which this configuration applies. */
   country: CountryDisplay;
-  /** Determines whether prices displayed in a storefront should include taxes for this country. */
+  /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['output'];
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: Maybe<TaxCalculationStrategy>;
@@ -27180,7 +27305,7 @@ export type TaxConfigurationPerCountryInput = {
   chargeTaxes: Scalars['Boolean']['input'];
   /** Country in which this configuration applies. */
   countryCode: CountryCode;
-  /** Determines whether prices displayed in a storefront should include taxes for this country. */
+  /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['input'];
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: InputMaybe<TaxCalculationStrategy>;
@@ -27219,7 +27344,7 @@ export type TaxConfigurationUpdateErrorCode =
 export type TaxConfigurationUpdateInput = {
   /** Determines whether taxes are charged in the given channel. */
   chargeTaxes?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Determines whether prices displayed in a storefront should include taxes. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices?: InputMaybe<Scalars['Boolean']['input']>;
   /** Determines whether prices are entered with the tax included. */
   pricesEnteredWithTax?: InputMaybe<Scalars['Boolean']['input']>;
@@ -27498,7 +27623,7 @@ export type TokenizedPaymentFlowEnum =
 export type Transaction = Node & {
   /** Total amount of the transaction. */
   amount?: Maybe<Money>;
-  /** Date and time which transaction was created. */
+  /** Date and time at which transaction was created. */
   created: Scalars['DateTime']['output'];
   /** Error associated with transaction, if any. */
   error?: Maybe<Scalars['String']['output']>;
@@ -28948,8 +29073,14 @@ export type Voucher = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   channelListings?: Maybe<Array<VoucherChannelListing>>;
-  /** The code of the voucher. */
-  code: Scalars['String']['output'];
+  /** The code of the voucher.This field will be removed in Saleor 4.0. */
+  code?: Maybe<Scalars['String']['output']>;
+  /**
+   * List of codes available for this voucher.
+   *
+   * Added in Saleor 3.18.
+   */
+  codes?: Maybe<VoucherCodeCountableConnection>;
   /**
    * List of collections this voucher applies to.
    *
@@ -29014,6 +29145,14 @@ export type Voucher = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   products?: Maybe<ProductCountableConnection>;
+  /**
+   * Determine if the voucher codes can be used once or multiple times.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  singleUse: Scalars['Boolean']['output'];
   /** The start date and time of voucher. */
   startDate: Scalars['DateTime']['output'];
   /** Returns translated voucher fields for the given language code. */
@@ -29037,6 +29176,15 @@ export type Voucher = Node & ObjectWithMetadata & {
 
 /** Vouchers allow giving discounts to particular customers on categories, collections or specific products. They can be used during checkout by providing valid voucher codes. */
 export type VoucherCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** Vouchers allow giving discounts to particular customers on categories, collections or specific products. They can be used during checkout by providing valid voucher codes. */
+export type VoucherCodesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -29178,6 +29326,92 @@ export type VoucherChannelListingUpdate = {
   voucher?: Maybe<Voucher>;
 };
 
+/**
+ * Represents voucher code.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type VoucherCode = {
+  /** Code to use the voucher. */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Date time of code creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** The ID of the voucher code. */
+  id: Scalars['ID']['output'];
+  /** Whether a code is active or not. */
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Number of times a code has been used. */
+  used?: Maybe<Scalars['Int']['output']>;
+};
+
+/**
+ * Deletes voucher codes.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - VOUCHER_UPDATED (async): A voucher was updated.
+ */
+export type VoucherCodeBulkDelete = {
+  /** Returns how many codes were deleted. */
+  count: Scalars['Int']['output'];
+  errors: Array<VoucherCodeBulkDeleteError>;
+};
+
+export type VoucherCodeBulkDeleteError = {
+  /** The error code. */
+  code: VoucherCodeBulkDeleteErrorCode;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+  /** Path to field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  path?: Maybe<Scalars['String']['output']>;
+  /** List of voucher codes which causes the error. */
+  voucherCodes?: Maybe<Array<Scalars['ID']['output']>>;
+};
+
+/** An enumeration. */
+export type VoucherCodeBulkDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'NOT_FOUND';
+
+export type VoucherCodeCountableConnection = {
+  edges: Array<VoucherCodeCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type VoucherCodeCountableEdge = {
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: VoucherCode;
+};
+
+/**
+ * Event sent when voucher code export is completed.
+ *
+ * Added in Saleor 3.18.
+ */
+export type VoucherCodeExportCompleted = Event & {
+  /** The export file for voucher codes. */
+  export?: Maybe<ExportFile>;
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
 export type VoucherCountableConnection = {
   edges: Array<VoucherCountableEdge>;
   /** Pagination data for this connection. */
@@ -29295,13 +29529,21 @@ export type VoucherFilterInput = {
 };
 
 export type VoucherInput = {
+  /**
+   * List of codes to add.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  addCodes?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Voucher should be applied once per customer. */
   applyOncePerCustomer?: InputMaybe<Scalars['Boolean']['input']>;
   /** Voucher should be applied to the cheapest item or entire order. */
   applyOncePerOrder?: InputMaybe<Scalars['Boolean']['input']>;
   /** Categories discounted by the voucher. */
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** Code to use the voucher. */
+  /** Code to use the voucher. This field will be removed in Saleor 4.0. Use `addCodes` instead. */
   code?: InputMaybe<Scalars['String']['input']>;
   /** Collections discounted by the voucher. */
   collections?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -29319,6 +29561,16 @@ export type VoucherInput = {
   onlyForStaff?: InputMaybe<Scalars['Boolean']['input']>;
   /** Products discounted by the voucher. */
   products?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /**
+   * When set to 'True', each voucher code can be used only once; otherwise, codes can be used multiple times depending on `usageLimit`.
+   *
+   * The option can only be changed if none of the voucher codes have been used.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  singleUse?: InputMaybe<Scalars['Boolean']['input']>;
   /** Start date of the voucher in ISO 8601 format. */
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   /** Voucher type: PRODUCT, CATEGORY SHIPPING or ENTIRE_ORDER. */
@@ -29378,7 +29630,11 @@ export type VoucherRemoveCatalogues = {
 };
 
 export type VoucherSortField =
-  /** Sort vouchers by code. */
+  /**
+   * Sort vouchers by code.
+   *
+   * DEPRECATED: this field will be removed in Saleor 4.0.
+   */
   | 'CODE'
   /** Sort vouchers by end date. */
   | 'END_DATE'
@@ -29388,6 +29644,12 @@ export type VoucherSortField =
    * This option requires a channel filter to work as the values can vary between channels.
    */
   | 'MINIMUM_SPENT_AMOUNT'
+  /**
+   * Sort vouchers by name.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'NAME'
   /** Sort vouchers by start date. */
   | 'START_DATE'
   /** Sort vouchers by type. */
@@ -30335,7 +30597,7 @@ export type WebhookEventTypeAsyncEnum =
   | 'PRODUCT_VARIANT_BACK_IN_STOCK'
   /** A new product variant is created. */
   | 'PRODUCT_VARIANT_CREATED'
-  /** A product variant is deleted. */
+  /** A product variant is deleted. Warning: this event will not be executed when parent product has been deleted. Check PRODUCT_DELETED. */
   | 'PRODUCT_VARIANT_DELETED'
   /**
    * A product variant metadata is updated.
@@ -30421,6 +30683,12 @@ export type WebhookEventTypeAsyncEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  /**
+   * A voucher code export is completed.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   /** A new voucher created. */
   | 'VOUCHER_CREATED'
   /** A voucher is deleted. */
@@ -30763,7 +31031,7 @@ export type WebhookEventTypeEnum =
   | 'PRODUCT_VARIANT_BACK_IN_STOCK'
   /** A new product variant is created. */
   | 'PRODUCT_VARIANT_CREATED'
-  /** A product variant is deleted. */
+  /** A product variant is deleted. Warning: this event will not be executed when parent product has been deleted. Check PRODUCT_DELETED. */
   | 'PRODUCT_VARIANT_DELETED'
   /**
    * A product variant metadata is updated.
@@ -30878,6 +31146,12 @@ export type WebhookEventTypeEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  /**
+   * A voucher code export is completed.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   /** A new voucher created. */
   | 'VOUCHER_CREATED'
   /** A voucher is deleted. */
@@ -31102,6 +31376,7 @@ export type WebhookSampleEventTypeEnum =
   | 'TRANSACTION_ITEM_METADATA_UPDATED'
   | 'TRANSLATION_CREATED'
   | 'TRANSLATION_UPDATED'
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   | 'VOUCHER_CREATED'
   | 'VOUCHER_DELETED'
   | 'VOUCHER_METADATA_UPDATED'
@@ -31256,6 +31531,13 @@ export type GetProductsQueryVariables = Exact<{
 
 export type GetProductsQuery = { products?: { totalCount?: number | null, edges: Array<{ cursor: string, node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }>, pageInfo: { hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
+export type GetProductQueryVariables = Exact<{
+  ids?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
+}>;
+
+
+export type GetProductQuery = { products?: { edges: Array<{ node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }> } | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -31407,6 +31689,39 @@ export const GetProductsDocument = new TypedDocumentString(`
     name
   }
 }`) as unknown as TypedDocumentString<GetProductsQuery, GetProductsQueryVariables>;
+export const GetProductDocument = new TypedDocumentString(`
+    query GetProduct($ids: [ID!]) {
+  products(channel: "default-channel", first: 1, where: {ids: $ids}) {
+    edges {
+      node {
+        ...ProductCard
+      }
+    }
+  }
+}
+    fragment ProductCard on Product {
+  isAvailable
+  isAvailableForPurchase
+  name
+  rating
+  id
+  thumbnail {
+    alt
+    url
+  }
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+        }
+      }
+    }
+  }
+  category {
+    name
+  }
+}`) as unknown as TypedDocumentString<GetProductQuery, GetProductQueryVariables>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -35373,7 +35688,7 @@ export type Checkout = Node & ObjectWithMetadata & {
   /** The name of voucher assigned to the checkout. */
   discountName?: Maybe<Scalars['String']['output']>;
   /**
-   * Determines whether checkout prices should include taxes when displayed in a storefront.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -35527,6 +35842,14 @@ export type Checkout = Node & ObjectWithMetadata & {
   updatedAt: Scalars['DateTime']['output'];
   /** The user assigned to the checkout. Requires one of the following permissions: MANAGE_USERS, HANDLE_PAYMENTS, OWNER. */
   user?: Maybe<User>;
+  /**
+   * The voucher assigned to the checkout.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   */
+  voucher?: Maybe<Voucher>;
   /** The code of voucher assigned to the checkout. */
   voucherCode?: Maybe<Scalars['String']['output']>;
 };
@@ -37970,6 +38293,12 @@ export type DiscountError = {
   message?: Maybe<Scalars['String']['output']>;
   /** List of products IDs which causes the error. */
   products?: Maybe<Array<Scalars['ID']['output']>>;
+  /**
+   * List of voucher codes which causes the error.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCodes?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 /** An enumeration. */
@@ -37981,7 +38310,8 @@ export type DiscountErrorCode =
   | 'INVALID'
   | 'NOT_FOUND'
   | 'REQUIRED'
-  | 'UNIQUE';
+  | 'UNIQUE'
+  | 'VOUCHER_ALREADY_USED';
 
 export type DiscountStatusEnum =
   | 'ACTIVE'
@@ -38003,13 +38333,13 @@ export type DistanceUnitsEnum =
   | 'MM'
   | 'YD';
 
-/** Represents shop's domain. */
+/** Represents API domain. */
 export type Domain = {
   /** The host name of the domain. */
   host: Scalars['String']['output'];
   /** Inform if SSL is enabled. */
   sslEnabled: Scalars['Boolean']['output'];
-  /** Shop's absolute URL. */
+  /** The absolute URL of the API. */
   url: Scalars['String']['output'];
 };
 
@@ -38080,6 +38410,12 @@ export type DraftOrderCreateInput = {
   userEmail?: InputMaybe<Scalars['String']['input']>;
   /** ID of the voucher associated with the order. */
   voucher?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * A code of the voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -38157,6 +38493,12 @@ export type DraftOrderInput = {
   userEmail?: InputMaybe<Scalars['String']['input']>;
   /** ID of the voucher associated with the order. */
   voucher?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * A code of the voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -38518,6 +38860,33 @@ export type ExportScope =
   /** Export products with given ids. */
   | 'IDS';
 
+/**
+ * Export voucher codes to csv/xlsx file.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - VOUCHER_CODE_EXPORT_COMPLETED (async): A notification for the exported file.
+ */
+export type ExportVoucherCodes = {
+  errors: Array<ExportError>;
+  /** The newly created export file job which is responsible for export data. */
+  exportFile?: Maybe<ExportFile>;
+};
+
+export type ExportVoucherCodesInput = {
+  /** Type of exported file. */
+  fileType: FileTypesEnum;
+  /** List of voucher code IDs to export. */
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** The ID of the voucher. If provided, exports all codes belonging to the voucher. */
+  voucherId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 /** External authentication plugin. */
 export type ExternalAuthentication = {
   /** ID of external authentication plugin. */
@@ -38684,9 +39053,21 @@ export type Fulfillment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /**
+   * Amount of refunded shipping price.
+   *
+   * Added in Saleor 3.14.
+   */
+  shippingRefundedAmount?: Maybe<Money>;
   status: FulfillmentStatus;
   /** User-friendly fulfillment status. */
   statusDisplay?: Maybe<Scalars['String']['output']>;
+  /**
+   * Total refunded amount assigned to this fulfillment.
+   *
+   * Added in Saleor 3.14.
+   */
+  totalRefundedAmount?: Maybe<Money>;
   trackingNumber: Scalars['String']['output'];
   /** Warehouse from fulfillment was fulfilled. */
   warehouse?: Maybe<Warehouse>;
@@ -42649,6 +43030,19 @@ export type Mutation = {
    * - PRODUCT_EXPORT_COMPLETED (async): A notification for the exported file.
    */
   exportProducts?: Maybe<ExportProducts>;
+  /**
+   * Export voucher codes to csv/xlsx file.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - VOUCHER_CODE_EXPORT_COMPLETED (async): A notification for the exported file.
+   */
+  exportVoucherCodes?: Maybe<ExportVoucherCodes>;
   /** Prepare external authentication URL for user by custom plugin. */
   externalAuthenticationUrl?: Maybe<ExternalAuthenticationUrl>;
   /** Logout user by custom plugin. */
@@ -44017,6 +44411,9 @@ export type Mutation = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    *
    * Requires one of the following permissions: MANAGE_PRODUCTS.
+   *
+   * Triggers the following webhook events:
+   * - PRODUCT_VARIANT_STOCK_UPDATED (async): A product variant stock details were updated.
    */
   stockBulkUpdate?: Maybe<StockBulkUpdate>;
   /**
@@ -44248,6 +44645,17 @@ export type Mutation = {
    * - VOUCHER_UPDATED (async): A voucher was updated.
    */
   voucherChannelListingUpdate?: Maybe<VoucherChannelListingUpdate>;
+  /**
+   * Deletes voucher codes.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Requires one of the following permissions: MANAGE_DISCOUNTS.
+   *
+   * Triggers the following webhook events:
+   * - VOUCHER_UPDATED (async): A voucher was updated.
+   */
+  voucherCodeBulkDelete?: Maybe<VoucherCodeBulkDelete>;
   /**
    * Creates a new voucher.
    *
@@ -44940,6 +45348,11 @@ export type MutationExportGiftCardsArgs = {
 
 export type MutationExportProductsArgs = {
   input: ExportProductsInput;
+};
+
+
+export type MutationExportVoucherCodesArgs = {
+  input: ExportVoucherCodesInput;
 };
 
 
@@ -46162,6 +46575,11 @@ export type MutationVoucherChannelListingUpdateArgs = {
 };
 
 
+export type MutationVoucherCodeBulkDeleteArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationVoucherCreateArgs = {
   input: VoucherInput;
 };
@@ -46331,7 +46749,7 @@ export type Order = Node & ObjectWithMetadata & {
   /** List of all discounts assigned to the order. */
   discounts: Array<OrderDiscount>;
   /**
-   * Determines whether checkout prices should include taxes when displayed in a storefront.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -46587,6 +47005,12 @@ export type Order = Node & ObjectWithMetadata & {
   /** Email address of the customer. The full data can be access for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_ORDERS, OWNER. */
   userEmail?: Maybe<Scalars['String']['output']>;
   voucher?: Maybe<Voucher>;
+  /**
+   * Voucher code that was used for Order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: Maybe<Scalars['String']['output']>;
   weight: Weight;
 };
 
@@ -46792,7 +47216,7 @@ export type OrderBulkCreateInput = {
   deliveryMethod?: InputMaybe<OrderBulkCreateDeliveryMethodInput>;
   /** List of discounts. */
   discounts?: InputMaybe<Array<OrderDiscountCommonInput>>;
-  /** Determines whether checkout prices should include taxes, when displayed in a storefront. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices?: InputMaybe<Scalars['Boolean']['input']>;
   /** External ID of the order. */
   externalReference?: InputMaybe<Scalars['String']['input']>;
@@ -46822,8 +47246,18 @@ export type OrderBulkCreateInput = {
   transactions?: InputMaybe<Array<TransactionCreateInput>>;
   /** Customer associated with the order. */
   user: OrderBulkCreateUserInput;
-  /** Code of a voucher associated with the order. */
+  /**
+   * Code of a voucher associated with the order.
+   *
+   * DEPRECATED: this field will be removed in Saleor 3.19. Use `voucherCode` instead.
+   */
   voucher?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Code of a voucher associated with the order.
+   *
+   * Added in Saleor 3.18.
+   */
+  voucherCode?: InputMaybe<Scalars['String']['input']>;
   /** Weight of the order in kg. */
   weight?: InputMaybe<Scalars['WeightScalar']['input']>;
 };
@@ -47252,6 +47686,8 @@ export type OrderErrorCode =
   | 'INSUFFICIENT_STOCK'
   | 'INVALID'
   | 'INVALID_QUANTITY'
+  | 'INVALID_VOUCHER'
+  | 'INVALID_VOUCHER_CODE'
   | 'NOT_AVAILABLE_IN_CHANNEL'
   | 'NOT_EDITABLE'
   | 'NOT_FOUND'
@@ -48348,14 +48784,6 @@ export type OrderSettings = {
   /** When enabled, all non-shippable gift card orders will be fulfilled automatically. */
   automaticallyFulfillNonShippableGiftCard: Scalars['Boolean']['output'];
   /**
-   * Determine the transaction flow strategy to be used. Include the selected option in the payload sent to the payment app, as a requested action for the transaction.
-   *
-   * Added in Saleor 3.13.
-   *
-   * Note: this API is currently in Feature Preview and can be subject to changes at later point.This preview feature field will be removed in Saleor 3.17. Use `PaymentSettings.defaultTransactionFlowStrategy` instead.
-   */
-  defaultTransactionFlowStrategy: TransactionFlowStrategyEnum;
-  /**
    * The time in days after expired orders will be deleted.
    *
    * Added in Saleor 3.14.
@@ -48371,6 +48799,14 @@ export type OrderSettings = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    */
   expireOrdersAfter?: Maybe<Scalars['Minute']['output']>;
+  /**
+   * Determine if voucher applied on draft order should be count toward voucher usage.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  includeDraftOrderInVoucherUsage: Scalars['Boolean']['output'];
   /**
    * Determine what strategy will be used to mark the order as paid. Based on the chosen option, the proper object will be created and attached to the order when it's manually marked as paid.
    * `PAYMENT_FLOW` - [default option] creates the `Payment` object.
@@ -48410,16 +48846,6 @@ export type OrderSettingsInput = {
   /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By defualt set to True. */
   automaticallyFulfillNonShippableGiftCard?: InputMaybe<Scalars['Boolean']['input']>;
   /**
-   * Determine the transaction flow strategy to be used. Include the selected option in the payload sent to the payment app, as a requested action for the transaction.
-   *
-   * Added in Saleor 3.13.
-   *
-   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
-   *
-   * DEPRECATED: this preview feature field will be removed in Saleor 3.17. Use `PaymentSettingsInput.defaultTransactionFlowStrategy` instead.
-   */
-  defaultTransactionFlowStrategy?: InputMaybe<TransactionFlowStrategyEnum>;
-  /**
    * The time in days after expired orders will be deleted.Allowed range is from 1 to 120.
    *
    * Added in Saleor 3.14.
@@ -48435,6 +48861,16 @@ export type OrderSettingsInput = {
    * Note: this API is currently in Feature Preview and can be subject to changes at later point.
    */
   expireOrdersAfter?: InputMaybe<Scalars['Minute']['input']>;
+  /**
+   * Specify whether a coupon applied to draft orders will count toward voucher usage.
+   *
+   * Warning:  when switching this setting from `false` to `true`, the vouchers will be disconnected from all draft orders.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  includeDraftOrderInVoucherUsage?: InputMaybe<Scalars['Boolean']['input']>;
   /**
    * Determine what strategy will be used to mark the order as paid. Based on the chosen option, the proper object will be created and attached to the order when it's manually marked as paid.
    * `PAYMENT_FLOW` - [default option] creates the `Payment` object.
@@ -48463,7 +48899,7 @@ export type OrderSettingsUpdate = {
 export type OrderSettingsUpdateInput = {
   /** When disabled, all new orders from checkout will be marked as unconfirmed. When enabled orders from checkout will become unfulfilled immediately. By default set to True */
   automaticallyConfirmAllNewOrders?: InputMaybe<Scalars['Boolean']['input']>;
-  /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By defualt set to True. */
+  /** When enabled, all non-shippable gift card orders will be fulfilled automatically. By default set to True. */
   automaticallyFulfillNonShippableGiftCard?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -51886,7 +52322,7 @@ export type ProductPricingInfo = {
    */
   discountLocalCurrency?: Maybe<TaxedMoney>;
   /**
-   * Determines whether this product's price displayed in a storefront should include taxes.
+   * Determines whether displayed prices should include taxes.
    *
    * Added in Saleor 3.9.
    */
@@ -52674,6 +53110,7 @@ export type ProductVariantBulkErrorCode =
   | 'NOT_PRODUCTS_VARIANT'
   | 'PRODUCT_NOT_ASSIGNED_TO_CHANNEL'
   | 'REQUIRED'
+  | 'STOCK_ALREADY_EXISTS'
   | 'UNIQUE';
 
 export type ProductVariantBulkResult = {
@@ -57958,6 +58395,9 @@ export type StockBulkResult = {
  * Note: this API is currently in Feature Preview and can be subject to changes at later point.
  *
  * Requires one of the following permissions: MANAGE_PRODUCTS.
+ *
+ * Triggers the following webhook events:
+ * - PRODUCT_VARIANT_STOCK_UPDATED (async): A product variant stock details were updated.
  */
 export type StockBulkUpdate = {
   /** Returns how many objects were updated. */
@@ -58455,7 +58895,7 @@ export type TaxConfiguration = Node & ObjectWithMetadata & {
   chargeTaxes: Scalars['Boolean']['output'];
   /** List of country-specific exceptions in tax configuration. */
   countries: Array<TaxConfigurationPerCountry>;
-  /** Determines whether prices displayed in a storefront should include taxes. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices: Scalars['Boolean']['output'];
   /** The ID of the object. */
   id: Scalars['ID']['output'];
@@ -58567,7 +59007,7 @@ export type TaxConfigurationPerCountry = {
   chargeTaxes: Scalars['Boolean']['output'];
   /** Country in which this configuration applies. */
   country: CountryDisplay;
-  /** Determines whether prices displayed in a storefront should include taxes for this country. */
+  /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['output'];
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: Maybe<TaxCalculationStrategy>;
@@ -58578,7 +59018,7 @@ export type TaxConfigurationPerCountryInput = {
   chargeTaxes: Scalars['Boolean']['input'];
   /** Country in which this configuration applies. */
   countryCode: CountryCode;
-  /** Determines whether prices displayed in a storefront should include taxes for this country. */
+  /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['input'];
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: InputMaybe<TaxCalculationStrategy>;
@@ -58617,7 +59057,7 @@ export type TaxConfigurationUpdateErrorCode =
 export type TaxConfigurationUpdateInput = {
   /** Determines whether taxes are charged in the given channel. */
   chargeTaxes?: InputMaybe<Scalars['Boolean']['input']>;
-  /** Determines whether prices displayed in a storefront should include taxes. */
+  /** Determines whether displayed prices should include taxes. */
   displayGrossPrices?: InputMaybe<Scalars['Boolean']['input']>;
   /** Determines whether prices are entered with the tax included. */
   pricesEnteredWithTax?: InputMaybe<Scalars['Boolean']['input']>;
@@ -58896,7 +59336,7 @@ export type TokenizedPaymentFlowEnum =
 export type Transaction = Node & {
   /** Total amount of the transaction. */
   amount?: Maybe<Money>;
-  /** Date and time which transaction was created. */
+  /** Date and time at which transaction was created. */
   created: Scalars['DateTime']['output'];
   /** Error associated with transaction, if any. */
   error?: Maybe<Scalars['String']['output']>;
@@ -60346,8 +60786,14 @@ export type Voucher = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   channelListings?: Maybe<Array<VoucherChannelListing>>;
-  /** The code of the voucher. */
-  code: Scalars['String']['output'];
+  /** The code of the voucher.This field will be removed in Saleor 4.0. */
+  code?: Maybe<Scalars['String']['output']>;
+  /**
+   * List of codes available for this voucher.
+   *
+   * Added in Saleor 3.18.
+   */
+  codes?: Maybe<VoucherCodeCountableConnection>;
   /**
    * List of collections this voucher applies to.
    *
@@ -60412,6 +60858,14 @@ export type Voucher = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    */
   products?: Maybe<ProductCountableConnection>;
+  /**
+   * Determine if the voucher codes can be used once or multiple times.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  singleUse: Scalars['Boolean']['output'];
   /** The start date and time of voucher. */
   startDate: Scalars['DateTime']['output'];
   /** Returns translated voucher fields for the given language code. */
@@ -60435,6 +60889,15 @@ export type Voucher = Node & ObjectWithMetadata & {
 
 /** Vouchers allow giving discounts to particular customers on categories, collections or specific products. They can be used during checkout by providing valid voucher codes. */
 export type VoucherCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+/** Vouchers allow giving discounts to particular customers on categories, collections or specific products. They can be used during checkout by providing valid voucher codes. */
+export type VoucherCodesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -60576,6 +61039,92 @@ export type VoucherChannelListingUpdate = {
   voucher?: Maybe<Voucher>;
 };
 
+/**
+ * Represents voucher code.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+ */
+export type VoucherCode = {
+  /** Code to use the voucher. */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Date time of code creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** The ID of the voucher code. */
+  id: Scalars['ID']['output'];
+  /** Whether a code is active or not. */
+  isActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Number of times a code has been used. */
+  used?: Maybe<Scalars['Int']['output']>;
+};
+
+/**
+ * Deletes voucher codes.
+ *
+ * Added in Saleor 3.18.
+ *
+ * Requires one of the following permissions: MANAGE_DISCOUNTS.
+ *
+ * Triggers the following webhook events:
+ * - VOUCHER_UPDATED (async): A voucher was updated.
+ */
+export type VoucherCodeBulkDelete = {
+  /** Returns how many codes were deleted. */
+  count: Scalars['Int']['output'];
+  errors: Array<VoucherCodeBulkDeleteError>;
+};
+
+export type VoucherCodeBulkDeleteError = {
+  /** The error code. */
+  code: VoucherCodeBulkDeleteErrorCode;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+  /** Path to field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  path?: Maybe<Scalars['String']['output']>;
+  /** List of voucher codes which causes the error. */
+  voucherCodes?: Maybe<Array<Scalars['ID']['output']>>;
+};
+
+/** An enumeration. */
+export type VoucherCodeBulkDeleteErrorCode =
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'NOT_FOUND';
+
+export type VoucherCodeCountableConnection = {
+  edges: Array<VoucherCodeCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type VoucherCodeCountableEdge = {
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: VoucherCode;
+};
+
+/**
+ * Event sent when voucher code export is completed.
+ *
+ * Added in Saleor 3.18.
+ */
+export type VoucherCodeExportCompleted = Event & {
+  /** The export file for voucher codes. */
+  export?: Maybe<ExportFile>;
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+};
+
 export type VoucherCountableConnection = {
   edges: Array<VoucherCountableEdge>;
   /** Pagination data for this connection. */
@@ -60693,13 +61242,21 @@ export type VoucherFilterInput = {
 };
 
 export type VoucherInput = {
+  /**
+   * List of codes to add.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  addCodes?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Voucher should be applied once per customer. */
   applyOncePerCustomer?: InputMaybe<Scalars['Boolean']['input']>;
   /** Voucher should be applied to the cheapest item or entire order. */
   applyOncePerOrder?: InputMaybe<Scalars['Boolean']['input']>;
   /** Categories discounted by the voucher. */
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
-  /** Code to use the voucher. */
+  /** Code to use the voucher. This field will be removed in Saleor 4.0. Use `addCodes` instead. */
   code?: InputMaybe<Scalars['String']['input']>;
   /** Collections discounted by the voucher. */
   collections?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -60717,6 +61274,16 @@ export type VoucherInput = {
   onlyForStaff?: InputMaybe<Scalars['Boolean']['input']>;
   /** Products discounted by the voucher. */
   products?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /**
+   * When set to 'True', each voucher code can be used only once; otherwise, codes can be used multiple times depending on `usageLimit`.
+   *
+   * The option can only be changed if none of the voucher codes have been used.
+   *
+   * Added in Saleor 3.18.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  singleUse?: InputMaybe<Scalars['Boolean']['input']>;
   /** Start date of the voucher in ISO 8601 format. */
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
   /** Voucher type: PRODUCT, CATEGORY SHIPPING or ENTIRE_ORDER. */
@@ -60776,7 +61343,11 @@ export type VoucherRemoveCatalogues = {
 };
 
 export type VoucherSortField =
-  /** Sort vouchers by code. */
+  /**
+   * Sort vouchers by code.
+   *
+   * DEPRECATED: this field will be removed in Saleor 4.0.
+   */
   | 'CODE'
   /** Sort vouchers by end date. */
   | 'END_DATE'
@@ -60786,6 +61357,12 @@ export type VoucherSortField =
    * This option requires a channel filter to work as the values can vary between channels.
    */
   | 'MINIMUM_SPENT_AMOUNT'
+  /**
+   * Sort vouchers by name.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'NAME'
   /** Sort vouchers by start date. */
   | 'START_DATE'
   /** Sort vouchers by type. */
@@ -61733,7 +62310,7 @@ export type WebhookEventTypeAsyncEnum =
   | 'PRODUCT_VARIANT_BACK_IN_STOCK'
   /** A new product variant is created. */
   | 'PRODUCT_VARIANT_CREATED'
-  /** A product variant is deleted. */
+  /** A product variant is deleted. Warning: this event will not be executed when parent product has been deleted. Check PRODUCT_DELETED. */
   | 'PRODUCT_VARIANT_DELETED'
   /**
    * A product variant metadata is updated.
@@ -61819,6 +62396,12 @@ export type WebhookEventTypeAsyncEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  /**
+   * A voucher code export is completed.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   /** A new voucher created. */
   | 'VOUCHER_CREATED'
   /** A voucher is deleted. */
@@ -62161,7 +62744,7 @@ export type WebhookEventTypeEnum =
   | 'PRODUCT_VARIANT_BACK_IN_STOCK'
   /** A new product variant is created. */
   | 'PRODUCT_VARIANT_CREATED'
-  /** A product variant is deleted. */
+  /** A product variant is deleted. Warning: this event will not be executed when parent product has been deleted. Check PRODUCT_DELETED. */
   | 'PRODUCT_VARIANT_DELETED'
   /**
    * A product variant metadata is updated.
@@ -62276,6 +62859,12 @@ export type WebhookEventTypeEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  /**
+   * A voucher code export is completed.
+   *
+   * Added in Saleor 3.18.
+   */
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   /** A new voucher created. */
   | 'VOUCHER_CREATED'
   /** A voucher is deleted. */
@@ -62500,6 +63089,7 @@ export type WebhookSampleEventTypeEnum =
   | 'TRANSACTION_ITEM_METADATA_UPDATED'
   | 'TRANSLATION_CREATED'
   | 'TRANSLATION_UPDATED'
+  | 'VOUCHER_CODE_EXPORT_COMPLETED'
   | 'VOUCHER_CREATED'
   | 'VOUCHER_DELETED'
   | 'VOUCHER_METADATA_UPDATED'
@@ -62653,6 +63243,13 @@ export type GetProductsQueryVariables = Exact<{
 
 
 export type GetProductsQuery = { products?: { totalCount?: number | null, edges: Array<{ cursor: string, node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }>, pageInfo: { hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+
+export type GetProductQueryVariables = Exact<{
+  ids?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
+}>;
+
+
+export type GetProductQuery = { products?: { edges: Array<{ node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }> } | null };
 
 export const ProductCardFragmentDoc = `
     fragment ProductCard on Product {
@@ -62871,3 +63468,42 @@ export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = Apollo.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
+export const GetProductDocument = `
+    query GetProduct($ids: [ID!]) {
+  products(channel: "default-channel", first: 1, where: {ids: $ids}) {
+    edges {
+      node {
+        ...ProductCard
+      }
+    }
+  }
+}
+    ${ProductCardFragmentDoc}`;
+
+/**
+ * __useGetProductQuery__
+ *
+ * To run a query within a React component, call `useGetProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetProductQuery(baseOptions?: Apollo.QueryHookOptions<GetProductQuery, GetProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProductQuery, GetProductQueryVariables>(GetProductDocument, options);
+      }
+export function useGetProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductQuery, GetProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProductQuery, GetProductQueryVariables>(GetProductDocument, options);
+        }
+export type GetProductQueryHookResult = ReturnType<typeof useGetProductQuery>;
+export type GetProductLazyQueryHookResult = ReturnType<typeof useGetProductLazyQuery>;
+export type GetProductQueryResult = Apollo.QueryResult<GetProductQuery, GetProductQueryVariables>;
