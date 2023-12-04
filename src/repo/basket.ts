@@ -1,3 +1,4 @@
+import { type ProductCardFragment } from '../../generated/graphql'
 export default function (type: 'client' | 'server') {
     const key = 'basket';
     function getBaskets(): any[] {
@@ -5,17 +6,22 @@ export default function (type: 'client' | 'server') {
         if (data == null) {
             return []
         }
-        return JSON.parse(localStorage.getItem(key) || '');
+        return JSON.parse(localStorage.getItem(key) || '') || [];
     }
     return {
         client: {
-            add: function (item: any) {
+            add: function (item: unknown) {
                 let data = getBaskets();
-                let existItem = data.some(x => x.id === item.id)
+                const productItem = item as ProductCardFragment;
+                console.log(productItem.id)
+                let existItem = data.some(x => x.id === productItem.id)
+
                 if (existItem) return
+                console.log(item)
                 localStorage.setItem(key, JSON.stringify([item, ...getBaskets()]))
             },
-            del: function (id: number) {
+            del: function (id: string | string[]) {
+                console.log(id)
                 return localStorage.setItem(key, JSON.stringify(getBaskets().filter(x => x.id !== id)))
             }
         },

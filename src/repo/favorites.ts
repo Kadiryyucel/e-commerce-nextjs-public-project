@@ -1,5 +1,6 @@
 import { type ProductCardFragment } from '../../generated/graphql'
 
+
 export default function (type: 'client' | 'server') {
     const key = 'favorites';
     function getFavorites(): any[] {
@@ -11,22 +12,24 @@ export default function (type: 'client' | 'server') {
     }
     return {
         client: {
-            add: function (item: ProductCardFragment) {
+            add: function (item: unknown) {
                 let data = getFavorites();
-                let existItem = data.some((fav:ProductCardFragment)=>fav.id === item.id)
+                const productItem = item as ProductCardFragment;
+                let existItem = data.some((fav: ProductCardFragment) => fav.id === productItem.id)
                 if (existItem) return
                 localStorage.setItem(key, JSON.stringify([item, ...getFavorites()]))
+
             },
-            del: function (id: string) {
+            del: function (id: string | string[]) {
                 return localStorage.setItem(key, JSON.stringify(getFavorites().filter(x => x.id !== id)))
             }
         },
         server: {
-            getFavorites:function(){
+            getFavorites: function () {
                 return []
             },
-            add:function(){},
-            del:function(){}
+            add: function () { },
+            del: function () { }
         }
     }[type]
 
