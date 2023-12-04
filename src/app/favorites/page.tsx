@@ -14,7 +14,6 @@ import { IoCloseOutline } from 'react-icons/io5'
 export default function Favorites() {
 
 	const { del }: { del: Function } = favoritesRepo(typeof window !== 'undefined' ? 'client' : 'server')
-
 	const [favorites, setFavorite] = useState([])
 
 	function whenDel(id: string) {

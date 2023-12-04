@@ -1,4 +1,3 @@
-
 import Site from '@/template/Site'
 import Products from "../components/Products";
 import ProductCard from '../components/ProductCard';
