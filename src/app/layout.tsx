@@ -1,10 +1,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
+
 import { Montserrat_Alternates } from 'next/font/google'
 
 import { ApolloWrapper } from "@/lib/client";
 import { AppStateProvider } from "@/store";
 
+
+import ReduxProvider from "../storiesRedux/storeProvider"
 
 const inter = Montserrat_Alternates({ subsets: ['latin'], weight: '400' })
 
@@ -23,9 +26,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ApolloWrapper>
-          <AppStateProvider>{children}</AppStateProvider>
+          <AppStateProvider>
+            <ReduxProvider>
+              {children}
+            </ReduxProvider>
+          </AppStateProvider>
         </ApolloWrapper>
       </body>
-    </html>
+    </html >
   )
 }
