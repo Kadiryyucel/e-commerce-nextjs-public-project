@@ -1,28 +1,42 @@
+'use client'
+import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
+
 import Site from '@/template/Site'
-import Products from "../components/Products";
-import ProductCard from '../components/ProductCard';
 
-import { GetProductsQuery } from "../../generated/graphql";
-import { GET_PRODUCTS } from "../../graphql/queries";
+import category1 from '@/assets/categories/category-1.png'
+import category2 from '@/assets/categories/category-2.png'
+import category3 from '@/assets/categories/category-3.png'
+import category5 from '@/assets/categories/category-5.png'
+import category6 from '@/assets/categories/category-6.png'
 
-import { getClient } from "@/lib/ssr"
 
+export default function Page() {
 
-export default async function Page() {
-	const dataProducts = await getClient().query<GetProductsQuery>({ query: GET_PRODUCTS })
-
-	const cursor = dataProducts.data.products?.pageInfo?.startCursor || '';
-
+	const categoriesImg = [[category1, category2, category6], [category3, category2], [category6, category5, category2]]
 	return (
 		<Site>
-			<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-				{dataProducts.data.products?.edges.map(({ node: product }) => {
+			<div className="flex flex-col h-20 [&>*:nth-child(even)]:bg-current [&>*:nth-child(even)]:h-40">
+				{categoriesImg.map((categories:StaticImageData[], i:number) => {
 					return (
-						<ProductCard product={product} key={product.id}><></></ProductCard>
-					);
+						<div className='flex' key={i}>{categories.map((category:StaticImageData,index:number) => {
+							return (
+
+								<div className='h-100 w-full' key={index}>
+									<Link href='/category'>
+										<Image
+											width={250}
+											height={250}
+											alt={""}
+											src={category}
+											className="h-full w-full object-cover object-center p-4"
+										/>
+									</Link>
+								</div>)
+						})}</div>
+					)
 				})}
 			</div>
-			<Products cursor={cursor} />
-		</Site>
+		</Site >
 	);
 }
