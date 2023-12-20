@@ -10,7 +10,7 @@ import {
 
 function makeClient() {
   const httpLink = new HttpLink({
-      uri: "https://self-ecommerce.saleor.cloud/graphql/",
+      uri: "https://next-test-grapqhl.eu.saleor.cloud/graphql/",
   });
 
   return new NextSSRApolloClient({
