@@ -5,13 +5,13 @@ const nextConfig = {
 	reactStrictMode: true,
 	experimental: {
 		windowHistorySupport: true,
-	  },
+	},
 	images: {
-		domains: [hostname],
+		domains:[hostname]
 	},
 	compiler: {
 		styledComponents: true,
-	  },
+	},
 };
 
 module.exports = nextConfig;
