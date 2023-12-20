@@ -57,37 +57,29 @@ function ListIn(props: { data: any }) {
 export default function ListComponent(props:{className:string}) {
 
 
-
     let categories = [
         {
-            category: 'lo',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+            category: 'Kategori',
+            childCategories: [{ category: 'Sweatshirt' }, { category: 'Gömlek' }, { category: 'Kazak' }, { category: 'Sneaker' }]
         },
         {
-            category: 'mo',
-            childCategories: [{ category: 'totoadfadfadsfsafads' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+            category: 'Beden',
+            childCategories: [{ category: 'XXS' }, { category: 'XS' }, { category: 'S' }, { category: 'M' }]
         },
         {
-            category: 'yo',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+            category: 'Fiyat',
+            childCategories: [{ category: '0 TL - 125 TL' }, { category: '125 TL - 250 TL' }, { category: '250 TL - 300 TL' }, { category: '350 TL - 600 TL' }]
         },
         {
-            category: 'ro',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+            category: 'Kalıp',
+            childCategories: [{ category: 'Baggy Fit' }, { category: 'Basic' }, { category: 'Bol' }, { category: 'Büyük Beden' }]
         },
         {
-            category: 'to',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
-        },
-        {
-            category: 'ko',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
-        },
-        {
-            category: 'so',
-            childCategories: [{ category: 'toto' }, { category: 'toto' }, { category: 'toto' }, { category: 'toto' }]
+            category: 'Avantajlı Ürünler',
+            childCategories: [{ category: 'Süper Avantajlı Ürün' }, { category: 'Çok Avantajlı Ürün' }, { category: 'Avantajlı Ürün' }, { category: 'Taksit Erteleme' }]
         }
     ]
+
     return (
         <div>
             <List
