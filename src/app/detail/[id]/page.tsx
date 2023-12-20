@@ -82,7 +82,7 @@ export default function PrdouctDetail({ params }: { params: { id: string } }) {
   let dispatch = useAppDispatch()
 
   const { add, del } = favorites(typeof window !== 'undefined' ? 'client' : 'server');
-  const { add:basketAdd, del:basketDel } = basket(typeof window !== 'undefined' ? 'client' : 'server');
+  const { add: basketAdd, del: basketDel } = basket(typeof window !== 'undefined' ? 'client' : 'server');
   const [isFavorite, setFavorite] = useState<boolean>(false);
 
 
@@ -117,21 +117,21 @@ export default function PrdouctDetail({ params }: { params: { id: string } }) {
   useEffect(() => {
     const getBasket = localStorage.getItem('basket');
     if (getBasket) {
-        let isInBasket = JSON.parse(getBasket).some((fav: any) => fav.id === id);
-        setBasket(isInBasket)
-        setIsClient(true);
+      let isInBasket = JSON.parse(getBasket).some((fav: any) => fav.id === id);
+      setBasket(isInBasket)
+      setIsClient(true);
     }
 
-}, [id]);
+  }, [id]);
 
-useEffect(() => {
-  const getFavorites = localStorage.getItem('favorites');
-  if (getFavorites) {
+  useEffect(() => {
+    const getFavorites = localStorage.getItem('favorites');
+    if (getFavorites) {
       let isInFavorites = JSON.parse(getFavorites).some((fav: any) => fav.id === id);
       setFavorite(isInFavorites)
       setIsClient(true);
-  }
-}, [id]);
+    }
+  }, [id]);
 
 
   const [data, setDeata] = useState([
@@ -150,7 +150,7 @@ useEffect(() => {
   return (
     <>
       <Site>
-        <div className='flex flex-col xl:flex-row xl:justify-center'>
+        <div className='flex flex-col xl:flex-row xl:justify-center products'>
           <div className='w-full xl:w-[25rem] shirink-0'>
             <div className='relative w-full h-[126vw] h- md:h-[117vw] xl:h-[37.5rem]'>
               <Swiper
@@ -177,7 +177,7 @@ useEffect(() => {
               </Swiper>
               <div className="wrapper-img h-full w-[30rem] absolute top-0 left-full ml-4 z-20 overflow-hidden">
                 <div className='absolute top-0 left-0 z-20 magnifying-img' style={{ width: '1000px', height: '1500px' }}>
-                  <div className='absolute magnifying-img-content'></div>
+                  <div className='absolute bg-stone-50 magnifying-img-content'></div>
                 </div>
               </div>
             </div>
@@ -206,7 +206,7 @@ useEffect(() => {
           </div>
           <div className='xl:w-[38rem] mx-4'>
             <div>
-              <h3>{dataProduct?.name}</h3>
+              <h2>{dataProduct?.name}</h2>
             </div>
             <div className='flex flex-col'>
               <div className='flex justify-between items-center text-xs'>
@@ -258,13 +258,13 @@ useEffect(() => {
             </div>
 
             <div className='flex items-center mt-4'>
-              <div className={`flex justify-center items-center text-lg w-full h-12 ${isBasket ? 'bg-slate-300' : 'bg-red-50'}`} onClick={() => toggleBasket()}>
+              <div className={`flex justify-center items-center text-lg w-full h-12 text-white cursor-pointer ${isBasket ? 'bg-lime-600' : 'bg-amber-400'}`} onClick={() => toggleBasket()}>
                 {isBasket ? 'Sepete Eklendi' : 'Sepete Ekle'}
-                {isBasket && <FaCheck size={24} />}
+                {isBasket && <div className='pl-2'><FaCheck size={28} /></div>}
               </div>
 
               <div className="flex top-4 right-4 w-12 h-12 ml-4 bg-slate-50 justify-center items-center rounded-full z-10 shrink-0 border hover:text-amber-500 cursor-pointer" onClick={() => toggleFavorite()}>
-                {isClient && isFavorite ? <IoMdHeart color='rgb(245 158 11)' size={28} />  : <CiHeart color='inherit' size={28} />}
+                {isClient && isFavorite ? <IoMdHeart color='rgb(245 158 11)' size={28} /> : <CiHeart color='inherit' size={28} />}
               </div>
             </div>
             <div>
@@ -299,8 +299,10 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        <h2 className='ml-4'>Benzer ürünler</h2>
-        <Slider></Slider>
+        <div className='products mb-8'>
+          <h2 className='ml-4'>Benzer ürünler</h2>
+          <Slider></Slider>
+        </div>
       </Site>
     </>
   );

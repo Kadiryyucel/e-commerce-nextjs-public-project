@@ -1,12 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
-
 import Site from '@/template/Site'
-
 import favoritesRepo from '@/repo/favorites'
-
 import ProductCard from '@/components/ProductCard'
-
 import { IoCloseOutline } from 'react-icons/io5'
 
 
@@ -31,7 +27,7 @@ export default function Favorites() {
 
 	return (
 		<Site>
-			<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+			<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 products">
 				{favorites.map((product: any) => {
 					return (
 						<ProductCard product={product} key={product.id} >

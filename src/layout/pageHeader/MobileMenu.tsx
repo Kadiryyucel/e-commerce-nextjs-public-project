@@ -22,7 +22,7 @@ export default function MobileMenu({ categories, isOpenMenu, setMenu }
 
     return (
         <div className={`w-full h-full ${clsx({ 'is-open-mobile-menu': isOpenMenu })}`}>
-            <div className={`flex flex-col justify-start bg-white w-3/4 border-r-2 fixed h-screen z-50 left-0 top-0 xl:relative xl:w-full transition-all ${clsx({ 'translate-x-[-100%]': !isOpenMenu, 'translate-x-0': isOpenMenu })}`}>
+            <div className={`flex flex-col justify-start bg-white w-3/4 border-r-2 fixed h-screen z-50 left-0 top-0 xl:relative xl:w-full transition-all ${clsx({ 'translate-x-[-150%]': !isOpenMenu, 'translate-x-0': isOpenMenu })}`}>
                 <div className='flex justify-between items-center px-4 xl:hidden'>
                     <h2 className={lato.className}>trendyol</h2>
                     {isOpenSubMenu ?
@@ -30,7 +30,7 @@ export default function MobileMenu({ categories, isOpenMenu, setMenu }
                             setMenuTab(categories?.data?.categories?.edges)
                             setSubMenu(false)
                         }}><IoIosArrowRoundBack size={50} /></div>
-                        : <div onClick={() => setMenu(false)}><AiOutlineClose size={28} /></div>
+                        : <div className='cursor-pointer' onClick={() => setMenu(false)}><AiOutlineClose size={28} /></div>
                     }
                 </div>
 

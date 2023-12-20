@@ -19,7 +19,7 @@ const NumberInput = () => {
 
     return (
         <div className='flex h-6 md:h-8 xl:h-10 w-24 shrink-0 mr-8'>
-            <Button variant="contained" className='p-1 min-w-[24px]' onClick={handleIncrement}>
+            <Button color="default" variant="contained" className='p-1 min-w-[24px]' onClick={handleIncrement}>
                 <BsPlusLg size={20}/>
             </Button>
             <TextField
@@ -28,7 +28,7 @@ const NumberInput = () => {
                 className='count-product h-full'
                 onChange={(e) => setValue(parseInt(e.target.value, 10))}
             />
-            <Button variant="contained" className='p-1 min-w-[24px]' onClick={handleDecrement}>
+            <Button color="default" variant="contained" className='p-1 min-w-[24px]' onClick={handleDecrement}>
                 <BiMinus size={20}/>
             </Button>
         </div>

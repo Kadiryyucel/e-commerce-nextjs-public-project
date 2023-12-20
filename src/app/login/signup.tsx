@@ -42,9 +42,9 @@ export default function LoginPage() {
 
                             <div>
                                 <span>{"Cinsiyet (Opsiyonel)"}</span>
-                                <div className="flex">
-                                    <Button className="w-1/2" variant="contained">Woman</Button>
-                                    <Button className="w-1/2" variant="contained">Man</Button>
+                                <div className="flex gap-x-2">
+                                    <Button color="default" className="w-1/2" variant="contained">Woman</Button>
+                                    <Button color="default" className="w-1/2" variant="contained">Man</Button>
                                 </div>
                             </div>
 
@@ -68,6 +68,6 @@ export default function LoginPage() {
                             </div>
 
 
-                            <Button variant="contained" className="w-full">Üye Ol</Button>
+                            <Button color="default" variant="contained" className="w-full">Üye Ol</Button>
         </>)
 }

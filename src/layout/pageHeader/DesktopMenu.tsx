@@ -13,7 +13,7 @@ export default function DesktopMenu({ categories, setMenu }
     return <div className={`flex flex-col justify-start bg-white w-3/4 absolute left-0 top-0 xl:relative xl:w-full`}>
         <div className='flex justify-between items-center px-4 xl:hidden'>
             <h2 className={lato.className}>trendyol</h2>
-            <div onClick={() => setMenu(false)}><AiOutlineClose size={24} /></div>
+            <div className='cursor-pointer' onClick={() => setMenu(false)}><AiOutlineClose size={24} /></div>
         </div>
 
         <ul className="list-menu flex flex-col xl:flex-row justify-center bg-white z-10 divide-y divide-slate-200 xl:divide-none">

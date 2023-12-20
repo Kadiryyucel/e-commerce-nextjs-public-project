@@ -79,6 +79,8 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  background-color: white;
+  z-index: 40;
 }
 
 .wrapper:has(.show-category:hover)::after {
@@ -122,7 +124,7 @@ h6 {
 
 .search-bar {
   outline: transparent solid 4px;
-  transition: outline .2s;
+  transition: outline,background-color .2s;
 }
 
 .search-bar fieldset {
@@ -133,6 +135,7 @@ h6 {
   border-radius: 0 !important;
   outline: rgb(234 179 8 / 1) solid 4px;
   border-bottom:  none;
+  background-color: white;
 }
 
 .wrapper-content:has(input:focus) .search-suggests{
@@ -228,6 +231,10 @@ h6 {
   top: 0;
 }
 
+.order-summery-roundded::after{
+  border-radius: 1rem;
+}
+
 .count-product input {
   text-align: center;
   padding: 8px 5.5px;
@@ -250,8 +257,9 @@ input::-webkit-inner-spin-button {
   right: 0;
   top: calc(100vh-100px);
   height: 6rem;
-  background-color: #ccc;
   display: flex;
+  background-color: white;
+  border-top: 1px solid black;
   justify-content: center;
   align-items: center;
   z-index: 100;
@@ -272,7 +280,7 @@ input::-webkit-inner-spin-button {
 
 .info-about-product>li::before {
   content: "";
-  background-color: orange;
+  background-color: #ffa500;
   position: relative;
   display: inline-block;
   height: 10px;
@@ -345,4 +353,31 @@ input::-webkit-inner-spin-button {
 .search-suggests{
   width: calc(100% + 8px);
 }
+
+.bg-item{
+  background-color: rgb(250 250 250);
+}
+
+
+.receipt div:not(:nth-of-type(5)){
+  border-bottom: 2px solid rgb(184, 179, 179);
+}
+
+.products,.products-basket{
+  font-family: source_sans_proregular,sans-serif !important;
+}
+
+.products h3{
+  font-weight: 400 !important;
+}
+
+.products-basket h3{
+  font-weight: 200 !important;
+}
+
+.cargo{
+  color: rgb(130, 125, 125);
+}
+
+
 

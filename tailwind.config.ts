@@ -18,7 +18,7 @@ const config: Config = {
         8: '8'
       },
       translate: {
-        'x-return': '-100%'
+        'x-return': '-150%'
       },
       minWidth: {
         'xs': '320px',

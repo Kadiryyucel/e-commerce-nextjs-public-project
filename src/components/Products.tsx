@@ -84,7 +84,7 @@ const Products = (props: ProductsValues) => {
 
     return (
         <>
-            <div className={`mt-4 xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 ${props.className}`}>
+            <div className={`w-full mt-4 xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 products ${props.className}`}>
                 {dataProducts.map((product, index) => {
                     return (
                         <div key={index}><ProductCard product={product} key={index}><></></ProductCard></div>

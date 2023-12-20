@@ -1,8 +1,7 @@
 'use client'
-
-
+import Link from "next/link";
 import { Button, InputAdornment, TextField } from "@mui/material";
-import Link from "@mui/material/Link"
+
 
 export default function LoginPage() {
 
@@ -43,8 +42,8 @@ export default function LoginPage() {
                   </InputAdornment>,
                 }} />
 
-              <div className="flex justify-end"><Link href='/'>Şifremi Unuttum</Link></div>
+              <div className="flex justify-end underline pointer text-slate-400"><Link href='/'>Şifremi Unuttum</Link></div>
 
-              <Button variant="contained" className="w-full">Login</Button>
+              <Button color="default" variant="contained" className="w-full">Login</Button>
     </>)
 }

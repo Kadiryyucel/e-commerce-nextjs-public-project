@@ -19,7 +19,7 @@ export default function Basket() {
     data.fill(6)
     function BasketCol() {
         return (
-            <div className='flex flex-col md:w-full gap-y-4 xl:pl-4 p-0'>
+            <div className='flex flex-col md:w-full gap-y-4 xl:pl-4 p-0 products-basket'>
                 {data.map((_, i) => {
                     return (
                         <div className='w-full flex justify-center xl:justify-end' key={i}>
@@ -48,7 +48,7 @@ export default function Basket() {
                                                 <p className='truncate'> Szymanski Tasarımlı Parfüm Esanslı Baskılı Ayna Oto Araç Kokusu Araba Kokusu</p>
                                             </div>
                                             <div><span>Beden:</span><span>Tek Ebat</span></div>
-                                            <div className='hidden md:block'><span>5 saat 18 dakika içinde sipariş verirsen en geç yarın kargoda</span></div>
+                                            <div className='hidden md:block cargo'><span>5 saat 18 dakika içinde sipariş verirsen en geç yarın kargoda</span></div>
                                             <div className='block md:hidden'><span>Tahmini Kargoya Teslim: 3 gün içinde</span></div>
                                         </div>
                                         <div className='flex shrink-0 justify-between xl:justify-end w-full xl:w-auto items-end'>
@@ -78,16 +78,16 @@ export default function Basket() {
                             <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
                             <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
                         </div>
-                        <Button variant='contained' className='w-8/12 mt-4' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
+                        <Button color="default" variant='contained' className='w-8/12 mt-4' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
                     </div>
 
-                    <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 bg-slate-200 mobile-approval'>
+                    <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 border-top mobile-approval'>
                         <div className='flex flex-col'>
                             <div className='text-xs'><span>Toplam</span></div>
                             <div><span>4.449,87 TL</span></div>
                             <div className='text-xs'><span>Kargo Bedava</span></div>
                         </div>
-                        <Button variant='contained' className='w-3/6 h-12' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
+                        <Button color="default" variant='contained' className='w-3/6 h-12' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
                     </div>
 
                 </div>

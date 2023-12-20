@@ -119,7 +119,7 @@ export default function PageHeader() {
         <>
             <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
                 <div className="flex flex-wrap justify-center items-center w-full">
-                    <div className='grow xl:hidden' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
+                    <div className='grow xl:hidden cursor-pointer' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
                     <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
                     <Box sx={{ backgroundColor: '#f3f3f3' }} className='flex justify-center relative grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
                         <TextField
@@ -128,7 +128,7 @@ export default function PageHeader() {
                             value={searchVal}
                             onChange={(e) => { setSearchVal(e.target.value) }}
                             InputProps={{
-                                autoComplete:'off',
+                                autoComplete: 'off',
                                 endAdornment: <InputAdornment position="end">
                                     <div className='cursor-pointer' onClick={() => { searchProcess() }}>
                                         <FiSearch size={24} color='orange' />
@@ -136,39 +136,42 @@ export default function PageHeader() {
                                 </InputAdornment>,
                             }}
                         />
-                        <div className='search-suggests top-14 min-h-80 absolute z-20 p-10 border-4 border-yellow-500' style={{ backgroundColor: '#f3f3f3' }}>
-                            <div>
-                                <div className='flex justify-between'>
-                                    <span className='text-lg text-orange-400'>Geçmiş Aramalar</span>
-                                    <span>Temizle</span>
-                                </div>
-                                <div className='flex flex-col gap-y-2 my-2'>
-                                    <div>aplle</div>
-                                    <div>Pantolon</div>
-                                    <div>selam</div>
-                                    <div>tshirt</div>
-                                </div>
-                                <div>
-                                    <div className='flex flex-col gap-y-2'>
-                                        <span className='text-lg text-orange-400'>Popüler Aramalar</span>
-                                        <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
-                                            return (
-                                                <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
-                                            )
-                                        })}
+                        <div className={`search-suggests top-14 min-h-80 absolute z-20 border-4 border-yellow-500 bg-white ${searchVal? '':'p-10'}`}>
+                            {
+                                searchVal ? <div className='hover:bg-slate-100 p-4'>{searchVal}</div> : <div>
+                                    <div className='flex justify-between'>
+                                        <span className='text-lg text-orange-400'>Geçmiş Aramalar</span>
+                                        <span>Temizle</span>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2 my-2'>
+                                        <div>aplle</div>
+                                        <div>Pantolon</div>
+                                        <div>selam</div>
+                                        <div>tshirt</div>
+                                    </div>
+                                    <div>
+                                        <div className='flex flex-col gap-y-2'>
+                                            <span className='text-lg text-orange-400'>Popüler Aramalar</span>
+                                            <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
+                                                return (
+                                                    <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                                )
+                                            })}
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col gap-y-2 mt-2'>
+                                            <span className='text-lg text-orange-400'>Sana Özel Kategoriler</span>
+                                            <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
+                                                return (
+                                                    <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                                )
+                                            })}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='flex flex-col gap-y-2 mt-2'>
-                                        <span className='text-lg text-orange-400'>Sana Özel Kategoriler</span>
-                                        <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
-                                            return (
-                                                <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
-                                            )
-                                        })}
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
+                            }
+
                         </div>
                     </Box>
 
