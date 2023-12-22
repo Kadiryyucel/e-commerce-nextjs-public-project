@@ -13,15 +13,12 @@ export default function (type: 'client' | 'server') {
             add: function (item: unknown) {
                 let data = getBaskets();
                 const productItem = item as ProductCardFragment;
-                console.log(productItem.id)
                 let existItem = data.some(x => x.id === productItem.id)
 
                 if (existItem) return
-                console.log(item)
                 localStorage.setItem(key, JSON.stringify([item, ...getBaskets()]))
             },
             del: function (id: string | string[]) {
-                console.log(id)
                 return localStorage.setItem(key, JSON.stringify(getBaskets().filter(x => x.id !== id)))
             }
         },

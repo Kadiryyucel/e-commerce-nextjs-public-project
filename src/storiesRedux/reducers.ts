@@ -34,7 +34,6 @@ export const usersSlice = createSlice({
     },
 
     addProductFavorite: (state: TState, action: PayloadAction<unknown>) => {
-      console.log(state.favorites)
       state.favorites = [...state.favorites, action.payload];
     },
     removeProductFavorite: (state: TState, action: PayloadAction<string | string []>) => {

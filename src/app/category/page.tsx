@@ -47,7 +47,6 @@ export default function Page() {
                     categoriesEl.current?.contains(el)) {
 
                     setCategories(prev => !prev)
-                    console.log('hi')
                 }
                 else {
                     setCategories(false)

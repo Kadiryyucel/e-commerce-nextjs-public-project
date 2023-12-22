@@ -19,7 +19,6 @@ export default function Page() {
 
 	
 	const cursor = dataProducts.data.products?.pageInfo?.startCursor || "";
-	console.log(cursor)
 	return (
 		<Site>
 			<div className="mt-4 px-2 xl:px-28 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">

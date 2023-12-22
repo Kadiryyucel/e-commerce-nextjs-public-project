@@ -46,8 +46,6 @@ export default function MobileList(props: { className: string }) {
 
     const pathname = usePathname();
     function searchProcess(parentQuery: any, childQuery: string) {
-        console.log(parentQuery.category)
-        console.log(createQueryString(parentQuery.category, childQuery))
         window.history.pushState({}, '', pathname + '?' + createQueryString(parentQuery.category, childQuery))
     }
 

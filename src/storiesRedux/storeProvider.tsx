@@ -31,7 +31,6 @@ function StoreMain({
     children: React.ReactNode
 }) {
     const favoritesData = useSelector((state: any) => state.products.favorites)
-    console.log(favoritesData)
     const dispatch = useAppDispatch();
     useEffect(() => {
         const dataFavorites = localStorage.getItem('favorites');
@@ -45,8 +44,6 @@ function StoreMain({
             let basket = JSON.parse(dataBasket)
             dispatch(setProdutcOfBasket(basket))
         }
-        console.log(dataBasket)
-        console.log(dataFavorites)
 
         
         const handleBeforeUnload = () => {
