@@ -120,7 +120,7 @@ export default function PageHeader() {
             <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
                 <div className="flex flex-wrap justify-center items-center w-full">
                     <div className='grow xl:hidden cursor-pointer' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
-                    <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>trendyol</Link></h1>
+                    <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>MAMA</Link></h1>
                     <Box sx={{ backgroundColor: '#f3f3f3' }} className='flex justify-center relative grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
                         <TextField
                             className='search-bar w-full'

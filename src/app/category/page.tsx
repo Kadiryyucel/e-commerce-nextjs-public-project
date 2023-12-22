@@ -86,7 +86,7 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-                    <div className='inline-grid w-full'>
+                    <div className='inline-grid w-full products'>
                         <div className="w-full  px-2 xl:px-4 2xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-4">
                             {dataProducts.data.products?.edges.map(({ node: product }) => {
                                 return (
