@@ -12,7 +12,7 @@ export default function DesktopMenu({ categories, setMenu }
     :{categories:any,setMenu:Function}) {
     return <div className={`flex flex-col justify-start bg-white w-3/4 absolute left-0 top-0 xl:relative xl:w-full`}>
         <div className='flex justify-between items-center px-4 xl:hidden'>
-            <h2 className={lato.className}>trendyol</h2>
+            <h2 className={lato.className}>MAMA</h2>
             <div className='cursor-pointer' onClick={() => setMenu(false)}><AiOutlineClose size={24} /></div>
         </div>
 
