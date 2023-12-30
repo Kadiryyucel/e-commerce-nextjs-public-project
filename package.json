@@ -9,8 +9,8 @@
     "generate": "graphql-codegen --config .graphqlrc.ts",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-
+    "build-storybook": "storybook build",
+    "install": "npm install --force"
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
