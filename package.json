@@ -10,10 +10,11 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
+
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
-    "@apollo/experimental-nextjs-app-support": "^0.4.2",
+    "@apollo/experimental-nextjs-app-support": "^0.4.3",
     "@apollo/server": "^4.9.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
