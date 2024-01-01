@@ -57,8 +57,9 @@ const Products = (props: ProductsValues) => {
 
         let buffered: any;
         async function whenScroll() {
-            if ((window.innerHeight + window.scrollY) === document.body.scrollHeight) {
-
+            console.log({body:document.body.scrollHeight,inner:window.innerHeight,y:window.scrollY})
+            if ((window.innerHeight + window.scrollY) > document.body.scrollHeight - 200) {
+                
                 clearTimeout(buffered)
 
                 setSpinner('visible');
