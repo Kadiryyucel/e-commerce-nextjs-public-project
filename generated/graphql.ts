@@ -10,68 +10,6 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  /**
-   * The `Date` scalar type represents a Date
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
-  Date: { input: unknown; output: unknown; }
-  /**
-   * The `DateTime` scalar type represents a DateTime
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
-  DateTime: { input: unknown; output: unknown; }
-  /** The `Day` scalar type represents number of days by integer value. */
-  Day: { input: unknown; output: unknown; }
-  /**
-   * Custom Decimal implementation.
-   *
-   * Returns Decimal as a float in the API,
-   * parses float to the Decimal on the way back.
-   */
-  Decimal: { input: unknown; output: unknown; }
-  /**
-   * The `GenericScalar` scalar type represents a generic
-   * GraphQL scalar value that could be:
-   * String, Boolean, Int, Float, List or Object.
-   */
-  GenericScalar: { input: unknown; output: unknown; }
-  JSON: { input: unknown; output: unknown; }
-  JSONString: { input: unknown; output: unknown; }
-  /**
-   * Metadata is a map of key-value pairs, both keys and values are `String`.
-   *
-   * Example:
-   * ```
-   * {
-   *     "key1": "value1",
-   *     "key2": "value2"
-   * }
-   * ```
-   */
-  Metadata: { input: unknown; output: unknown; }
-  /** The `Minute` scalar type represents number of minutes by integer value. */
-  Minute: { input: unknown; output: unknown; }
-  /**
-   * Nonnegative Decimal scalar implementation.
-   *
-   * Should be used in places where value must be nonnegative (0 or greater).
-   */
-  PositiveDecimal: { input: unknown; output: unknown; }
-  UUID: { input: unknown; output: unknown; }
-  /** Variables of this type must be set to null in mutations. They will be replaced with a filename from a following multipart part containing a binary file. See: https://github.com/jaydenseric/graphql-multipart-request-spec. */
-  Upload: { input: unknown; output: unknown; }
-  WeightScalar: { input: unknown; output: unknown; }
-  /** _Any value scalar as defined by Federation spec. */
-  _Any: { input: unknown; output: unknown; }
-};
 
 /**
  * Create a new address for the customer.
