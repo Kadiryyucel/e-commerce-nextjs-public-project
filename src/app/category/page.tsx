@@ -69,7 +69,7 @@ export default function Page() {
                     <ListCategories className='hidden md:inline-grid border ml-2' />
                 </div>
                 <div className='flex flex-col h-full w-full'>
-                    <div className='hidden md:flex justify-end mb-6 w-full  pr-2 lg:pr-4 2xl:pr-28'>
+                    <div className='hidden md:flex justify-end mb-6 w-full pr-2 lg:pr-4 2xl:pr-28'>
                         <div className='flex w-2/6 md:w-3/6 lg:w-2/6 relative flex-col cursor-pointer products'>
                             <div className={`flex items-center justify-between p-4 ${selectedOrder ? 'border' : ''}`}>
                                 <div ref={setCategoriesEl}>{selectedOrder}</div>
@@ -87,7 +87,7 @@ export default function Page() {
                         </div>
                     </div>
                     <div className='inline-grid w-full products'>
-                        <div className="w-full  px-2 xl:px-4 2xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+                        <div className="w-full px-2 xl:px-4 2xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-4">
                             {dataProducts.data.products?.edges.map(({ node: product }) => {
                                 return (
                                     <div key={product.id}>
@@ -96,7 +96,7 @@ export default function Page() {
                                 );
                             })}
                         </div>
-                        <Products cursor={cursor} className='w-full px-2 xl:px-4' />
+                        <Products cursor={cursor} className='w-full px-2 xl:px-4 2xl:px-28 inline-grid grid-cols-1 gap-8 sm:grid-cols-2 lg:!grid-cols-3 mt-4' />
                     </div>
                 </div>
 
