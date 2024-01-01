@@ -9,7 +9,7 @@ export default function PageFooter() {
 
     return (
         <>
-            <div className='hidden lg:flex gap-x-4 w-full justify-around products'>
+            <div className='hidden lg:flex gap-x-4 w-full justify-around products mt-24'>
                 <div className='flex flex-col gap-y-2 cursor-pointer'>
                     <h2>Help</h2>
                     <div>Shop online</div>
@@ -40,7 +40,7 @@ export default function PageFooter() {
                 </div>
             </div>
 
-            <div className='flex lg:hidden flex-col w-full px-4 justify-around products'>
+            <div className='flex lg:hidden flex-col w-full px-4 justify-around products mt-8'>
                 <div className={`flex flex-col gap-y-2 overflow-hidden cursor-pointer ${valueSection == 1 ? 'min-h-1' : 'max-h-16'}`}>
                     <div className='flex items-center justify-between' onClick={() => {
                         if (valueSection == 1) {
