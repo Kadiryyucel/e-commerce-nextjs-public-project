@@ -16,10 +16,10 @@ export default function Page() {
 	const categoriesImg = [[category1, category2, category6], [category3, category2], [category6, category5, category2]]
 	return (
 		<Site>
-			<div className="flex flex-col h-20 [&>*:nth-child(even)]:bg-current [&>*:nth-child(even)]:h-40">
-				{categoriesImg.map((categories:StaticImageData[], i:number) => {
+			<div className="flex flex-col [&>*:nth-child(even)]:bg-current [&>*:nth-child(even)]:h-40">
+				{categoriesImg.map((categories: StaticImageData[], i: number) => {
 					return (
-						<div className='flex' key={i}>{categories.map((category:StaticImageData,index:number) => {
+						<div className='flex' key={i}>{categories.map((category: StaticImageData, index: number) => {
 							return (
 
 								<div className='h-100 w-full' key={index}>
@@ -29,7 +29,7 @@ export default function Page() {
 											height={250}
 											alt={""}
 											src={category}
-											className="h-full w-full object-cover object-center p-4"
+											className="h-full w-full object-cover object-center p-1 md:p-4 filter grayscale"
 										/>
 									</Link>
 								</div>)

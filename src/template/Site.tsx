@@ -1,4 +1,5 @@
 'use client'
+import PageFooter from '@/layout/pageFooter/page';
 import PageHeader from '@/layout/pageHeader/page'
 import { createTheme, PaletteColorOptions, ThemeProvider } from '@mui/material/styles';
 
@@ -73,6 +74,7 @@ export default function Site({ children }: { children: React.ReactNode }) {
                             <PageHeader />
                         </div>
                         {children}
+                        <PageFooter/>
                     </ThemeProvider>
                 </div>
             </div>
