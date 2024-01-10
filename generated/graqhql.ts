@@ -1,4 +1,4 @@
-import type * as Types from 'types.ts';
+
 
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -16,17 +16,17 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  Date: { input: unknown; output: unknown; }
-  DateTime: { input: unknown; output: unknown; }
-  Day: { input: unknown; output: unknown; }
-  Decimal: { input: unknown; output: unknown; }
+  Date: { input: string; output: string; }
+  DateTime: { input: string; output: string; }
+  Day: { input: number; output: number; }
+  Decimal: { input: number; output: number; }
   GenericScalar: { input: unknown; output: unknown; }
   JSON: { input: unknown; output: unknown; }
-  JSONString: { input: unknown; output: unknown; }
-  Metadata: { input: unknown; output: unknown; }
-  Minute: { input: unknown; output: unknown; }
-  PositiveDecimal: { input: unknown; output: unknown; }
-  UUID: { input: unknown; output: unknown; }
+  JSONString: { input: string; output: string; }
+  Metadata: { input: Record<string, string>; output: Record<string, string>; }
+  Minute: { input: number; output: number; }
+  PositiveDecimal: { input: number; output: number; }
+  UUID: { input: string; output: string; }
   Upload: { input: unknown; output: unknown; }
   WeightScalar: { input: unknown; output: unknown; }
   _Any: { input: unknown; output: unknown; }
@@ -31495,7 +31495,7 @@ export type AuthMutation = { tokenCreate?: { token?: string | null, refreshToken
 export type CurrentUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { me?: { id: string, lastLogin?: unknown | null, dateJoined: unknown, email: string, firstName: string, lastName: string, avatar?: { url: string, alt?: string | null } | null, orders?: { totalCount?: number | null } | null } | null };
+export type CurrentUserQuery = { me?: { id: string, lastLogin?: string | null, dateJoined: string, email: string, firstName: string, lastName: string, avatar?: { url: string, alt?: string | null } | null, orders?: { totalCount?: number | null } | null } | null };
 
 export type GetCategoriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -31556,7 +31556,7 @@ export const CategoryFragmentDoc = `
   slug
 }
     `;
-export const AuthDocument = `
+export const AuthDocument = Apollo.gql`
     mutation Auth($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
     token
@@ -31595,7 +31595,7 @@ export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<Types.A
 export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<Types.AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<Types.AuthMutation, Types.AuthMutationVariables>;
-export const CurrentUserDocument = `
+export const CurrentUserDocument = Apollo.gql`
     query CurrentUser {
   me {
     id
@@ -31641,7 +31641,7 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<Types.CurrentUserQuery, Types.CurrentUserQueryVariables>;
-export const GetCategoriesDocument = `
+export const GetCategoriesDocument = Apollo.gql`
     query GetCategories {
   categories(first: 10) {
     edges {
@@ -31687,7 +31687,7 @@ export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesQueryResult = Apollo.QueryResult<Types.GetCategoriesQuery, Types.GetCategoriesQueryVariables>;
-export const GetProductsDocument = `
+export const GetProductsDocument = Apollo.gql`
     query GetProducts($after: String, $search: String) {
   products(channel: "default-channel", first: 12, after: $after, search: $search) {
     edges {
@@ -31734,7 +31734,7 @@ export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = Apollo.QueryResult<Types.GetProductsQuery, Types.GetProductsQueryVariables>;
-export const GetProductDocument = `
+export const GetProductDocument = Apollo.gql`
     query GetProduct($ids: [ID!]) {
   products(channel: "default-channel", first: 1, where: {ids: $ids}) {
     edges {

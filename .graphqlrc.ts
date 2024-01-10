@@ -13,7 +13,7 @@ const config: CodegenConfig = {
 			preset: 'import-types',
 			plugins: ["typescript", 'typescript-operations', "typescript-react-apollo"],
 			presetConfig: {
-				typesPath: 'types.ts',
+				typesPath: './types.ts',
 				gqlTagName: "gql",
 				fragmentMasking: false
 			},
@@ -23,6 +23,23 @@ const config: CodegenConfig = {
 				enumsAsTypes: true,
 				defaultScalarType: "unknown",
 				documentMode: "string",
+				strictScalars: true,
+				scalars: {
+					Date: "string",
+					DateTime: "string",
+					Day: "number",
+					Decimal: "number",
+					GenericScalar: "unknown",
+					JSON: "unknown",
+					JSONString: "string",
+					Metadata: "Record<string, string>",
+					Minute: "number",
+					PositiveDecimal: "number",
+					UUID: "string",
+					Upload: "unknown",
+					WeightScalar: "unknown",
+					_Any: "unknown",
+				},
 			},
 
 		},
