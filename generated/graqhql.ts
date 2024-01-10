@@ -1,4 +1,4 @@
-
+import type * as Types from './types.ts';
 
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -31556,7 +31556,7 @@ export const CategoryFragmentDoc = `
   slug
 }
     `;
-export const AuthDocument = Apollo.gql`
+export const AuthDocument = `
     mutation Auth($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
     token
@@ -31595,7 +31595,7 @@ export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<Types.A
 export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
 export type AuthMutationResult = Apollo.MutationResult<Types.AuthMutation>;
 export type AuthMutationOptions = Apollo.BaseMutationOptions<Types.AuthMutation, Types.AuthMutationVariables>;
-export const CurrentUserDocument = Apollo.gql`
+export const CurrentUserDocument = `
     query CurrentUser {
   me {
     id
@@ -31641,7 +31641,7 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<Types.CurrentUserQuery, Types.CurrentUserQueryVariables>;
-export const GetCategoriesDocument = Apollo.gql`
+export const GetCategoriesDocument = `
     query GetCategories {
   categories(first: 10) {
     edges {
@@ -31687,7 +31687,7 @@ export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
 export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
 export type GetCategoriesQueryResult = Apollo.QueryResult<Types.GetCategoriesQuery, Types.GetCategoriesQueryVariables>;
-export const GetProductsDocument = Apollo.gql`
+export const GetProductsDocument = `
     query GetProducts($after: String, $search: String) {
   products(channel: "default-channel", first: 12, after: $after, search: $search) {
     edges {
@@ -31734,7 +31734,7 @@ export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = Apollo.QueryResult<Types.GetProductsQuery, Types.GetProductsQueryVariables>;
-export const GetProductDocument = Apollo.gql`
+export const GetProductDocument = `
     query GetProduct($ids: [ID!]) {
   products(channel: "default-channel", first: 1, where: {ids: $ids}) {
     edges {
