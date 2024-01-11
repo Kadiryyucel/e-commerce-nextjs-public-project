@@ -9,13 +9,16 @@ const config: CodegenConfig = {
 	documents: "graphql/**/*.ts",
 	watch: true,
 	generates: {
-		"generated/graqhql.ts": {
-			preset: 'import-types',
-			plugins: ["typescript", 'typescript-operations', "typescript-react-apollo"],
+		"generated/": {
+			preset: "client",
+			plugins: [
+				"typescript",
+				"typescript-operations",
+				"typescript-react-apollo"
+			],
 			presetConfig: {
-				typesPath: './types.ts',
 				gqlTagName: "gql",
-				fragmentMasking: false
+				fragmentMasking: false,
 			},
 			config: {
 				useTypeImports: true,
@@ -23,23 +26,6 @@ const config: CodegenConfig = {
 				enumsAsTypes: true,
 				defaultScalarType: "unknown",
 				documentMode: "string",
-				strictScalars: true,
-				scalars: {
-					Date: "string",
-					DateTime: "string",
-					Day: "number",
-					Decimal: "number",
-					GenericScalar: "unknown",
-					JSON: "unknown",
-					JSONString: "string",
-					Metadata: "Record<string, string>",
-					Minute: "number",
-					PositiveDecimal: "number",
-					UUID: "string",
-					Upload: "unknown",
-					WeightScalar: "unknown",
-					_Any: "unknown",
-				},
 			},
 
 		},
