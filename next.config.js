@@ -15,7 +15,7 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	'eslint-config-next': {
+	eslintConfigNext: {
 		ignoreDuringBuilds: true,
 	}
 };
