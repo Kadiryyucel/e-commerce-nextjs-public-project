@@ -7,14 +7,17 @@ const nextConfig = {
 		windowHistorySupport: true,
 	},
 	images: {
-		domains:[hostname]
+		domains: [hostname]
 	},
 	compiler: {
 		styledComponents: true,
 	},
 	eslint: {
 		ignoreDuringBuilds: true,
-	  },
+	},
+	'eslint-config-next': {
+		ignoreDuringBuilds: true,
+	}
 };
 
 module.exports = nextConfig;
