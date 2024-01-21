@@ -9,8 +9,7 @@ const config: CodegenConfig = {
 	documents: "graphql/**/*.ts",
 	watch: true,
 	generates: {
-		"generated/": {
-			preset: "client",
+		"generated/graphql.tsx": {
 			plugins: [
 				"typescript",
 				"typescript-operations",
