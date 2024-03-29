@@ -5,7 +5,7 @@ loadEnvConfig(".");
 
 const config: CodegenConfig = {
 	overwrite: true,
-	schema: 'https://next-test-grapqhl.eu.saleor.cloud/graphql/',
+	schema: 'https://trial.saleor.cloud/graphql/',
 	documents: "graphql/**/*.ts",
 	watch: true,
 	generates: {
@@ -13,7 +13,7 @@ const config: CodegenConfig = {
 			plugins: [
 				"typescript",
 				"typescript-operations",
-				"typescript-react-apollo"
+				"typed-document-node"
 			],
 			presetConfig: {
 				gqlTagName: "gql",
@@ -24,7 +24,6 @@ const config: CodegenConfig = {
 				skipTypename: true,
 				enumsAsTypes: true,
 				defaultScalarType: "unknown",
-				documentMode: "string",
 			},
 
 		},

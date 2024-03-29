@@ -1,4 +1,4 @@
-import * as Apollo from '@apollo/client';
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -6,7 +6,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -836,6 +835,12 @@ export type App = Node & ObjectWithMetadata & {
   homepageUrl?: Maybe<Scalars['String']['output']>;
   /** The ID of the app. */
   id: Scalars['ID']['output'];
+  /**
+   * Canonical app ID from the manifest
+   *
+   * Added in Saleor 3.19.
+   */
+  identifier?: Maybe<Scalars['String']['output']>;
   /** Determine if app will be set active or not. */
   isActive?: Maybe<Scalars['Boolean']['output']>;
   /**
@@ -1196,6 +1201,12 @@ export type AppFilterInput = {
 };
 
 export type AppInput = {
+  /**
+   * Canonical app ID. If not provided, the identifier will be generated based on app.id.
+   *
+   * Added in Saleor 3.19.
+   */
+  identifier?: InputMaybe<Scalars['String']['input']>;
   /** Name of the app. */
   name?: InputMaybe<Scalars['String']['input']>;
   /** List of permission code names to assign to this app. */
@@ -2128,7 +2139,13 @@ export type AttributeTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   attribute?: Maybe<Attribute>;
-  /** The ID of the attribute. */
+  /**
+   * The ID of the attribute to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  attributeId: Scalars['ID']['output'];
+  /** The ID of the attribute translatable content. */
   id: Scalars['ID']['output'];
   /** Name of the attribute to translate. */
   name: Scalars['String']['output'];
@@ -2169,6 +2186,12 @@ export type AttributeTranslation = Node & {
   language: LanguageDisplay;
   /** Translated attribute name. */
   name: Scalars['String']['output'];
+  /**
+   * Represents the attribute fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<AttributeTranslatableContent>;
 };
 
 /** An enumeration. */
@@ -2585,6 +2608,12 @@ export type AttributeValueTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   attributeValue?: Maybe<AttributeValue>;
+  /**
+   * The ID of the attribute value to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  attributeValueId: Scalars['ID']['output'];
   /** The ID of the attribute value translatable content. */
   id: Scalars['ID']['output'];
   /** Name of the attribute value to translate. */
@@ -2642,6 +2671,12 @@ export type AttributeValueTranslation = Node & {
    * Rich text format. For reference see https://editorjs.io/
    */
   richText?: Maybe<Scalars['JSONString']['output']>;
+  /**
+   * Represents the attribute value fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<AttributeValueTranslatableContent>;
 };
 
 export type AttributeValueTranslationInput = {
@@ -3230,6 +3265,12 @@ export type CategoryTranslatableContent = Node & {
    */
   category?: Maybe<Category>;
   /**
+   * The ID of the category to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  categoryId: Scalars['ID']['output'];
+  /**
    * Category description to translate.
    *
    * Rich text format. For reference see https://editorjs.io/
@@ -3297,6 +3338,12 @@ export type CategoryTranslation = Node & {
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** Translated SEO title. */
   seoTitle?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the category fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<CategoryTranslatableContent>;
 };
 
 /**
@@ -3464,6 +3511,12 @@ export type Channel = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: AUTHENTICATED_APP, AUTHENTICATED_STAFF_USER.
    */
   stockSettings: StockSettings;
+  /**
+   * Channel specific tax configuration.
+   *
+   * Requires one of the following permissions: AUTHENTICATED_STAFF_USER, AUTHENTICATED_APP.
+   */
+  taxConfiguration: TaxConfiguration;
   /**
    * List of warehouses assigned to this channel.
    *
@@ -4392,7 +4445,7 @@ export type CheckoutCustomerDetach = {
 };
 
 /**
- * Updates the delivery method (shipping method or pick up point) of the checkout.
+ * Updates the delivery method (shipping method or pick up point) of the checkout. Updates the checkout shipping_address for click and collect delivery for a warehouse address.
  *
  * Added in Saleor 3.1.
  *
@@ -4449,6 +4502,8 @@ export type CheckoutErrorCode =
   | 'INVALID'
   | 'INVALID_SHIPPING_METHOD'
   | 'MISSING_CHANNEL_SLUG'
+  | 'NON_EDITABLE_GIFT_LINE'
+  | 'NON_REMOVABLE_GIFT_LINE'
   | 'NOT_FOUND'
   | 'NO_LINES'
   | 'PAYMENT_ERROR'
@@ -4457,6 +4512,7 @@ export type CheckoutErrorCode =
   | 'QUANTITY_GREATER_THAN_LIMIT'
   | 'REQUIRED'
   | 'SHIPPING_ADDRESS_NOT_SET'
+  | 'SHIPPING_CHANGE_FORBIDDEN'
   | 'SHIPPING_METHOD_NOT_APPLICABLE'
   | 'SHIPPING_METHOD_NOT_SET'
   | 'SHIPPING_NOT_REQUIRED'
@@ -4539,6 +4595,14 @@ export type CheckoutLanguageCodeUpdate = {
 export type CheckoutLine = Node & ObjectWithMetadata & {
   /** The ID of the checkout line. */
   id: Scalars['ID']['output'];
+  /**
+   * Determine if the line is a gift.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  isGift?: Maybe<Scalars['Boolean']['output']>;
   /**
    * List of public metadata items. Can be accessed without permissions.
    *
@@ -5461,6 +5525,12 @@ export type CollectionTranslatableContent = Node & {
    */
   collection?: Maybe<Collection>;
   /**
+   * The ID of the collection to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  collectionId: Scalars['ID']['output'];
+  /**
    * Collection's description to translate.
    *
    * Rich text format. For reference see https://editorjs.io/
@@ -5528,6 +5598,12 @@ export type CollectionTranslation = Node & {
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** Translated SEO title. */
   seoTitle?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the collection fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<CollectionTranslatableContent>;
 };
 
 /**
@@ -6566,6 +6642,17 @@ export type DiscountValueTypeEnum =
   | 'FIXED'
   | 'PERCENTAGE';
 
+export type DiscountedObjectWhereInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<DiscountedObjectWhereInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<DiscountedObjectWhereInput>>;
+  /** Filter by the base subtotal price. */
+  baseSubtotalPrice?: InputMaybe<DecimalFilterInput>;
+  /** Filter by the base total price. */
+  baseTotalPrice?: InputMaybe<DecimalFilterInput>;
+};
+
 /** An enumeration. */
 export type DistanceUnitsEnum =
   | 'CM'
@@ -7260,8 +7347,11 @@ export type FileUpload = {
 
 /** Represents order fulfillment. */
 export type Fulfillment = Node & ObjectWithMetadata & {
+  /** Date and time when fulfillment was created. */
   created: Scalars['DateTime']['output'];
+  /** Sequence in which the fulfillments were created for an order. */
   fulfillmentOrder: Scalars['Int']['output'];
+  /** ID of the fulfillment. */
   id: Scalars['ID']['output'];
   /** List of lines for the fulfillment. */
   lines?: Maybe<Array<FulfillmentLine>>;
@@ -7303,6 +7393,7 @@ export type Fulfillment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.14.
    */
   shippingRefundedAmount?: Maybe<Money>;
+  /** Status of fulfillment. */
   status: FulfillmentStatus;
   /** User-friendly fulfillment status. */
   statusDisplay?: Maybe<Scalars['String']['output']>;
@@ -7312,6 +7403,7 @@ export type Fulfillment = Node & ObjectWithMetadata & {
    * Added in Saleor 3.14.
    */
   totalRefundedAmount?: Maybe<Money>;
+  /** Fulfillment tracking number. */
   trackingNumber: Scalars['String']['output'];
   /** Warehouse from fulfillment was fulfilled. */
   warehouse?: Maybe<Warehouse>;
@@ -7455,8 +7547,11 @@ export type FulfillmentCreated = Event & {
 
 /** Represents line of the fulfillment. */
 export type FulfillmentLine = Node & {
+  /** ID of the fulfillment line. */
   id: Scalars['ID']['output'];
+  /** The order line to which the fulfillment line is related. */
   orderLine?: Maybe<OrderLine>;
+  /** The number of items included in the fulfillment line. */
   quantity: Scalars['Int']['output'];
 };
 
@@ -7599,6 +7694,7 @@ export type GiftCard = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_GIFT_CARD, OWNER.
    */
   code: Scalars['String']['output'];
+  /** Date and time when gift card was created. */
   created: Scalars['DateTime']['output'];
   /**
    * The user who bought or issued a gift card.
@@ -7630,12 +7726,15 @@ export type GiftCard = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_GIFT_CARD.
    */
   events: Array<GiftCardEvent>;
+  /** Expiry date of the gift card. */
   expiryDate?: Maybe<Scalars['Date']['output']>;
+  /** ID of the gift card. */
   id: Scalars['ID']['output'];
   initialBalance: Money;
   isActive: Scalars['Boolean']['output'];
   /** Last 4 characters of gift card code. */
   last4CodeChars: Scalars['String']['output'];
+  /** Date and time when gift card was last used. */
   lastUsedOn?: Maybe<Scalars['DateTime']['output']>;
   /** List of public metadata items. Can be accessed without permissions. */
   metadata: Array<MetadataItem>;
@@ -8051,6 +8150,7 @@ export type GiftCardEvent = Node & {
   email?: Maybe<Scalars['String']['output']>;
   /** The gift card expiry date. */
   expiryDate?: Maybe<Scalars['Date']['output']>;
+  /** ID of the event associated with a gift card. */
   id: Scalars['ID']['output'];
   /** Content of the event. */
   message?: Maybe<Scalars['String']['output']>;
@@ -8291,7 +8391,9 @@ export type GiftCardStatusChanged = Event & {
  * Added in Saleor 3.1.
  */
 export type GiftCardTag = Node & {
+  /** ID of the tag associated with a gift card. */
   id: Scalars['ID']['output'];
+  /** Name of the tag associated with a gift card. */
   name: Scalars['String']['output'];
 };
 
@@ -10270,6 +10372,12 @@ export type MenuItemTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   menuItem?: Maybe<MenuItem>;
+  /**
+   * The ID of the menu item to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  menuItemId: Scalars['ID']['output'];
   /** Name of the menu item to translate. */
   name: Scalars['String']['output'];
   /** Returns translated menu item fields for the given language code. */
@@ -10302,6 +10410,12 @@ export type MenuItemTranslation = Node & {
   language: LanguageDisplay;
   /** Translated menu item name. */
   name: Scalars['String']['output'];
+  /**
+   * Represents the menu item fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<MenuItemTranslatableContent>;
 };
 
 /**
@@ -10966,7 +11080,7 @@ export type Mutation = {
    */
   checkoutCustomerDetach?: Maybe<CheckoutCustomerDetach>;
   /**
-   * Updates the delivery method (shipping method or pick up point) of the checkout.
+   * Updates the delivery method (shipping method or pick up point) of the checkout. Updates the checkout shipping_address for click and collect delivery for a warehouse address.
    *
    * Added in Saleor 3.1.
    *
@@ -12648,7 +12762,7 @@ export type Mutation = {
    */
   staffUpdate?: Maybe<StaffUpdate>;
   /**
-   * Updates stocks for a given variant and warehouse.
+   * Updates stocks for a given variant and warehouse. Variant and warehouse selectors have to be the same for all stock inputs. Is not allowed to use 'variantId' in one input and 'variantExternalReference' in another.
    *
    * Added in Saleor 3.13.
    *
@@ -12897,7 +13011,7 @@ export type Mutation = {
    * Requires one of the following permissions: MANAGE_DISCOUNTS.
    *
    * Triggers the following webhook events:
-   * - VOUCHER_UPDATED (async): A voucher was updated.
+   * - VOUCHER_CODES_DELETED (async): A voucher codes were deleted.
    */
   voucherCodeBulkDelete?: Maybe<VoucherCodeBulkDelete>;
   /**
@@ -12907,6 +13021,7 @@ export type Mutation = {
    *
    * Triggers the following webhook events:
    * - VOUCHER_CREATED (async): A voucher was created.
+   * - VOUCHER_CODES_CREATED (async): A voucher codes were created.
    */
   voucherCreate?: Maybe<VoucherCreate>;
   /**
@@ -12931,6 +13046,7 @@ export type Mutation = {
    *
    * Triggers the following webhook events:
    * - VOUCHER_UPDATED (async): A voucher was updated.
+   * - VOUCHER_CODES_CREATED (async): A voucher code was created.
    */
   voucherUpdate?: Maybe<VoucherUpdate>;
   /**
@@ -14704,10 +14820,11 @@ export type MutationTransactionEventReportArgs = {
   amount: Scalars['PositiveDecimal']['input'];
   availableActions?: InputMaybe<Array<TransactionActionEnum>>;
   externalUrl?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
   message?: InputMaybe<Scalars['String']['input']>;
   pspReference: Scalars['String']['input'];
   time?: InputMaybe<Scalars['DateTime']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
   type: TransactionEventTypeEnum;
 };
 
@@ -14725,25 +14842,29 @@ export type MutationTransactionInitializeArgs = {
 export type MutationTransactionProcessArgs = {
   customerIpAddress?: InputMaybe<Scalars['String']['input']>;
   data?: InputMaybe<Scalars['JSON']['input']>;
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 
 export type MutationTransactionRequestActionArgs = {
   actionType: TransactionActionEnum;
   amount?: InputMaybe<Scalars['PositiveDecimal']['input']>;
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 
 export type MutationTransactionRequestRefundForGrantedRefundArgs = {
   grantedRefundId: Scalars['ID']['input'];
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 
 export type MutationTransactionUpdateArgs = {
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
   transaction?: InputMaybe<TransactionUpdateInput>;
   transactionEvent?: InputMaybe<TransactionEventInput>;
 };
@@ -14959,6 +15080,7 @@ export type Order = Node & ObjectWithMetadata & {
   billingAddress?: Maybe<Address>;
   /** Informs whether a draft order can be finalized(turned into a regular order). */
   canFinalize: Scalars['Boolean']['output'];
+  /** Channel through which the order was placed. */
   channel: Channel;
   /**
    * The charge status of the order.
@@ -14972,8 +15094,11 @@ export type Order = Node & ObjectWithMetadata & {
    * Added in Saleor 3.11.
    */
   checkoutId?: Maybe<Scalars['ID']['output']>;
+  /** Name of the collection point where the order should be picked up by the customer. */
   collectionPointName?: Maybe<Scalars['String']['output']>;
+  /** Date and time when the order was created. */
   created: Scalars['DateTime']['output'];
+  /** Additional information provided by the customer about the order. */
   customerNote: Scalars['String']['output'];
   /**
    * The delivery method selected for this order.
@@ -15027,6 +15152,7 @@ export type Order = Node & ObjectWithMetadata & {
    * Requires one of the following permissions: MANAGE_ORDERS.
    */
   grantedRefunds: Array<OrderGrantedRefund>;
+  /** ID of the order. */
   id: Scalars['ID']['output'];
   /** List of order invoices. Can be fetched for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_ORDERS, OWNER. */
   invoices: Array<Invoice>;
@@ -15084,6 +15210,7 @@ export type Order = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /** URL to which user should be redirected after order is placed. */
   redirectUrl?: Maybe<Scalars['String']['output']>;
   /** Shipping address. The full data can be access for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_ORDERS, OWNER. */
   shippingAddress?: Maybe<Address>;
@@ -15092,6 +15219,7 @@ export type Order = Node & ObjectWithMetadata & {
    * @deprecated This field will be removed in Saleor 4.0. Use `deliveryMethod` instead.
    */
   shippingMethod?: Maybe<ShippingMethod>;
+  /** Method used for shipping. */
   shippingMethodName?: Maybe<Scalars['String']['output']>;
   /** Shipping methods related to this order. */
   shippingMethods: Array<ShippingMethod>;
@@ -15125,6 +15253,7 @@ export type Order = Node & ObjectWithMetadata & {
   shippingTaxClassPrivateMetadata: Array<MetadataItem>;
   /** The shipping tax rate value. */
   shippingTaxRate: Scalars['Float']['output'];
+  /** Status of the order. */
   status: OrderStatus;
   /** User-friendly order status. */
   statusDisplay: Scalars['String']['output'];
@@ -15244,11 +15373,13 @@ export type Order = Node & ObjectWithMetadata & {
   translatedDiscountName?: Maybe<Scalars['String']['output']>;
   /** Undiscounted total amount of the order. */
   undiscountedTotal: TaxedMoney;
+  /** Date and time when the order was created. */
   updatedAt: Scalars['DateTime']['output'];
   /** User who placed the order. This field is set only for orders placed by authenticated users. Can be fetched for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_USERS, MANAGE_ORDERS, HANDLE_PAYMENTS, OWNER. */
   user?: Maybe<User>;
   /** Email address of the customer. The full data can be access for orders created in Saleor 3.2 and later, for other orders requires one of the following permissions: MANAGE_ORDERS, OWNER. */
   userEmail?: Maybe<Scalars['String']['output']>;
+  /** Voucher linked to the order. */
   voucher?: Maybe<Voucher>;
   /**
    * Voucher code that was used for Order.
@@ -15256,6 +15387,7 @@ export type Order = Node & ObjectWithMetadata & {
    * Added in Saleor 3.18.
    */
   voucherCode?: Maybe<Scalars['String']['output']>;
+  /** Weight of the order. */
   weight: Weight;
 };
 
@@ -15491,12 +15623,6 @@ export type OrderBulkCreateInput = {
   transactions?: InputMaybe<Array<TransactionCreateInput>>;
   /** Customer associated with the order. */
   user: OrderBulkCreateUserInput;
-  /**
-   * Code of a voucher associated with the order.
-   *
-   * DEPRECATED: this field will be removed in Saleor 3.19. Use `voucherCode` instead.
-   */
-  voucher?: InputMaybe<Scalars['String']['input']>;
   /**
    * Code of a voucher associated with the order.
    *
@@ -15871,6 +15997,7 @@ export type OrderDiscountDelete = {
 /** An enumeration. */
 export type OrderDiscountType =
   | 'MANUAL'
+  | 'ORDER_PROMOTION'
   | 'PROMOTION'
   | 'SALE'
   | 'VOUCHER';
@@ -15933,6 +16060,8 @@ export type OrderErrorCode =
   | 'INVALID_QUANTITY'
   | 'INVALID_VOUCHER'
   | 'INVALID_VOUCHER_CODE'
+  | 'NON_EDITABLE_GIFT_LINE'
+  | 'NON_REMOVABLE_GIFT_LINE'
   | 'NOT_AVAILABLE_IN_CHANNEL'
   | 'NOT_EDITABLE'
   | 'NOT_FOUND'
@@ -15968,6 +16097,7 @@ export type OrderEvent = Node & {
   emailType?: Maybe<OrderEventsEmailsEnum>;
   /** The lines fulfilled. */
   fulfilledItems?: Maybe<Array<FulfillmentLine>>;
+  /** ID of the event associated with an order. */
   id: Scalars['ID']['output'];
   /** Number of an invoice related to the order. */
   invoiceNumber?: Maybe<Scalars['String']['output']>;
@@ -16549,7 +16679,17 @@ export type OrderLine = Node & ObjectWithMetadata & {
    */
   allocations?: Maybe<Array<Allocation>>;
   digitalContentUrl?: Maybe<DigitalContentUrl>;
+  /** ID of the order line. */
   id: Scalars['ID']['output'];
+  /**
+   * Determine if the line is a gift.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  isGift?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether the product variant requires shipping. */
   isShippingRequired: Scalars['Boolean']['output'];
   /**
    * List of public metadata items. Can be accessed without permissions.
@@ -16591,10 +16731,15 @@ export type OrderLine = Node & ObjectWithMetadata & {
    * Added in Saleor 3.5.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /** Name of the product in order line. */
   productName: Scalars['String']['output'];
+  /** SKU of the product variant. */
   productSku?: Maybe<Scalars['String']['output']>;
+  /** The ID of the product variant. */
   productVariantId?: Maybe<Scalars['String']['output']>;
+  /** Number of variant items ordered. */
   quantity: Scalars['Int']['output'];
+  /** Number of variant items fulfilled. */
   quantityFulfilled: Scalars['Int']['output'];
   /**
    * A quantity of items remaining to be fulfilled.
@@ -16634,6 +16779,7 @@ export type OrderLine = Node & ObjectWithMetadata & {
    * Added in Saleor 3.9.
    */
   taxClassPrivateMetadata: Array<MetadataItem>;
+  /** Rate of tax applied on product variant. */
   taxRate: Scalars['Float']['output'];
   thumbnail?: Maybe<Image>;
   /** Price of the order line. */
@@ -16648,6 +16794,7 @@ export type OrderLine = Node & ObjectWithMetadata & {
   undiscountedUnitPrice: TaxedMoney;
   /** The discount applied to the single order line. */
   unitDiscount: Money;
+  /** Reason for any discounts applied on a product in the order. */
   unitDiscountReason?: Maybe<Scalars['String']['output']>;
   /** Type of the discount: fixed or percent */
   unitDiscountType?: Maybe<DiscountValueTypeEnum>;
@@ -16657,6 +16804,7 @@ export type OrderLine = Node & ObjectWithMetadata & {
   unitPrice: TaxedMoney;
   /** A purchased product variant. Note: this field may be null if the variant has been removed from stock at all. Requires one of the following permissions to include the unpublished items: MANAGE_ORDERS, MANAGE_DISCOUNTS, MANAGE_PRODUCTS. */
   variant?: Maybe<ProductVariant>;
+  /** Name of the variant of product in order line. */
   variantName: Scalars['String']['output'];
   /**
    * Voucher code that was used for this order line.
@@ -16923,6 +17071,15 @@ export type OrderPaid = Event & {
   recipient?: Maybe<App>;
   /** Saleor version that triggered the event. */
   version?: Maybe<Scalars['String']['output']>;
+};
+
+export type OrderPredicateInput = {
+  /** List of conditions that must be met. */
+  AND?: InputMaybe<Array<OrderPredicateInput>>;
+  /** A list of conditions of which at least one must be met. */
+  OR?: InputMaybe<Array<OrderPredicateInput>>;
+  /** Defines the conditions related to checkout and order objects. */
+  discountedObjectPredicate?: InputMaybe<DiscountedObjectWhereInput>;
 };
 
 /**
@@ -17695,6 +17852,12 @@ export type PageTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   page?: Maybe<Page>;
+  /**
+   * The ID of the page to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  pageId: Scalars['ID']['output'];
   /** SEO description to translate. */
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** SEO title to translate. */
@@ -17748,6 +17911,12 @@ export type PageTranslation = Node & {
   seoTitle?: Maybe<Scalars['String']['output']>;
   /** Translated page title. */
   title?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the page fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<PageTranslatableContent>;
 };
 
 export type PageTranslationInput = {
@@ -20629,6 +20798,12 @@ export type ProductTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   product?: Maybe<Product>;
+  /**
+   * The ID of the product to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  productId: Scalars['ID']['output'];
   /** SEO description to translate. */
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** SEO title to translate. */
@@ -20687,6 +20862,12 @@ export type ProductTranslation = Node & {
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** Translated SEO title. */
   seoTitle?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the product fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<ProductTranslatableContent>;
 };
 
 /** Represents a type of product. It defines what attributes are available to products of this type. */
@@ -21964,6 +22145,12 @@ export type ProductVariantTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   productVariant?: Maybe<ProductVariant>;
+  /**
+   * The ID of the product variant to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  productVariantId: Scalars['ID']['output'];
   /** Returns translated product variant fields for the given language code. */
   translation?: Maybe<ProductVariantTranslation>;
 };
@@ -22001,6 +22188,12 @@ export type ProductVariantTranslation = Node & {
   language: LanguageDisplay;
   /** Translated product variant name. */
   name: Scalars['String']['output'];
+  /**
+   * Represents the product variant fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<ProductVariantTranslatableContent>;
 };
 
 /**
@@ -22156,6 +22349,14 @@ export type Promotion = Node & ObjectWithMetadata & {
   startDate: Scalars['DateTime']['output'];
   /** Returns translated promotion fields for the given language code. */
   translation?: Maybe<PromotionTranslation>;
+  /**
+   * The type of the promotion. Implicate if the discount is applied on catalogue or order level.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  type?: Maybe<PromotionTypeEnum>;
   /** Date time of last update of promotion. */
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -22276,20 +22477,32 @@ export type PromotionCreateError = {
   code: PromotionCreateErrorCode;
   /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
   field?: Maybe<Scalars['String']['output']>;
+  /** Limit of gifts assigned to promotion rule. */
+  giftsLimit?: Maybe<Scalars['Int']['output']>;
+  /** Number of gifts defined for this promotion rule exceeding the limit. */
+  giftsLimitExceedBy?: Maybe<Scalars['Int']['output']>;
   /** Index of an input list item that caused the error. */
   index?: Maybe<Scalars['Int']['output']>;
   /** The error message. */
   message?: Maybe<Scalars['String']['output']>;
+  /** Limit of rules with orderPredicate defined. */
+  rulesLimit?: Maybe<Scalars['Int']['output']>;
+  /** Number of rules with orderPredicate defined exceeding the limit. */
+  rulesLimitExceedBy?: Maybe<Scalars['Int']['output']>;
 };
 
 /** An enumeration. */
 export type PromotionCreateErrorCode =
+  | 'GIFTS_NUMBER_LIMIT'
   | 'GRAPHQL_ERROR'
   | 'INVALID'
+  | 'INVALID_GIFT_TYPE'
   | 'INVALID_PRECISION'
+  | 'MISSING_CHANNELS'
   | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
   | 'NOT_FOUND'
-  | 'REQUIRED';
+  | 'REQUIRED'
+  | 'RULES_NUMBER_LIMIT';
 
 export type PromotionCreateInput = {
   /** Promotion description. */
@@ -22302,6 +22515,16 @@ export type PromotionCreateInput = {
   rules?: InputMaybe<Array<PromotionRuleInput>>;
   /** The start date of the promotion in ISO 8601 format. */
   startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  /**
+   * Defines the promotion type. Implicate the required promotion rules predicate type and whether the promotion rules will give the catalogue or order discount.
+   *
+   * The default value is `Catalogue`.
+   *
+   * This field will be required from Saleor 3.20.
+   *
+   * Added in Saleor 3.19.
+   */
+  type?: InputMaybe<PromotionTypeEnum>;
 };
 
 /**
@@ -22481,12 +22704,58 @@ export type PromotionRule = Node & {
   channels?: Maybe<Array<Channel>>;
   /** Description of the promotion rule. */
   description?: Maybe<Scalars['JSON']['output']>;
+  /**
+   * Product variant IDs available as a gift to choose.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  giftIds?: Maybe<Array<Scalars['ID']['output']>>;
+  /**
+   * Defines the maximum number of gifts to choose from the gifts list.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  giftsLimit?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   /** Name of the promotion rule. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * The checkout/order predicate that must be met to apply the rule reward.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  orderPredicate?: Maybe<Scalars['JSON']['output']>;
+  /**
+   * The type of the predicate that must be met to apply the reward.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  predicateType?: Maybe<PromotionTypeEnum>;
   /** Promotion to which the rule belongs. */
   promotion?: Maybe<Promotion>;
-  /** The reward value of the promotion rule. Defines the discount value applied when the rule conditions are met. */
+  /**
+   * The reward type of the promotion rule.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  rewardType?: Maybe<RewardTypeEnum>;
+  /**
+   * The reward value of the promotion rule. Defines the discount value applied when the rule conditions are met.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
   rewardValue?: Maybe<Scalars['PositiveDecimal']['output']>;
   /** The type of reward value of the promotion rule. */
   rewardValueType?: Maybe<RewardValueTypeEnum>;
@@ -22528,18 +22797,30 @@ export type PromotionRuleCreateError = {
   code: PromotionRuleCreateErrorCode;
   /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
   field?: Maybe<Scalars['String']['output']>;
+  /** Limit of gifts assigned to promotion rule. */
+  giftsLimit?: Maybe<Scalars['Int']['output']>;
+  /** Number of gifts defined for this promotion rule exceeding the limit. */
+  giftsLimitExceedBy?: Maybe<Scalars['Int']['output']>;
   /** The error message. */
   message?: Maybe<Scalars['String']['output']>;
+  /** Limit of rules with orderPredicate defined. */
+  rulesLimit?: Maybe<Scalars['Int']['output']>;
+  /** Number of rules with orderPredicate defined exceeding the limit. */
+  rulesLimitExceedBy?: Maybe<Scalars['Int']['output']>;
 };
 
 /** An enumeration. */
 export type PromotionRuleCreateErrorCode =
+  | 'GIFTS_NUMBER_LIMIT'
   | 'GRAPHQL_ERROR'
   | 'INVALID'
+  | 'INVALID_GIFT_TYPE'
   | 'INVALID_PRECISION'
+  | 'MISSING_CHANNELS'
   | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
   | 'NOT_FOUND'
-  | 'REQUIRED';
+  | 'REQUIRED'
+  | 'RULES_NUMBER_LIMIT';
 
 export type PromotionRuleCreateInput = {
   /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
@@ -22548,10 +22829,34 @@ export type PromotionRuleCreateInput = {
   channels?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Promotion rule description. */
   description?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   * Product variant IDs available as a gift to choose.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  gifts?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Promotion rule name. */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Defines the conditions on the checkout/draft order level that must be met for the reward to be applied.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  orderPredicate?: InputMaybe<OrderPredicateInput>;
   /** The ID of the promotion that rule belongs to. */
   promotion: Scalars['ID']['input'];
+  /**
+   * Defines the reward type of the promotion rule.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  rewardType?: InputMaybe<RewardTypeEnum>;
   /** Defines the discount value. Required when catalogue predicate is provided. */
   rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
   /** Defines the promotion rule reward value type. Must be provided together with reward value. */
@@ -22694,8 +22999,32 @@ export type PromotionRuleInput = {
   channels?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Promotion rule description. */
   description?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   * Product variant IDs available as a gift to choose.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  gifts?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Promotion rule name. */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Defines the conditions on the checkout/draft order level that must be met for the reward to be applied.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  orderPredicate?: InputMaybe<OrderPredicateInput>;
+  /**
+   * Defines the reward type of the promotion rule.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  rewardType?: InputMaybe<RewardTypeEnum>;
   /** Defines the discount value. Required when catalogue predicate is provided. */
   rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
   /** Defines the promotion rule reward value type. Must be provided together with reward value. */
@@ -22718,6 +23047,12 @@ export type PromotionRuleTranslatableContent = Node & {
   id: Scalars['ID']['output'];
   /** Name of the promotion rule. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * ID of the promotion rule to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  promotionRuleId: Scalars['ID']['output'];
   /** Returns translated promotion rule fields for the given language code. */
   translation?: Maybe<PromotionRuleTranslation>;
 };
@@ -22762,6 +23097,12 @@ export type PromotionRuleTranslation = Node & {
   language: LanguageDisplay;
   /** Translated name of the promotion rule. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the promotion rule fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<PromotionRuleTranslatableContent>;
 };
 
 export type PromotionRuleTranslationInput = {
@@ -22798,6 +23139,10 @@ export type PromotionRuleUpdateError = {
   code: PromotionRuleUpdateErrorCode;
   /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
   field?: Maybe<Scalars['String']['output']>;
+  /** Limit of gifts assigned to promotion rule. */
+  giftsLimit?: Maybe<Scalars['Int']['output']>;
+  /** Number of gifts defined for this promotion rule exceeding the limit. */
+  giftsLimitExceedBy?: Maybe<Scalars['Int']['output']>;
   /** The error message. */
   message?: Maybe<Scalars['String']['output']>;
 };
@@ -22805,24 +23150,59 @@ export type PromotionRuleUpdateError = {
 /** An enumeration. */
 export type PromotionRuleUpdateErrorCode =
   | 'DUPLICATED_INPUT_ITEM'
+  | 'GIFTS_NUMBER_LIMIT'
   | 'GRAPHQL_ERROR'
   | 'INVALID'
+  | 'INVALID_GIFT_TYPE'
   | 'INVALID_PRECISION'
   | 'MISSING_CHANNELS'
   | 'MULTIPLE_CURRENCIES_NOT_ALLOWED'
-  | 'NOT_FOUND';
+  | 'NOT_FOUND'
+  | 'REQUIRED';
 
 export type PromotionRuleUpdateInput = {
-  /** List of channel ids to remove. */
+  /** List of channel ids to add. */
   addChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /**
+   * List of variant IDs available as a gift to add.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  addGifts?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Defines the conditions on the catalogue level that must be met for the reward to be applied. */
   cataloguePredicate?: InputMaybe<CataloguePredicateInput>;
   /** Promotion rule description. */
   description?: InputMaybe<Scalars['JSON']['input']>;
   /** Promotion rule name. */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Defines the conditions on the checkout/draft order level that must be met for the reward to be applied.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  orderPredicate?: InputMaybe<OrderPredicateInput>;
   /** List of channel ids to remove. */
   removeChannels?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /**
+   * List of variant IDs available as a gift to remove.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  removeGifts?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /**
+   * Defines the reward type of the promotion rule.
+   *
+   * Added in Saleor 3.19.
+   *
+   * Note: this API is currently in Feature Preview and can be subject to changes at later point.
+   */
+  rewardType?: InputMaybe<RewardTypeEnum>;
   /** Defines the discount value. Required when catalogue predicate is provided. */
   rewardValue?: InputMaybe<Scalars['PositiveDecimal']['input']>;
   /** Defines the promotion rule reward value type. Must be provided together with reward value. */
@@ -22946,6 +23326,8 @@ export type PromotionTranslatableContent = Node & {
   id: Scalars['ID']['output'];
   /** Name of the promotion. */
   name: Scalars['String']['output'];
+  /** ID of the promotion to translate. */
+  promotionId: Scalars['ID']['output'];
   /** Returns translated promotion fields for the given language code. */
   translation?: Maybe<PromotionTranslation>;
 };
@@ -22990,6 +23372,12 @@ export type PromotionTranslation = Node & {
   language: LanguageDisplay;
   /** Translated name of the promotion. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the promotion fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<PromotionTranslatableContent>;
 };
 
 export type PromotionTranslationInput = {
@@ -23000,6 +23388,18 @@ export type PromotionTranslationInput = {
    */
   description?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** An enumeration. */
+export type PromotionTypeEnum =
+  | 'CATALOGUE'
+  | 'ORDER';
+
+export type PromotionTypeEnumFilterInput = {
+  /** The value equal to. */
+  eq?: InputMaybe<PromotionTypeEnum>;
+  /** The value included in. */
+  oneOf?: InputMaybe<Array<PromotionTypeEnum>>;
 };
 
 /**
@@ -23103,6 +23503,7 @@ export type PromotionWhereInput = {
   name?: InputMaybe<StringFilterInput>;
   /** Filter promotions by start date. */
   startDate?: InputMaybe<DateTimeFilterInput>;
+  type?: InputMaybe<PromotionTypeEnumFilterInput>;
 };
 
 export type PublishableChannelListingInput = {
@@ -23281,6 +23682,7 @@ export type Query = {
    * List of activity events to display on homepage (at the moment it only contains order-events).
    *
    * Requires one of the following permissions: MANAGE_ORDERS.
+   * @deprecated This field will be removed in Saleor 4.0.
    */
   homepageEvents?: Maybe<OrderEventCountableConnection>;
   /** Return the currently authenticated user. */
@@ -23317,6 +23719,7 @@ export type Query = {
    * Return the total sales amount from a specific period.
    *
    * Requires one of the following permissions: MANAGE_ORDERS.
+   * @deprecated This field will be removed in Saleor 4.0.
    */
   ordersTotal?: Maybe<TaxedMoney>;
   /** Look up a page by ID or slug. */
@@ -23399,6 +23802,7 @@ export type Query = {
    * List of top selling products.
    *
    * Requires one of the following permissions: MANAGE_PRODUCTS.
+   * @deprecated This field will be removed in Saleor 4.0.
    */
   reportProductSales?: Maybe<ProductVariantCountableConnection>;
   /**
@@ -24089,7 +24493,8 @@ export type QueryTaxCountryConfigurationArgs = {
 
 
 export type QueryTransactionArgs = {
-  id: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  token?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 
@@ -24218,6 +24623,11 @@ export type RequestPasswordReset = {
   accountErrors: Array<AccountError>;
   errors: Array<AccountError>;
 };
+
+/** An enumeration. */
+export type RewardTypeEnum =
+  | 'GIFT'
+  | 'SUBTOTAL_DISCOUNT';
 
 /** An enumeration. */
 export type RewardValueTypeEnum =
@@ -24739,6 +25149,12 @@ export type SaleTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   sale?: Maybe<Sale>;
+  /**
+   * The ID of the sale to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  saleId: Scalars['ID']['output'];
   /** Returns translated sale fields for the given language code. */
   translation?: Maybe<SaleTranslation>;
 };
@@ -24779,6 +25195,12 @@ export type SaleTranslation = Node & {
   language: LanguageDisplay;
   /** Translated name of sale. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the sale fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<SaleTranslatableContent>;
 };
 
 export type SaleType =
@@ -25117,6 +25539,12 @@ export type ShippingMethodTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   shippingMethod?: Maybe<ShippingMethodType>;
+  /**
+   * The ID of the shipping method to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  shippingMethodId: Scalars['ID']['output'];
   /** Returns translated shipping method fields for the given language code. */
   translation?: Maybe<ShippingMethodTranslation>;
 };
@@ -25141,6 +25569,12 @@ export type ShippingMethodTranslation = Node & {
   language: LanguageDisplay;
   /** Translated shipping method name. */
   name: Scalars['String']['output'];
+  /**
+   * Represents the shipping method fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<ShippingMethodTranslatableContent>;
 };
 
 /** Shipping method are the methods you'll use to get customer's orders to them. They are directly exposed to the customers. */
@@ -25859,6 +26293,14 @@ export type Shop = ObjectWithMetadata & {
   availablePaymentGateways: Array<PaymentGateway>;
   /** Shipping methods that are available for the shop. */
   availableShippingMethods?: Maybe<Array<ShippingMethod>>;
+  /**
+   * List of tax apps that can be assigned to the channel. The list will be calculated by Saleor based on the apps that are subscribed to webhooks related to tax calculations: CHECKOUT_CALCULATE_TAXES
+   *
+   * Added in Saleor 3.19.
+   *
+   * Requires one of the following permissions: AUTHENTICATED_STAFF_USER, MANAGE_APPS.
+   */
+  availableTaxApps: Array<App>;
   /**
    * List of all currencies supported by shop's channels.
    *
@@ -26633,7 +27075,7 @@ export type StockBulkResult = {
 };
 
 /**
- * Updates stocks for a given variant and warehouse.
+ * Updates stocks for a given variant and warehouse. Variant and warehouse selectors have to be the same for all stock inputs. Is not allowed to use 'variantId' in one input and 'variantExternalReference' in another.
  *
  * Added in Saleor 3.13.
  *
@@ -27178,6 +27620,12 @@ export type TaxConfiguration = Node & ObjectWithMetadata & {
    * Added in Saleor 3.3.
    */
   privateMetafields?: Maybe<Scalars['Metadata']['output']>;
+  /**
+   * The tax app `App.identifier` that will be used to calculate the taxes for the given channel. Empty value for `TAX_APP` set as `taxCalculationStrategy` means that Saleor will iterate over all installed tax apps. If multiple tax apps exist with provided tax app id use the `App` with newest `created` date. Will become mandatory in 4.0 for `TAX_APP` `taxCalculationStrategy`.
+   *
+   * Added in Saleor 3.19.
+   */
+  taxAppId?: Maybe<Scalars['String']['output']>;
   /** The default strategy to use for tax calculation in the given channel. Taxes can be calculated either using user-defined flat rates or with a tax app. Empty value means that no method is selected and taxes are not calculated. */
   taxCalculationStrategy?: Maybe<TaxCalculationStrategy>;
 };
@@ -27254,6 +27702,12 @@ export type TaxConfigurationPerCountry = {
   country: CountryDisplay;
   /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['output'];
+  /**
+   * The tax app `App.identifier` that will be used to calculate the taxes for the given channel and country. If not provided, use the value from the channel's tax configuration.
+   *
+   * Added in Saleor 3.19.
+   */
+  taxAppId?: Maybe<Scalars['String']['output']>;
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: Maybe<TaxCalculationStrategy>;
 };
@@ -27265,6 +27719,12 @@ export type TaxConfigurationPerCountryInput = {
   countryCode: CountryCode;
   /** Determines whether displayed prices should include taxes for this country. */
   displayGrossPrices: Scalars['Boolean']['input'];
+  /**
+   * The tax app `App.identifier` that will be used to calculate the taxes for the given channel and country. If not provided, use the value from the channel's tax configuration.
+   *
+   * Added in Saleor 3.19.
+   */
+  taxAppId?: InputMaybe<Scalars['String']['input']>;
   /** A country-specific strategy to use for tax calculation. Taxes can be calculated either using user-defined flat rates or with a tax app. If not provided, use the value from the channel's tax configuration. */
   taxCalculationStrategy?: InputMaybe<TaxCalculationStrategy>;
 };
@@ -27308,6 +27768,12 @@ export type TaxConfigurationUpdateInput = {
   pricesEnteredWithTax?: InputMaybe<Scalars['Boolean']['input']>;
   /** List of country codes for which to remove the tax configuration. */
   removeCountriesConfiguration?: InputMaybe<Array<CountryCode>>;
+  /**
+   * The tax app `App.identifier` that will be used to calculate the taxes for the given channel. Empty value for `TAX_APP` set as `taxCalculationStrategy` means that Saleor will iterate over all installed tax apps. If multiple tax apps exist with provided tax app id use the `App` with newest `created` date. It's possible to set plugin by using prefix `plugin:` with `PLUGIN_ID` e.g. with Avalara `plugin:mirumee.taxes.avalara`.Will become mandatory in 4.0 for `TAX_APP` `taxCalculationStrategy`.
+   *
+   * Added in Saleor 3.19.
+   */
+  taxAppId?: InputMaybe<Scalars['String']['input']>;
   /** The default strategy to use for tax calculation in the given channel. Taxes can be calculated either using user-defined flat rates or with a tax app. Empty value means that no method is selected and taxes are not calculated. */
   taxCalculationStrategy?: InputMaybe<TaxCalculationStrategy>;
   /** List of tax country configurations to create or update (identified by a country code). */
@@ -28108,6 +28574,12 @@ export type TransactionItem = Node & ObjectWithMetadata & {
   refundPendingAmount: Money;
   /** Total amount refunded for this payment. */
   refundedAmount: Money;
+  /**
+   * The transaction token.
+   *
+   * Added in Saleor 3.14.
+   */
+  token: Scalars['UUID']['output'];
 };
 
 
@@ -28881,6 +29353,10 @@ export type UserCreateInput = {
    * User account is confirmed.
    *
    * Added in Saleor 3.15.
+   *
+   * DEPRECATED: this field will be removed in Saleor 4.0.
+   *
+   * The user will be always set as unconfirmed. The confirmation will take place when the user sets the password.
    */
   isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   /** User language code. */
@@ -29331,7 +29807,7 @@ export type VoucherCode = {
  * Requires one of the following permissions: MANAGE_DISCOUNTS.
  *
  * Triggers the following webhook events:
- * - VOUCHER_UPDATED (async): A voucher was updated.
+ * - VOUCHER_CODES_DELETED (async): A voucher codes were deleted.
  */
 export type VoucherCodeBulkDelete = {
   /** Returns how many codes were deleted. */
@@ -29389,6 +29865,42 @@ export type VoucherCodeExportCompleted = Event & {
   version?: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * Event sent when new voucher codes were created.
+ *
+ * Added in Saleor 3.19.
+ */
+export type VoucherCodesCreated = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+  /** The voucher codes the event relates to. */
+  voucherCodes?: Maybe<Array<VoucherCode>>;
+};
+
+/**
+ * Event sent when voucher codes were deleted.
+ *
+ * Added in Saleor 3.19.
+ */
+export type VoucherCodesDeleted = Event & {
+  /** Time of the event. */
+  issuedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** The user or application that triggered the event. */
+  issuingPrincipal?: Maybe<IssuingPrincipal>;
+  /** The application receiving the webhook. */
+  recipient?: Maybe<App>;
+  /** Saleor version that triggered the event. */
+  version?: Maybe<Scalars['String']['output']>;
+  /** The voucher codes the event relates to. */
+  voucherCodes?: Maybe<Array<VoucherCode>>;
+};
+
 export type VoucherCountableConnection = {
   edges: Array<VoucherCountableEdge>;
   /** Pagination data for this connection. */
@@ -29411,6 +29923,7 @@ export type VoucherCountableEdge = {
  *
  * Triggers the following webhook events:
  * - VOUCHER_CREATED (async): A voucher was created.
+ * - VOUCHER_CODES_CREATED (async): A voucher codes were created.
  */
 export type VoucherCreate = {
   /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
@@ -29668,6 +30181,12 @@ export type VoucherTranslatableContent = Node & {
    * @deprecated This field will be removed in Saleor 4.0. Get model fields from the root level queries.
    */
   voucher?: Maybe<Voucher>;
+  /**
+   * The ID of the voucher to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  voucherId: Scalars['ID']['output'];
 };
 
 
@@ -29696,6 +30215,12 @@ export type VoucherTranslation = Node & {
   language: LanguageDisplay;
   /** Translated voucher name. */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * Represents the voucher fields to translate.
+   *
+   * Added in Saleor 3.14.
+   */
+  translatableContent?: Maybe<VoucherTranslatableContent>;
 };
 
 export type VoucherTypeEnum =
@@ -29710,6 +30235,7 @@ export type VoucherTypeEnum =
  *
  * Triggers the following webhook events:
  * - VOUCHER_UPDATED (async): A voucher was updated.
+ * - VOUCHER_CODES_CREATED (async): A voucher code was created.
  */
 export type VoucherUpdate = {
   /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
@@ -30660,6 +31186,8 @@ export type WebhookEventTypeAsyncEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  | 'VOUCHER_CODES_CREATED'
+  | 'VOUCHER_CODES_DELETED'
   /**
    * A voucher code export is completed.
    *
@@ -31123,6 +31651,8 @@ export type WebhookEventTypeEnum =
   | 'TRANSLATION_CREATED'
   /** A translation is updated. */
   | 'TRANSLATION_UPDATED'
+  | 'VOUCHER_CODES_CREATED'
+  | 'VOUCHER_CODES_DELETED'
   /**
    * A voucher code export is completed.
    *
@@ -31353,6 +31883,8 @@ export type WebhookSampleEventTypeEnum =
   | 'TRANSACTION_ITEM_METADATA_UPDATED'
   | 'TRANSLATION_CREATED'
   | 'TRANSLATION_UPDATED'
+  | 'VOUCHER_CODES_CREATED'
+  | 'VOUCHER_CODES_DELETED'
   | 'VOUCHER_CODE_EXPORT_COMPLETED'
   | 'VOUCHER_CREATED'
   | 'VOUCHER_DELETED'
@@ -31456,7 +31988,7 @@ export type WebhookUpdateInput = {
 export type Weight = {
   /** Weight unit. */
   unit: WeightUnitsEnum;
-  /** Weight value. */
+  /** Weight value. Returns a value with maximal three decimal places */
   value: Scalars['Float']['output'];
 };
 
@@ -31515,259 +32047,11 @@ export type GetProductQueryVariables = Exact<{
 
 export type GetProductQuery = { products?: { edges: Array<{ node: { isAvailable?: boolean | null, isAvailableForPurchase?: boolean | null, name: string, rating?: number | null, id: string, thumbnail?: { alt?: string | null, url: string } | null, pricing?: { priceRange?: { start?: { gross: { amount: number } } | null } | null } | null, category?: { name: string } | null } }> } | null };
 
-export const ProductCardFragmentDoc = `
-    fragment ProductCard on Product {
-  isAvailable
-  isAvailableForPurchase
-  name
-  rating
-  id
-  thumbnail {
-    alt
-    url
-  }
-  pricing {
-    priceRange {
-      start {
-        gross {
-          amount
-        }
-      }
-    }
-  }
-  category {
-    name
-  }
-}
-    `;
-export const ProductFragmentDoc = `
-    fragment PRODUCT on Product {
-  name
-  id
-  slug
-}
-    `;
-export const CategoryFragmentDoc = `
-    fragment CATEGORY on Category {
-  name
-  id
-  slug
-}
-    `;
-export const AuthDocument = `
-    mutation Auth($email: String!, $password: String!) {
-  tokenCreate(email: $email, password: $password) {
-    token
-    refreshToken
-    errors {
-      field
-      message
-    }
-  }
-}
-    `;
-export type AuthMutationFn = Apollo.MutationFunction<AuthMutation, AuthMutationVariables>;
-
-/**
- * __useAuthMutation__
- *
- * To run a mutation, you first call `useAuthMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAuthMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [authMutation, { data, loading, error }] = useAuthMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useAuthMutation(baseOptions?: Apollo.MutationHookOptions<AuthMutation, AuthMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AuthMutation, AuthMutationVariables>(AuthDocument, options);
-      }
-export type AuthMutationHookResult = ReturnType<typeof useAuthMutation>;
-export type AuthMutationResult = Apollo.MutationResult<AuthMutation>;
-export type AuthMutationOptions = Apollo.BaseMutationOptions<AuthMutation, AuthMutationVariables>;
-export const CurrentUserDocument = `
-    query CurrentUser {
-  me {
-    id
-    lastLogin
-    dateJoined
-    email
-    firstName
-    lastName
-    avatar {
-      url
-      alt
-    }
-    orders {
-      totalCount
-    }
-  }
-}
-    `;
-
-/**
- * __useCurrentUserQuery__
- *
- * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentUserQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-        }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const GetCategoriesDocument = `
-    query GetCategories {
-  categories(first: 10) {
-    edges {
-      node {
-        ...CATEGORY
-        products(first: 10, channel: "default-channel") {
-          edges {
-            node {
-              ...PRODUCT
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ${CategoryFragmentDoc}
-${ProductFragmentDoc}`;
-
-/**
- * __useGetCategoriesQuery__
- *
- * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCategoriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-      }
-export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
-        }
-export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
-export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
-export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
-export const GetProductsDocument = `
-    query GetProducts($after: String, $search: String) {
-  products(channel: "default-channel", first: 12, after: $after, search: $search) {
-    edges {
-      node {
-        ...ProductCard
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    totalCount
-  }
-}
-    ${ProductCardFragmentDoc}`;
-
-/**
- * __useGetProductsQuery__
- *
- * To run a query within a React component, call `useGetProductsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProductsQuery({
- *   variables: {
- *      after: // value for 'after'
- *      search: // value for 'search'
- *   },
- * });
- */
-export function useGetProductsQuery(baseOptions?: Apollo.QueryHookOptions<GetProductsQuery, GetProductsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, options);
-      }
-export function useGetProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductsQuery, GetProductsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, options);
-        }
-export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
-export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
-export type GetProductsQueryResult = Apollo.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
-export const GetProductDocument = `
-    query GetProduct($ids: [ID!]) {
-  products(channel: "default-channel", first: 1, where: {ids: $ids}) {
-    edges {
-      node {
-        ...ProductCard
-      }
-    }
-  }
-}
-    ${ProductCardFragmentDoc}`;
-
-/**
- * __useGetProductQuery__
- *
- * To run a query within a React component, call `useGetProductQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProductQuery({
- *   variables: {
- *      ids: // value for 'ids'
- *   },
- * });
- */
-export function useGetProductQuery(baseOptions?: Apollo.QueryHookOptions<GetProductQuery, GetProductQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProductQuery, GetProductQueryVariables>(GetProductDocument, options);
-      }
-export function useGetProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProductQuery, GetProductQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProductQuery, GetProductQueryVariables>(GetProductDocument, options);
-        }
-export type GetProductQueryHookResult = ReturnType<typeof useGetProductQuery>;
-export type GetProductLazyQueryHookResult = ReturnType<typeof useGetProductLazyQuery>;
-export type GetProductQueryResult = Apollo.QueryResult<GetProductQuery, GetProductQueryVariables>;
+export const ProductCardFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProductCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"isAvailableForPurchase"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"priceRange"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gross"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ProductCardFragment, unknown>;
+export const ProductFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PRODUCT"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]} as unknown as DocumentNode<ProductFragment, unknown>;
+export const CategoryFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CATEGORY"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Category"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]} as unknown as DocumentNode<CategoryFragment, unknown>;
+export const AuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Auth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tokenCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"errors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]} as unknown as DocumentNode<AuthMutation, AuthMutationVariables>;
+export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"lastLogin"}},{"kind":"Field","name":{"kind":"Name","value":"dateJoined"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"orders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
+export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CATEGORY"}},{"kind":"Field","name":{"kind":"Name","value":"products"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"10"}},{"kind":"Argument","name":{"kind":"Name","value":"channel"},"value":{"kind":"StringValue","value":"default-channel","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PRODUCT"}}]}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CATEGORY"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Category"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PRODUCT"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetProductsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProducts"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"products"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"channel"},"value":{"kind":"StringValue","value":"default-channel","block":false}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"12"}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProductCard"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cursor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProductCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"isAvailableForPurchase"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"priceRange"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gross"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetProductsQuery, GetProductsQueryVariables>;
+export const GetProductDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProduct"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"products"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"channel"},"value":{"kind":"StringValue","value":"default-channel","block":false}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"1"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProductCard"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProductCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"isAvailableForPurchase"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"priceRange"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gross"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetProductQuery, GetProductQueryVariables>;

@@ -9,7 +9,7 @@ export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
-      uri: "https://next-test-grapqhl.eu.saleor.cloud/graphql/",
+      uri: "https://trial.saleor.cloud/graphql/",
     }),
   });
 });
