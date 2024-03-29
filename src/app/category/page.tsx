@@ -5,7 +5,7 @@ import Site from '@/template/Site'
 import Products from "../../components/Products";
 import ProductCard from '../../components/ProductCard';
 
-import { GetProductsQuery } from "../../../generated/graqhql";
+import { GetProductsQuery } from "../../../generated/graphql";
 import { GET_PRODUCTS } from "../../../graphql/queries";
 
 import { useSuspenseQuery } from '@apollo/client';
