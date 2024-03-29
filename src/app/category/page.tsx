@@ -91,7 +91,7 @@ export default function Page() {
                             {dataProducts.data.products?.edges.map(({ node: product }) => {
                                 return (
                                     <div key={product.id}>
-                                        <ProductCard product={product} ><></></ProductCard>
+                                        <ProductCard product={product} ></ProductCard>
                                     </div>
                                 );
                             })}

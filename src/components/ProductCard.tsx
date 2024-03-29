@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 
 
 
-export default function ProductCard({ product, children }: { product: ProductCardFragment, children: React.ReactNode }) {
+export default function ProductCard({ product, children }: { product: ProductCardFragment, children?: React.ReactNode }) {
 
     const { add, del } = favorites(typeof window !== 'undefined' ? 'client' : 'server');
     const [isFavorite, setFavorite] = useState<boolean>(false);
