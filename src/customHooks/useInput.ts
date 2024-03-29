@@ -4,6 +4,6 @@ export default function useInput<T>(defaultValue:T){
     const [value,setValue] = useState<T>(defaultValue)
 
     function handleValue(e:React.FormEvent<HTMLInputElement>){
-        setValue(e.target?.value)
+        setValue((e.target as HTMLInputElement).value as unknown as T);
     }
 }
