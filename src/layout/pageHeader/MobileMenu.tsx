@@ -35,7 +35,7 @@ export default function MobileMenu({ categories, isOpenMenu, setMenu }
                 </div>
 
                 <ul className="list-menu flex flex-col xl:flex-row justify-center bg-white z-10 divide-y divide-slate-200 xl:divide-none">
-                    {menu?.map(({ node: x }) => {
+                    {menu?.map(({ node: x }:{ node:any }) => {
                         return (
                             <li className="flex justify-between xl:inline-block justify-center pl-4 py-4" key={x.id}>
                                 <div className="w-full flex jsutify-between" onClick={() => {
@@ -46,7 +46,7 @@ export default function MobileMenu({ categories, isOpenMenu, setMenu }
                                     {!isOpenSubMenu && <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>}
                                 </div>
                                 <div className="menu hidden md:block flex-col flex-wrap absolute max-h-52 bg-white p-8">
-                                    {x.products?.edges.map(({ node: sub }) => {
+                                    {x.products?.edges.map(({ node: sub }:{ node: any }) => {
                                         return (<div key={sub.id}>
                                             <div className={`flex-initial menu-text ${mulish.className}`} key={sub.id}><span>{sub.name}</span></div>
                                         </div>

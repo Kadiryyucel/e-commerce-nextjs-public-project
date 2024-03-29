@@ -17,7 +17,7 @@ export default function DesktopMenu({ categories, setMenu }
         </div>
 
         <ul className="list-menu flex flex-col xl:flex-row justify-center bg-white z-10 divide-y divide-slate-200 xl:divide-none">
-            {categories.data?.categories?.edges.map(({ node: x }) => {
+            {categories.data?.categories?.edges.map(({ node: x }: { node: any }) => {
                 return (
                     <li className="flex justify-between xl:inline-block justify-center pl-4 py-4 show-category" key={x.id}>
                         <div className="w-full flex jsutify-between}" onClick={() => {
@@ -27,7 +27,7 @@ export default function DesktopMenu({ categories, setMenu }
                             <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>
                         </div>
                         <div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white translate-x-0 p-8">
-                            {x.products?.edges.map(({ node: sub }) => {
+                            {x.products?.edges.map(({ node: sub }:{ node:any }) => {
                                 return (<div key={sub.id}>
                                     <div className={`flex-initial menu-text ${mulish.className}`} ><span>{sub.name}</span></div>
                                     <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>
