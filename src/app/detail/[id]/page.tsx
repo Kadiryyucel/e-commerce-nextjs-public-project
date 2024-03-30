@@ -168,12 +168,13 @@ export default function PrdouctDetail({ params }: { params: { id: string } }) {
               >
 
                 {data.map(({ id, image, title }) => (
-                  <SwiperSlide key={id}>
-                    {activeIndex === id && <Magnifying>
-                      <Image alt={dataProduct?.thumbnail?.alt || ''} width={400} height={400} className='w-5/6 md:w-11/12 xl:w-full xl:h-full' src={dataProduct?.thumbnail?.url || nike} />
-                    </Magnifying>}
-                  </SwiperSlide>
-                ))}
+                  <div key={id} className={activeIndex === id ? 'visible' : 'invisible'}>
+                    <SwiperSlide key={id}>
+                      <Magnifying>
+                        <Image alt={dataProduct?.thumbnail?.alt || ''} width={400} height={400} className='w-5/6 md:w-11/12 xl:w-full xl:h-full' src={dataProduct?.thumbnail?.url || nike} />
+                      </Magnifying>
+                    </SwiperSlide>
+                  </div>))}
               </Swiper>
               <div className="wrapper-img h-full w-[30rem] absolute top-0 left-full ml-4 z-20 overflow-hidden">
                 <div className='absolute top-0 left-0 z-20 magnifying-img' style={{ width: '1000px', height: '1500px' }}>
