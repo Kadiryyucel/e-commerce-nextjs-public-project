@@ -68,7 +68,7 @@ export default function Site({ children }: { children: React.ReactNode }) {
     return (
         <div>
             <div className="relative">
-                <div>
+                <div className="h-full">
                     <ThemeProvider theme={theme}>
                         <div className="wrapper">
                             <PageHeader />

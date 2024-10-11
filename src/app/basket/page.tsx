@@ -9,13 +9,14 @@ import { Button, Checkbox } from '@mui/material'
 import SpinButton from '../../components/SpinButton'
 
 import one from '@/assets/nike.png'
+import EmptyImg from '../../assets/emptyBasket.png'
 
 
 export default function Basket() {
 
     const router = useRouter();
 
-    let data = new Array(5)
+    let data = new Array(30)
     data.fill(6)
     function BasketCol() {
         return (
@@ -69,29 +70,36 @@ export default function Basket() {
     return (
         <>
             <Site>
-                <div className='flex justify-center gap-x-4'>
-                    <BasketCol></BasketCol>
-                    <div className='xl:w-8/12 xl:block hidden'>
-                        <div className='flex flex-col items-center border w-10/12 px-4'>
-                            <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
-                            <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
-                            <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
-                            <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
+                {
+                    !(data && data.length) ? <div className='w-full flex justify-center p-8'>
+                        <div className="w-4/12">
+                            <Image alt={''} width={200} height={100} className='w-6/6 md:w-10/12' src={EmptyImg} />
                         </div>
-                        <Button color="default" variant='contained' className='w-8/12 mt-4' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
-                    </div>
+                     </div>
+                        :
+                        <div className='flex justify-center gap-x-4'>
+                            <BasketCol></BasketCol>
+                            <div className='xl:w-8/12 xl:block hidden'>
+                                <div className='flex flex-col items-center border w-10/12 px-4'>
+                                    <div className='flex justify-start w-full'><h2>Sipariş Özeti</h2></div>
+                                    <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>368,70TL</span></div>
+                                    <div className='flex justify-between w-full'><span>Ürünün Toplamı</span><span>29.99,70TL</span></div>
+                                    <div className='flex justify-end w-full border-t-2 mt-4'><h3>398,69 TL</h3></div>
+                                </div>
+                                <Button color="default" variant='contained' className='w-8/12 mt-4' onClick={() => { router.push('/checkout') }}>Onayla</Button>
+                            </div>
 
-                    <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 border-top mobile-approval'>
-                        <div className='flex flex-col'>
-                            <div className='text-xs'><span>Toplam</span></div>
-                            <div><span>4.449,87 TL</span></div>
-                            <div className='text-xs'><span>Kargo Bedava</span></div>
+                            <div className='flex justify-center items-center xl:hidden fixed w-full h-20 gap-x-6 border-top mobile-approval'>
+                                <div className='flex flex-col'>
+                                    <div className='text-xs'><span>Toplam</span></div>
+                                    <div><span>4.449,87 TL</span></div>
+                                    <div className='text-xs'><span>Kargo Bedava</span></div>
+                                </div>
+                                <Button color="default" variant='contained' className='w-3/6 h-12' onClick={() => { router.push('/checkout') }}>Onayla</Button>
+                            </div>
                         </div>
-                        <Button color="default" variant='contained' className='w-3/6 h-12' onClick={()=>{router.push('/checkout')}}>Onayla</Button>
-                    </div>
-
-                </div>
-            </Site>
+                }
+            </Site >
         </>
     )
 }

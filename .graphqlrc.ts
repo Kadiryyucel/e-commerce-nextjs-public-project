@@ -5,7 +5,7 @@ loadEnvConfig(".");
 
 const config: CodegenConfig = {
 	overwrite: true,
-	schema: 'https://trial.saleor.cloud/graphql/',
+	schema: 'https://trial.eu.saleor.cloud/graphql/',
 	documents: "graphql/**/*.ts",
 	watch: true,
 	generates: {

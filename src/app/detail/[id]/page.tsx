@@ -142,7 +142,7 @@ export default function PrdouctDetail({ params }: { params: { id: string } }) {
 
 
   const [thumbsSwiper, setThumbsSwiper] = useState<types.Swiper | null>(null);
-  const [activeIndex, setActiveIndex] = useState<number>(0)
+  const [activeIndex, setActiveIndex] = useState<number>(1)
 
   const [selectedColor, setColor] = useState<number>();
   const [selectedSize, setSize] = useState<number>();

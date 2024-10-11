@@ -1,5 +1,5 @@
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/DesktopMenu.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/DesktopMenu.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
   \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* latin-ext */
 @font-face {
@@ -18,12 +18,12 @@
   font-display: swap;
   src: url(/_next/static/media/4de1fea1a954a5b6-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.32%;descent-override: 21.87%;line-gap-override: 0.00%;size-adjust: 97.42%
+}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.03%;descent-override: 21.80%;line-gap-override: 0.00%;size-adjust: 97.69%
 }.__className_b8262e {font-family: '__Lato_b8262e', '__Lato_Fallback_b8262e';font-weight: 400;font-style: normal
 }
 
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/DesktopMenu.tsx","import":"Mulish","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"mulish"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/DesktopMenu.tsx","import":"Mulish","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"mulish"} ***!
   \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* cyrillic-ext */
 @font-face {
@@ -69,12 +69,12 @@
   font-display: swap;
   src: url(/_next/static/media/6d7e649312431bb5-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Mulish_Fallback_4c3c85';src: local("Arial");ascent-override: 96.02%;descent-override: 23.89%;line-gap-override: 0.00%;size-adjust: 104.67%
+}@font-face {font-family: '__Mulish_Fallback_4c3c85';src: local("Arial");ascent-override: 96.56%;descent-override: 24.02%;line-gap-override: 0.00%;size-adjust: 104.08%
 }.__className_4c3c85 {font-family: '__Mulish_4c3c85', '__Mulish_Fallback_4c3c85';font-weight: 400;font-style: normal
 }
 
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/MobileMenu.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/MobileMenu.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
   \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* latin-ext */
 @font-face {
@@ -93,12 +93,12 @@
   font-display: swap;
   src: url(/_next/static/media/4de1fea1a954a5b6-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.32%;descent-override: 21.87%;line-gap-override: 0.00%;size-adjust: 97.42%
+}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.03%;descent-override: 21.80%;line-gap-override: 0.00%;size-adjust: 97.69%
 }.__className_b8262e {font-family: '__Lato_b8262e', '__Lato_Fallback_b8262e';font-weight: 400;font-style: normal
 }
 
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/MobileMenu.tsx","import":"Mulish","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"mulish"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/MobileMenu.tsx","import":"Mulish","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"mulish"} ***!
   \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* cyrillic-ext */
 @font-face {
@@ -144,12 +144,12 @@
   font-display: swap;
   src: url(/_next/static/media/6d7e649312431bb5-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Mulish_Fallback_4c3c85';src: local("Arial");ascent-override: 96.02%;descent-override: 23.89%;line-gap-override: 0.00%;size-adjust: 104.67%
+}@font-face {font-family: '__Mulish_Fallback_4c3c85';src: local("Arial");ascent-override: 96.56%;descent-override: 24.02%;line-gap-override: 0.00%;size-adjust: 104.08%
 }.__className_4c3c85 {font-family: '__Mulish_4c3c85', '__Mulish_Fallback_4c3c85';font-weight: 400;font-style: normal
 }
 
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[11].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[11].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/page.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[2].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[13].oneOf[2].use[2]!./node_modules/next/font/google/target.css?{"path":"src/layout/pageHeader/page.tsx","import":"Lato","arguments":[{"subsets":["latin"],"weight":"400"}],"variableName":"lato"} ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /* latin-ext */
 @font-face {
@@ -168,7 +168,7 @@
   font-display: swap;
   src: url(/_next/static/media/4de1fea1a954a5b6-s.p.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.32%;descent-override: 21.87%;line-gap-override: 0.00%;size-adjust: 97.42%
+}@font-face {font-family: '__Lato_Fallback_b8262e';src: local("Arial");ascent-override: 101.03%;descent-override: 21.80%;line-gap-override: 0.00%;size-adjust: 97.69%
 }.__className_b8262e {font-family: '__Lato_b8262e', '__Lato_Fallback_b8262e';font-weight: 400;font-style: normal
 }
 
