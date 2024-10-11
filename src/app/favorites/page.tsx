@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, Suspense, useTr } from 'react'
+import { useEffect, useState, Suspense} from 'react'
 import Site from '@/template/Site'
 import favoritesRepo from '@/repo/favorites'
 import ProductCard from '@/components/ProductCard'
