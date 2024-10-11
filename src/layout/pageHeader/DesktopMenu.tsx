@@ -3,6 +3,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 
 import { Mulish } from 'next/font/google'
 import { Lato } from 'next/font/google'
+import Link from 'next/link'
 
 const lato = Lato({ subsets: ['latin'], weight: '400' })
 const mulish = Mulish({ subsets: ['latin'], weight: '400' })
@@ -23,13 +24,14 @@ export default function DesktopMenu({ categories, setMenu }
                         <div className="w-full flex jsutify-between}" onClick={() => {
 
                         }}>
+                            
                             <span className='grow'>{x.name}</span>
                             <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>
                         </div>
                         <div className="menu flex flex-col flex-wrap absolute max-h-52 bg-white translate-x-0 p-8">
                             {x.products?.edges.map(({ node: sub }:{ node:any }) => {
                                 return (<div key={sub.id}>
-                                    <div className={`flex-initial menu-text ${mulish.className}`} ><span>{sub.name}</span></div>
+                                    <Link href="/category"><div className={`flex-initial menu-text ${mulish.className}`} ><span>{sub.name}</span></div></Link>
                                     <span className='pr-4 xl:hidden'><BsChevronRight size={20} /></span>
                                 </div>
                                 )
