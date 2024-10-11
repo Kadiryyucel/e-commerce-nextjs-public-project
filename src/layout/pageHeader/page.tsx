@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
@@ -117,88 +117,90 @@ export default function PageHeader() {
     ]
     return (
         <>
-            <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
-                <div className="flex flex-wrap justify-center items-center w-full">
-                    <div className='grow xl:hidden cursor-pointer' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
-                    <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>MAMA</Link></h1>
-                    <Box sx={{ backgroundColor: '#f3f3f3' }} className='flex justify-center relative grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
-                        <TextField
-                            className='search-bar w-full'
-                            placeholder='Search'
-                            value={searchVal}
-                            onChange={(e) => { setSearchVal(e.target.value) }}
-                            InputProps={{
-                                autoComplete: 'off',
-                                endAdornment: <InputAdornment position="end">
-                                    <div className='cursor-pointer' onClick={() => { searchProcess() }}>
-                                        <FiSearch size={24} color='orange' />
-                                    </div>
-                                </InputAdornment>,
-                            }}
-                        />
-                        <div className={`search-suggests top-14 min-h-80 absolute z-20 border-4 border-yellow-500 bg-white ${searchVal? '':'p-10'}`}>
-                            {
-                                searchVal ? <div className='hover:bg-slate-100 p-4'>{searchVal}</div> : <div>
-                                    <div className='flex justify-between'>
-                                        <span className='text-lg text-orange-400'>Geçmiş Aramalar</span>
-                                        <span>Temizle</span>
-                                    </div>
-                                    <div className='flex flex-col gap-y-2 my-2'>
-                                        <div>aplle</div>
-                                        <div>Pantolon</div>
-                                        <div>selam</div>
-                                        <div>tshirt</div>
-                                    </div>
-                                    <div>
-                                        <div className='flex flex-col gap-y-2'>
-                                            <span className='text-lg text-orange-400'>Popüler Aramalar</span>
-                                            <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
-                                                return (
-                                                    <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
-                                                )
-                                            })}
+            <Suspense>
+                <div className='wrapper-content px-2 xl:px-2 xl:px-28 w-full mb-10'>
+                    <div className="flex flex-wrap justify-center items-center w-full">
+                        <div className='grow xl:hidden cursor-pointer' onClick={() => setMenu(true)}><RiMenu2Line size={28} /></div>
+                        <h1 className={`${lato.className} grow shrink basis-auto`}><Link href='/'>MAMA</Link></h1>
+                        <Box sx={{ backgroundColor: '#f3f3f3' }} className='flex justify-center relative grown-[8] shirnk-1 basis-full m-0 order-3 xl:m-1 xl:order-2 xl:basis-6/12'>
+                            <TextField
+                                className='search-bar w-full'
+                                placeholder='Search'
+                                value={searchVal}
+                                onChange={(e) => { setSearchVal(e.target.value) }}
+                                InputProps={{
+                                    autoComplete: 'off',
+                                    endAdornment: <InputAdornment position="end">
+                                        <div className='cursor-pointer' onClick={() => { searchProcess() }}>
+                                            <FiSearch size={24} color='orange' />
+                                        </div>
+                                    </InputAdornment>,
+                                }}
+                            />
+                            <div className={`search-suggests top-14 min-h-80 absolute z-20 border-4 border-yellow-500 bg-white ${searchVal ? '' : 'p-10'}`}>
+                                {
+                                    searchVal ? <div className='hover:bg-slate-100 p-4'>{searchVal}</div> : <div>
+                                        <div className='flex justify-between'>
+                                            <span className='text-lg text-orange-400'>Geçmiş Aramalar</span>
+                                            <span>Temizle</span>
+                                        </div>
+                                        <div className='flex flex-col gap-y-2 my-2'>
+                                            <div>aplle</div>
+                                            <div>Pantolon</div>
+                                            <div>selam</div>
+                                            <div>tshirt</div>
+                                        </div>
+                                        <div>
+                                            <div className='flex flex-col gap-y-2'>
+                                                <span className='text-lg text-orange-400'>Popüler Aramalar</span>
+                                                <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
+                                                    return (
+                                                        <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                                    )
+                                                })}
+                                                </div>
+                                            </div>
+                                            <div className='flex flex-col gap-y-2 mt-2'>
+                                                <span className='text-lg text-orange-400'>Sana Özel Kategoriler</span>
+                                                <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
+                                                    return (
+                                                        <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
+                                                    )
+                                                })}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className='flex flex-col gap-y-2 mt-2'>
-                                            <span className='text-lg text-orange-400'>Sana Özel Kategoriler</span>
-                                            <div className='flex flex-wrap gap-2'>{categories.map((data, index) => {
-                                                return (
-                                                    <div className='p-2 border border-slate-400' key={index}>{data.category}</div>
-                                                )
-                                            })}
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
-                            }
+                                }
 
-                        </div>
-                    </Box>
-
-
-                    <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
-                        <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
-                        <Link href={`/favorites`}>
-
-                            <div className='flex items-center gap-x-2'>
-                                <Badge badgeContent={favorites?.length} color="primary">
-                                    <div><AiOutlineHeart size={20} /></div>
-                                </Badge>
-                                <span className='xl:w-auto hidden xl:block'>Favorilerim</span>
                             </div>
+                        </Box>
 
-                        </Link>
-                        <Link href={`/basket`}><div className='flex items-center gap-x-2'>
-                            <Badge badgeContent={basket?.length} color="primary">
-                                <div><SlBasket size={20} /></div>
-                            </Badge>
 
-                            <span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
+                        <div className="flex gap-x-3 justify-end items-center order-2 grow basis-auto shrink-1 xl:order-3">
+                            <Link href={`/login`}><div className='flex items-center gap-x-2'><div><CiUser size={20} /></div><span className='xl:w-auto hidden xl:block'>Login</span></div></Link>
+                            <Link href={`/favorites`}>
+
+                                <div className='flex items-center gap-x-2'>
+                                    <Badge badgeContent={favorites?.length} color="primary">
+                                        <div><AiOutlineHeart size={20} /></div>
+                                    </Badge>
+                                    <span className='xl:w-auto hidden xl:block'>Favorilerim</span>
+                                </div>
+
+                            </Link>
+                            <Link href={`/basket`}><div className='flex items-center gap-x-2'>
+                                <Badge badgeContent={basket?.length} color="primary">
+                                    <div><SlBasket size={20} /></div>
+                                </Badge>
+
+                                <span className='xl:w-auto hidden xl:block'>Sepetim</span></div></Link>
+                        </div>
                     </div>
+                    <DesktopMen />
                 </div>
-                <DesktopMen />
-            </div>
-            <MobileMen />
+                <MobileMen />
+            </Suspense>
         </>
     )
 }

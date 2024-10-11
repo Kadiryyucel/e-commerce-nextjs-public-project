@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useSearchParams, usePathname } from 'next/navigation'
 
 
@@ -17,19 +17,19 @@ export default function MobileList(props: { className: string }) {
 
     const [onOpenOrder, setOpenOrder] = useState<boolean>(false)
 
-    function getSearcParam(category:string,childCategory:string){
+    function getSearcParam(category: string, childCategory: string) {
         const params = new URLSearchParams(searchParams)
         let check = params.has(category)
-        if(check)[
-            params.append(category,childCategory)
+        if (check) [
+            params.append(category, childCategory)
         ]
     }
 
-    function delSearchParam(category:string,childCategory:string){
+    function delSearchParam(category: string, childCategory: string) {
         const params = new URLSearchParams(searchParams)
         let check = params.has(category)
-        if(check)[
-            params.delete(category,childCategory)
+        if (check) [
+            params.delete(category, childCategory)
         ]
     }
 
@@ -78,60 +78,62 @@ export default function MobileList(props: { className: string }) {
     const [showFilter, setFilter] = useState<boolean>(false)
 
     return (
-        <div>
-            <div className={`w-full relative z-20 ${props.className}`}>
-                <div className='flex justify-between gap-x-1 w-full h-10 z-20 bg-white'>
-                    <div className='flex justify-center items-center w-6/12 bg-gray-200' onClick={() => {
-                        setOpenOrder(true)
+        <Suspense>
+            <div>
+                <div className={`w-full relative z-20 ${props.className}`}>
+                    <div className='flex justify-between gap-x-1 w-full h-10 z-20 bg-white'>
+                        <div className='flex justify-center items-center w-6/12 bg-gray-200' onClick={() => {
+                            setOpenOrder(true)
+                            setSelected(null)
+                        }}>
+                            <div className='pr-2'><LuArrowDownUp size={20} /></div>
+                            <div>Sırala</div>
+                        </div>
+                        <div className='flex justify-center items-center w-6/12 bg-gray-200' onClick={() => {
+                            setFilter(prev => !prev)
+                        }}>
+                            <div className='pr-2'><CiFilter size={20} /></div>
+                            <div>Filtrele</div>
+                        </div>
+                    </div>
+
+                    <div className={`mobile-categories-wrapper z-20 w-full h-12 px-1 pt-2 items-center bg-white overflow-x-scroll no-scrollbar ${showFilter && !onOpenOrder ? 'flex' : 'hidden'}`}>
+                        {categories.map((data, index) => {
+                            return (<div className={`mobile-category shrink-0 border rounded-full py-1 px-2 mx-2 ${selectedCategory === index ? 'border-orange-500' : 'border-slate-300'}`} onClick={() => {
+                                if (selectedCategory === index) {
+                                    setSelected(null)
+                                    return
+                                }
+                                setSelected(index)
+                            }} key={index}>{data.category}</div>)
+                        })}
+                    </div>
+
+                    <div className={`categories absolute z-20 bg-white pb-4`} style={{ top: 88 }}>
+                        {categories.map((data, index) => {
+                            return (<div className={`${(selectedCategory === index) && showFilter ? 'flex' : 'hidden'} flex-wrap py-4 w-full`} key={index}>{data.childCategories.map((datachild, i) => {
+                                return (
+                                    <div className='flex p-2' key={i} onClick={() => {
+                                        searchProcess(categories[selectedCategory as number], datachild.category)
+                                    }}>
+                                        <div className="flex shrink-0 items-start w-1/12">
+                                            <Checkbox
+                                                className="pt-0"
+                                                inputProps={{ 'aria-label': 'controlled' }}
+                                            />
+                                        </div>
+                                        <div className='pl-8'>{datachild.category}</div>
+                                    </div>)
+                            })}</div>)
+                        })}
+                    </div>
+                    <div className={`w-full h-full fixed bg-black bg-opacity-40 z-10 top-0 ${typeof selectedCategory === 'number' ? 'block' : 'hidden'}`} onClick={() => {
                         setSelected(null)
-                    }}>
-                        <div className='pr-2'><LuArrowDownUp size={20} /></div>
-                        <div>Sırala</div>
-                    </div>
-                    <div className='flex justify-center items-center w-6/12 bg-gray-200' onClick={() => {
-                        setFilter(prev => !prev)
-                    }}>
-                        <div className='pr-2'><CiFilter size={20} /></div>
-                        <div>Filtrele</div>
-                    </div>
-                </div>
+                    }}></div>
+                </div >
 
-                <div className={`mobile-categories-wrapper z-20 w-full h-12 px-1 pt-2 items-center bg-white overflow-x-scroll no-scrollbar ${showFilter && !onOpenOrder ? 'flex' : 'hidden'}`}>
-                    {categories.map((data, index) => {
-                        return (<div className={`mobile-category shrink-0 border rounded-full py-1 px-2 mx-2 ${selectedCategory === index ? 'border-orange-500' : 'border-slate-300'}`} onClick={() => {
-                            if (selectedCategory === index) {
-                                setSelected(null)
-                                return
-                            }
-                            setSelected(index)
-                        }} key={index}>{data.category}</div>)
-                    })}
-                </div>
-
-                <div className={`categories absolute z-20 bg-white pb-4`} style={{ top: 88 }}>
-                    {categories.map((data, index) => {
-                        return (<div className={`${(selectedCategory === index) && showFilter ? 'flex' : 'hidden'} flex-wrap py-4 w-full`} key={index}>{data.childCategories.map((datachild, i) => {
-                            return (
-                                <div className='flex p-2' key={i} onClick={() => {
-                                    searchProcess(categories[selectedCategory as number], datachild.category)
-                                }}>
-                                    <div className="flex shrink-0 items-start w-1/12">
-                                        <Checkbox
-                                            className="pt-0"
-                                            inputProps={{ 'aria-label': 'controlled' }}
-                                        />
-                                    </div>
-                                    <div className='pl-8'>{datachild.category}</div>
-                                </div>)
-                        })}</div>)
-                    })}
-                </div>
-                <div className={`w-full h-full fixed bg-black bg-opacity-40 z-10 top-0 ${typeof selectedCategory === 'number' ? 'block' : 'hidden'}`} onClick={() => {
-                    setSelected(null)
-                }}></div>
+                <BottomMenu onOpen={onOpenOrder} setOpen={setOpenOrder} />
             </div >
-
-            <BottomMenu onOpen={onOpenOrder} setOpen={setOpenOrder} />
-        </div >
+        </Suspense>
     );
 }
